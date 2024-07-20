@@ -1,5 +1,7 @@
 use assets::AssetsPlugin;
-use bevy::prelude::*;
+use bevy::{
+    color::palettes::tailwind::SLATE_950, prelude::*,
+};
 use bevy_mod_picking::{
     debug::DebugPickingMode, DefaultPickingPlugins,
 };
@@ -13,7 +15,9 @@ pub struct AppPlugin;
 
 impl Plugin for AppPlugin {
     fn build(&self, app: &mut App) {
-        let app = app.add_plugins(DefaultPlugins);
+        let app = app
+            .insert_resource(ClearColor(SLATE_950.into()))
+            .add_plugins(DefaultPlugins);
 
         #[cfg(feature = "dev")]
         app

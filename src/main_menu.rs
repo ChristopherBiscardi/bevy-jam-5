@@ -5,7 +5,6 @@ use bevy::{
     prelude::*,
 };
 use bevy_mod_picking::prelude::*;
-use style_helpers::FromLength;
 use woodpecker_ui::prelude::*;
 
 use crate::{
@@ -24,7 +23,25 @@ impl Plugin for MainMenuPlugin {
     }
 }
 
-const BUTTON_SIZE: f32 = 300.;
+pub const BUTTON_STYLES: WoodpeckerStyle =
+    WoodpeckerStyle {
+        background_color: Color::Srgba(SLATE_500),
+        width: Units::Pixels(200.),
+        height: Units::Pixels(50.),
+        justify_content: Some(WidgetAlignContent::Center),
+        align_content: Some(WidgetAlignContent::Center),
+        ..WoodpeckerStyle::DEFAULT
+    };
+
+pub const BUTTON_STYLES_HOVER: WoodpeckerStyle =
+    WoodpeckerStyle {
+        background_color: Color::Srgba(SLATE_400),
+        width: Units::Pixels(200.),
+        height: Units::Pixels(50.),
+        justify_content: Some(WidgetAlignContent::Center),
+        align_content: Some(WidgetAlignContent::Center),
+        ..WoodpeckerStyle::DEFAULT
+    };
 
 fn spawn_main_menu(
     mut commands: Commands,
@@ -48,12 +65,122 @@ fn spawn_main_menu(
     //     ))
     //     .id();
 
+    let mut buttons = WidgetChildren::default();
+
+    let button = WButtonBundle {
+        button_styles: ButtonStyles {
+            normal: BUTTON_STYLES,
+            hovered: BUTTON_STYLES_HOVER,
+        },
+        children: WidgetChildren::default()
+            .with_child::<Element>((
+                ElementBundle {
+                    styles: WoodpeckerStyle {
+                        width: Units::Pixels(20.),
+                        height: Units::Pixels(20.),
+                        margin: Edge {
+                            left: (20. / 2.0).into(),
+                            top: (20. / 2.0).into(),
+                            ..Default::default()
+                        },
+                        font_size: 20.,
+                        color: Color::Srgba(SLATE_50),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                },
+                WidgetRender::Text {
+                    font: fonts.outfit_extra_bold.clone(),
+                    alignment: VelloTextAlignment::TopLeft,
+                    content: "New Game".into(),
+                    word_wrap: false,
+                },
+            )),
+        ..Default::default()
+    };
+    buttons.add::<WButton>((
+        button.clone(),
+        On::<Pointer<Click>>::run(
+            |mut commands: Commands| {
+                info!("clicked");
+                // commands.trigger()
+            },
+        ),
+        // On::<Pointer<Over>>::listener_component_mut::<
+        //     WButton,
+        // >(|_, vello_widget| {
+        //         vello_widget.hovering = true;
+        // }),
+        // On::<Pointer<Out>>::listener_component_mut::<
+        //     WButton,
+        // >(|_, vello_widget| {
+        //         vello_widget.hovering = false;
+        // }),
+    ));
+    buttons.add::<WButton>((
+        button.clone(),
+        On::<Pointer<Click>>::run(
+            |mut commands: Commands| {
+                info!("clicked");
+                // commands.trigger()
+            },
+        ),
+    ));
+    buttons.add::<WButton>((
+        button.clone(),
+        On::<Pointer<Click>>::run(
+            |mut commands: Commands| {
+                info!("clicked");
+                // commands.trigger()
+            },
+        ),
+    ));
+
     let root = commands
         .spawn((
+            StateScoped(AppState::MainMenu),
             WoodpeckerAppBundle {
+                children: WidgetChildren::default().with_child::<Element>(ElementBundle {
+                    styles: WoodpeckerStyle {
+                        width: Units::Percentage(100.0),
+                        height: Units::Percentage(100.0),
+                        justify_content: Some(WidgetAlignContent::FlexStart),
+                        align_content: Some(WidgetAlignContent::Center),
+                        padding: Edge {
+                            left: 0.0.into(),
+                            right: 0.0.into(),
+                            top: 25.0.into(),
+                            bottom: 0.0.into(),
+                        },
+                        ..Default::default()
+                    },
+   
+                    children: WidgetChildren::default().with_child::<Element>((
+                        ElementBundle {
+                            styles: WoodpeckerStyle {
+                                background_color: Srgba::hex("FF007F").unwrap().into(),
+                                border_radius: Corner::all(Units::Pixels(5.0)),
+                                width: Units::Pixels(300.),
+                                height: Units::Pixels(300.),
+                                gap: (Units::Pixels(10.), Units::Pixels(5.)),
+                                justify_content: Some(WidgetAlignContent::Center),
+                                align_content: Some(WidgetAlignContent::Center),
+                                flex_wrap: WidgetFlexWrap::Wrap,
+                                ..Default::default()
+                            },
+                            children: buttons,
+                            ..Default::default()
+                        },
+                        // WidgetRender::Quad {
+                        //     // color: Srgba::hex("FF007F").unwrap().into(),
+                        //     color: Srgba::lcha(0.,0.,0.,0.),
+                        //     border_radius: kurbo::RoundedRectRadii::from_single_radius(5.0),
+                        // },
+                    )),
+                    ..Default::default()
+                }),
                 ..Default::default()
             },
-            StateScoped(AppState::MainMenu),
         ))
         .id();
 
@@ -68,94 +195,7 @@ fn spawn_main_menu(
     //     word_wrap: false,
     // });
 
-    let font_size = 20.;
-    let button = WButtonBundle {
-        button_styles: ButtonStyles {
-            normal: (
-                SLATE_500.into(),
-                WoodpeckerStyle::new()
-                    .with_size(Size::from_lengths(
-                       200.,50.
-                    ))
-                    .with_justify_content(Some(
-                        taffy::AlignContent::Center,
-                    ))
-                    .with_align_content(Some(
-                        taffy::AlignContent::Center,
-                    )),
-            ),
-            hovered: (
-                SLATE_400.into(),
-                WoodpeckerStyle::new()
-                    .with_size(Size::from_lengths(
-                       200.,50.
-                    ))
-                    .with_justify_content(Some(
-                        taffy::AlignContent::Center,
-                    ))
-                    .with_align_content(Some(
-                        taffy::AlignContent::Center,
-                    )),
-            ),
-        },
-        children: WidgetChildren::default()
-            .with_child::<Element>((
-                ElementBundle {
-                    styles: WoodpeckerStyle::new()
-                        .with_size(Size::from_lengths(
-                            180.,17.
-                        ))
-                        .with_margin(taffy::Rect {
-                            left: LengthPercentageAuto::from_length(10.),
-                            right: LengthPercentageAuto::from_length(10.),
-                            top: LengthPercentageAuto::Auto,
-                            bottom: LengthPercentageAuto::Auto,
-                        }),
-                    ..Default::default()
-                },
-                WidgetRender::Text {
-                    font: fonts
-                        .outfit_extra_bold
-                        .clone(),
-                    size: font_size,
-                    color: Color::from(SLATE_50),
-                    alignment:
-                        VelloTextAlignment::TopLeft,
-                    content: "New Game".into(),
-                    word_wrap: false,
-                },
-            )),
-        ..Default::default()
-    };
-    root_children.add::<WButton>((
-        button.clone(),
-        On::<Pointer<Click>>::run(
-            |mut commands: Commands| {
-                info!("clicked");
-                // commands.trigger()
-            },
-        ),
-    ));
-    root_children.add::<WButton>((
-        button.clone(),
-        On::<Pointer<Click>>::run(
-            |mut commands: Commands| {
-                info!("clicked");
-                // commands.trigger()
-            },
-        ),
-    ));
-    root_children.add::<WButton>((
-        button.clone(),
-        On::<Pointer<Click>>::run(
-            |mut commands: Commands| {
-                info!("clicked");
-                // commands.trigger()
-            },
-        ),
-    ));
-
-    commands.entity(root).insert(root_children);
+    // commands.entity(root).insert(root_children);
 
     ui_context.set_root_widget(root);
 }
