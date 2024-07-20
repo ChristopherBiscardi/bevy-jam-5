@@ -1,0 +1,26 @@
+[package]
+name = "kenney-jam-2024"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = "0.14.0"
+bevy-inspector-egui = "0.25.1"
+bevy_asset_loader = { version = "0.21.0", features = ["progress_tracking"] }
+bevy_kira_audio = "0.20.0"
+iyes_progress = { version = "0.12.0", features = ["bevy_asset"] }
+leafwing-input-manager = "0.14.0"
+vleue_kinetoscope = "0.2.0"
+# woodpecker_ui = { git = "ssh://git@github.com/StarArawn/woodpecker_ui.git" }
+woodpecker_ui = { path = "../../stararawn/woodpecker_ui" }
+bevy_mod_picking = "0.20"
+taffy = "0.5"
+
+[features]
+default = ["dev"]
+dev = []
+long_loading = []
+
+[patch.crates-io]
+bevy_mod_picking = { git = "https://github.com/StarArawn/bevy_mod_picking", branch = "main" }
+bevy_eventlistener = { git = "https://github.com/StarArawn/bevy_eventlistener", branch = "main" }
