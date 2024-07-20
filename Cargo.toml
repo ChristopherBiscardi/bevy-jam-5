@@ -20,6 +20,7 @@ taffy = "0.5"
 default = ["dev"]
 dev = []
 long_loading = []
+with_main_menu = []
 
 [patch.crates-io]
 bevy_mod_picking = { git = "https://github.com/StarArawn/bevy_mod_picking", branch = "main" }

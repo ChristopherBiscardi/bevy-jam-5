@@ -16,6 +16,10 @@ pub struct AssetsPlugin;
 impl Plugin for AssetsPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
+            #[cfg(not(feature = "with_main_menu"))]
+            ProgressPlugin::new(AppState::AssetLoading)
+                .continue_to(AppState::InGame),
+            #[cfg(feature = "with_main_menu")]
             ProgressPlugin::new(AppState::AssetLoading)
                 .continue_to(AppState::MainMenu),
             FrameTimeDiagnosticsPlugin,
@@ -80,8 +84,6 @@ pub struct FontAssets {
 pub struct FontVelloAssets {
     #[asset(path = "outfit/Outfit-ExtraBold.ttf")]
     pub outfit_extra_bold: Handle<VelloFont>,
-    #[asset(path = "poppins/Poppins-Regular.ttf")]
-    pub poppins_regular: Handle<VelloFont>,
 }
 
 fn print_progress(

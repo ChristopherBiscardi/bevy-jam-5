@@ -30,6 +30,7 @@ impl Plugin for AppPlugin {
         app.init_state::<AppState>()
             .add_plugins((
                 AssetsPlugin,
+                #[cfg(feature = "with_main_menu")]
                 MainMenuPlugin,
                 WoodpeckerUIPlugin,
             ))
