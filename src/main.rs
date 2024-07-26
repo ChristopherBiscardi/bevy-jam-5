@@ -1,5 +1,6 @@
+#![allow(warnings)]
 use bevy::prelude::*;
-use kenney_jam_2024::AppPlugin;
+use wash_cycle::AppPlugin;
 
 fn main() {
     App::new().add_plugins(AppPlugin).run();
