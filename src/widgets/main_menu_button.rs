@@ -1,32 +1,35 @@
+use bevy::{color::palettes::tailwind::*, prelude::*};
+use bevy_kira_audio::Audio;
+use bevy_kira_audio::AudioControl;
 use bevy_mod_picking::prelude::*;
 use std::time::Duration;
-
-use crate::{widgets::*, AppState};
-use bevy::{color::palettes::tailwind::*, prelude::*};
 use woodpecker_ui::prelude::*;
 
-use crate::assets::FontVelloAssets;
+use crate::{
+    assets::{AudioAssets, FontVelloAssets},
+    widgets::*,
+    AppState,
+};
 // use woodpecker_ui_macros::Widget;
 
 pub fn main_menu_interaction(
-    mut interactions: Query<(
-        Entity,
-        &PickingInteraction,
-        &mut WoodpeckerStyle,
-    )>,
+    mut interactions: Query<(Entity, &PickingInteraction)>,
     children: Query<&Children>,
+    mut colors: Query<
+        &mut WoodpeckerStyle,
+        With<PickingInteractionSubscriber>,
+    >,
     transitions: Query<&TransitionTimer>,
 ) {
-    for (entity, interaction, mut style) in
-        &mut interactions
-    {
+    for (entity, interaction) in &mut interactions {
         let all_timers_finished = children
             .iter_descendants(entity)
             .filter_map(|entity| {
                 transitions.get(entity).ok()
             })
-            // note: all will return true if filter_map filters
-            // *all* items out, resulting in an empty iterator
+            // note: all will return true if filter_map
+            // filters *all* items out,
+            // resulting in an empty iterator
             .all(|transition| {
                 return transition
                     .timeouts
@@ -37,15 +40,27 @@ pub fn main_menu_interaction(
             continue;
         }
         let interaction_color: Color = match interaction {
-            PickingInteraction::Pressed => RED_400.into(),
-            PickingInteraction::Hovered => RED_400.into(),
+            PickingInteraction::Pressed => SKY_200.into(),
+            PickingInteraction::Hovered => SKY_200.into(),
             PickingInteraction::None => Color::WHITE,
         };
-        let mut new_style = style.clone();
-        new_style.background_color = interaction_color;
-        *style = new_style;
+
+        let color_updates = children
+            .iter_descendants(entity)
+            .filter(|entity| colors.get(*entity).is_ok())
+            .collect::<Vec<Entity>>();
+        for entity in color_updates {
+            let mut style = colors.get_mut(entity).unwrap();
+            let mut new_style = *style;
+            new_style.background_color = interaction_color;
+            *style = new_style;
+        }
     }
 }
+
+#[derive(Component, Clone)]
+pub struct PickingInteractionSubscriber;
+
 // We can derive widget here and pass in our
 // systems passing in the widget_systems is
 // optional and if we don't pass them in we need
@@ -57,6 +72,9 @@ pub struct MainMenuButtonWidget {
     // TODO: can we measure the inner text to calculate
     // this width?
     pub width: Units,
+    /// Offset the start of the animation chain
+    /// in milliseconds
+    pub offset: u64,
 }
 
 impl Default for MainMenuButtonWidget {
@@ -64,6 +82,7 @@ impl Default for MainMenuButtonWidget {
         Self {
             content: "A button".to_string(),
             width: Units::Pixels(300.),
+            offset: 0,
         }
     }
 }
@@ -102,7 +121,6 @@ pub fn update(
     time: Res<Time>,
     mut hooks: ResMut<HookHelper>,
     children: Query<&Children>,
-    // mut interaction: Query<&mut PickingInteraction>,
 ) -> bool {
     let Ok(props) = widgets.get_mut(**entity) else {
         warn!(
@@ -162,8 +180,10 @@ pub fn render(
     widgets: Query<&MainMenuButtonWidget>,
     mut states: Query<&mut State>,
     mut hooks: ResMut<HookHelper>,
-    // interaction: Query<&PickingInteraction>,
+    audio: Res<Audio>,
+    audios: Res<AudioAssets>,
 ) {
+    audio.play(audios.data_show.clone());
     // let state_entity = hooks.use_state(
     //     &mut commands,
     //     *entity,
@@ -188,12 +208,13 @@ pub fn render(
 
     inner_container_children.add::<Element>((
             Name::new("Card"),
+            PickingInteractionSubscriber,
             ElementBundle::default(),
             WidgetRender::Quad,
             TransitionTimer {
                 easing: timer_transition::TransitionEasing::QuinticOut,
                 start: Timer::new(
-                    Duration::from_millis(300),
+                    Duration::from_millis(props.offset + 300),
                     TimerMode::Once,
                 ),
                 timeouts: vec![Timer::new(
@@ -213,6 +234,8 @@ pub fn render(
                     background_color: Color::WHITE.into(),
                     width: props.width,
                     height: Units::Pixels(60.),
+                    border: Edge::all(1.),
+                    border_color: SLATE_300.into(),
                     ..default()
                 }],
                 ..default()
@@ -262,7 +285,7 @@ pub fn render(
         TransitionTimer {
             easing: timer_transition::TransitionEasing::QuinticOut,
             start: Timer::new(
-                Duration::from_millis(300),
+                Duration::from_millis(props.offset + 400),
                 TimerMode::Once,
             ),
             timeouts: vec![Timer::new(
@@ -273,29 +296,29 @@ pub fn render(
             styles: vec![WoodpeckerStyle {
                 margin: Edge::all(10.),
                 font_size: 30.0,
-                color: SLATE_950.into(),
-                font: Some(fonts.outfit_extra_bold.id()),
-                ..Default::default()
+                color: SLATE_950.with_alpha(0.).into(),
+                font: Some(fonts.outfit_bold.id()),
+                ..default()
             },
             WoodpeckerStyle {
                 margin: Edge::all(10.),
                 font_size: 30.0,
                 color: SLATE_950.into(),
-                font: Some(fonts.outfit_extra_bold.id()),
-                ..Default::default()
+                font: Some(fonts.outfit_bold.id()),
+                ..default()
             }],
             ..default()
         }
     ));
 
     inner_container_children.add::<Element>((
-        Name::new("Secondary Reveal"),
+        Name::new("Primary Reveal"),
         ElementBundle::default(),
         WidgetRender::Quad,
         TransitionTimer {
             easing: timer_transition::TransitionEasing::QuinticOut,
             start: Timer::new(
-                Duration::from_millis(0),
+                Duration::from_millis(props.offset + 0),
                 TimerMode::Once,
             ),
             timeouts: vec![Timer::new(
@@ -341,13 +364,13 @@ pub fn render(
     ));
 
     inner_container_children.add::<Element>((
-        Name::new("Primary Reveal"),
+        Name::new("Secondary Reveal"),
         ElementBundle::default(),
         WidgetRender::Quad,
         TransitionTimer {
             easing: timer_transition::TransitionEasing::QuinticOut,
             start: Timer::new(
-                Duration::from_millis(200),
+                Duration::from_millis(props.offset + 200),
                 TimerMode::Once,
             ),
             timeouts: vec![Timer::new(
@@ -404,18 +427,25 @@ pub fn render(
         // WidgetRender::Quad,
         PickingInteraction::default(),
         Pickable::default(),
-        On::<Pointer<Over>>::listener_component_mut::<
-            PickingInteraction,
-        >(|_, button| {
-            // button.hovering = true;
-            info!("over");
-        }),
+        On::<Pointer<Over>>::run(
+            |audio: Res<Audio>,
+             audios: Res<AudioAssets>| {
+                audio.play(audios.data_short.clone());
+                // button.hovering = true;
+            },
+        ),
         On::<Pointer<Out>>::listener_component_mut::<
             PickingInteraction,
         >(|_, button| {
-            info!("out");
             // button.hovering = false;
         }),
+        On::<Pointer<Click>>::run(
+            |audio: Res<Audio>,
+             audios: Res<AudioAssets>| {
+                audio.play(audios.data_long.clone());
+                // button.hovering = true;
+            },
+        ),
     ));
     container_children.apply(entity.as_parent());
 

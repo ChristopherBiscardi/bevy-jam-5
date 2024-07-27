@@ -33,7 +33,8 @@ impl Plugin for AssetsPlugin {
                 .load_collection::<AudioAssets>()
                 .load_collection::<FontAssets>()
                 .load_collection::<FontVelloAssets>()
-                .load_collection::<PlayerAssets>(),
+                .load_collection::<PlayerAssets>()
+                .load_collection::<NavMeshAssets>(),
         )
         .add_systems(
             Update,
@@ -72,9 +73,19 @@ pub struct AudioAssets {
     #[asset(
         path = "audio/UnderwaterAmbience_SFXB.486.ogg"
     )]
-    pub ambiance: Handle<AudioSource>,
+    pub ambiance:
+        Handle<bevy_kira_audio::prelude::AudioSource>,
     #[asset(path = "audio/nr_perc_plop.ogg")]
-    pub plop: Handle<AudioSource>,
+    pub plop: Handle<bevy_kira_audio::prelude::AudioSource>,
+    #[asset(path = "audio/PE-Data_BW.29124.ogg")]
+    pub data_long:
+        Handle<bevy_kira_audio::prelude::AudioSource>,
+    #[asset(path = "audio/PE-Data_BW.29156.ogg")]
+    pub data_short:
+        Handle<bevy_kira_audio::prelude::AudioSource>,
+    #[asset(path = "audio/ComputerAccessData_HV.163.ogg")]
+    pub data_show:
+        Handle<bevy_kira_audio::prelude::AudioSource>,
 }
 
 #[derive(AssetCollection, Resource)]
@@ -89,6 +100,12 @@ pub struct PlayerAssets {
     pub gltf: Handle<Gltf>,
     #[asset(path = "animation_graph/player.animgraph.ron")]
     pub animation_graph: Handle<AnimationGraph>,
+}
+
+#[derive(AssetCollection, Resource)]
+pub struct NavMeshAssets {
+    #[asset(path = "blueprints/navmesh_collection.glb")]
+    pub navmesh_gltf: Handle<Gltf>,
 }
 
 #[derive(AssetCollection, Resource)]
@@ -120,8 +137,10 @@ pub struct FontAssets {
 pub struct FontVelloAssets {
     // #[asset(path = "poppins/Poppins-Regular.ttf")]
     // pub outfit_extra_bold: Handle<VelloFont>,
-    #[asset(path = "outfit/Outfit-Bold.ttf")]
+    #[asset(path = "outfit/Outfit-ExtraBold.ttf")]
     pub outfit_extra_bold: Handle<VelloFont>,
+    #[asset(path = "outfit/Outfit-Bold.ttf")]
+    pub outfit_bold: Handle<VelloFont>,
 }
 
 fn print_progress(

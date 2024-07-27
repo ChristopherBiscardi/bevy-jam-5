@@ -102,7 +102,16 @@ fn setup_level(
     //     RigidBody::Static,
     //     Collider::half_space(Vec3::Y),
     // ));
-
+    #[cfg(feature = "spawn_sacrifice")]
+    commands.spawn((
+        BlueprintInfo::from_path(
+            "levels/Sacrifical Scene.glb",
+        ),
+        SpawnBlueprint,
+        HideUntilReady,
+        GameWorldTag,
+    ));
+    #[cfg(not(feature = "spawn_sacrifice"))]
     commands.spawn((
         BlueprintInfo::from_path("levels/Scene.glb"),
         SpawnBlueprint,
@@ -334,7 +343,7 @@ fn sync_weights(
     // &animation_weight) in
     //         CLIP_NODE_INDICES
     //             .iter()
-    //             
+    //
     // .zip(animation_weights.weights.iter())
     //     {
     //         // If the animation happens to be
@@ -344,18 +353,18 @@ fn sync_weights(
     //             animation_node_index.into(),
     //         ) {
     //             animation_player
-    //                 
+    //
     // .play(animation_node_index.into())
     //                 .repeat();
     //         }
 
     //         // Set the weight.
     //         if let Some(active_animation) =
-    // animation_player             
+    // animation_player
     // .animation_mut(animation_node_index.into())
     //         {
     //             active_animation
-    //                 
+    //
     // .set_weight(animation_weight);
     //         }
     //     }

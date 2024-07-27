@@ -15,6 +15,7 @@ use bevy::{
     prelude::*,
     render::view::RenderLayers,
 };
+use bevy_kira_audio::prelude::*;
 use bevy_mod_picking::{
     debug::DebugPickingMode, DefaultPickingPlugins,
 };
@@ -23,6 +24,7 @@ use blenvy_helpers::BlenvyHelpersPlugin;
 use collision_layers::CollisionLayersPlugin;
 use game_scene::{GameScenePlugin, Player};
 use main_menu::MainMenuPlugin;
+use navmesh::NavMeshPlugin;
 use woodpecker_ui::WoodpeckerUIPlugin;
 
 mod assets;
@@ -30,6 +32,7 @@ mod blenvy_helpers;
 pub mod collision_layers;
 mod game_scene;
 mod main_menu;
+mod navmesh;
 mod widgets;
 
 pub struct AppPlugin;
@@ -63,11 +66,13 @@ impl Plugin for AppPlugin {
         app.init_state::<AppState>()
             .add_plugins((
                 AssetsPlugin,
+                AudioPlugin,
                 WoodpeckerUIPlugin,
                 #[cfg(feature = "with_main_menu")]
                 MainMenuPlugin,
                 GameScenePlugin,
                 CollisionLayersPlugin,
+                NavMeshPlugin,
                 widgets::CustomWidgetsPlugin,
                 BlenvyHelpersPlugin,
                 BlenvyPlugin {
@@ -154,6 +159,7 @@ enum AppState {
 }
 
 fn spawn_2d_camera(mut commands: Commands) {
+    #[cfg(feature = "with_main_menu")]
     commands.spawn((
         StateScoped(AppState::MainMenu),
         Camera2dBundle {

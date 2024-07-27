@@ -1,22 +1,16 @@
 use std::time::{Duration, Instant};
 
 use bevy::{
-    color::palettes::tailwind::{
-        SLATE_200, SLATE_300, SLATE_400, SLATE_50,
-        SLATE_500, SLATE_600,
-    },
+    color::palettes::tailwind::*,
     prelude::*,
     render::view::RenderLayers,
 };
-use bevy_mod_picking::{
-    prelude::*,
-    // picking_core::Pickable
-};
+use bevy_mod_picking::prelude::*;
 use woodpecker_ui::prelude::*;
 
 use crate::{
     assets::{FontAssets, FontVelloAssets},
-    widgets::*,
+    widgets::{self, *},
     AppState,
 };
 
@@ -38,18 +32,20 @@ fn spawn_main_menu(
     mut font_manager: ResMut<FontManager>,
     asset_server: Res<AssetServer>,
 ) {
+   
+
     let mut buttons = WidgetChildren::default();
     buttons.add::<MainMenuButtonWidget>((
         MainMenuButtonWidgetBundle {
             props: MainMenuButtonWidget {
                 content: "New Game".to_string(),
+                offset: 200,
                 ..default()
             },
             ..default()
         },
         On::<Pointer<Click>>::run(
             |mut next_state: ResMut<NextState<AppState>>| {
-                info!("clicked");
                 next_state.set(AppState::InGame);
             },
         ),
@@ -58,14 +54,18 @@ fn spawn_main_menu(
         MainMenuButtonWidgetBundle {
             props: MainMenuButtonWidget {
                 content: "Options".to_string(),
+                offset: 250,
                 ..default()
             },
             ..default()
         },
         On::<Pointer<Click>>::run(
-            |mut commands: Commands| {
-                info!("clicked");
-                // commands.trigger()
+            |mut commands: Commands, mut modal: Query<&mut OptionsModal>| {
+                let Ok(mut modal) = modal.get_single_mut() else {
+                    warn!("Expected a single modal");
+                    return;
+                };
+                modal.show_modal = true;
             },
         ),
     ));
@@ -73,6 +73,7 @@ fn spawn_main_menu(
         MainMenuButtonWidgetBundle {
             props: MainMenuButtonWidget {
                 content: "Exit".to_string(),
+                offset: 300,
                 ..default()
             },
             ..default()
@@ -105,11 +106,83 @@ fn spawn_main_menu(
                         ..Default::default()
                     },
    
-                    children: WidgetChildren::default().with_child::<Element>((
+                    children: WidgetChildren::default().with_child::<Element>(
+                       (
+                            Name::new("MainMenu::Title"),
+                            ElementBundle::default(),
+                            WidgetRender::Text {
+                                content: "Wash Cycle".to_string(),
+                                word_wrap: false,
+                            },
+                            TransitionTimer {
+                                easing: widgets::timer_transition::TransitionEasing::QuinticOut,
+                                start: Timer::new(
+                                    Duration::from_millis(0),
+                                    TimerMode::Once,
+                                ),
+                                timeouts: vec![
+                                    Timer::new(
+                                        Duration::from_millis(200),
+                                        TimerMode::Once,
+                                    ),
+                                    Timer::new(
+                                        Duration::from_millis(200),
+                                        TimerMode::Once,
+                                    ),
+                                    Timer::new(
+                                        Duration::from_millis(200),
+                                        TimerMode::Once,
+                                    )
+                                ],
+                                looping: false,
+                                styles: vec![WoodpeckerStyle {
+                                    position: WidgetPosition::Absolute,
+                                    margin: Edge::all(50.),
+                                    font_size: 125.0,
+                                    color: SLATE_950.with_alpha(0.).into(),
+                                    font: Some(fonts.outfit_bold.id()),
+                                    left: Units::Percentage(-25.),
+                                    top: Units::Percentage(45.),
+                                    ..default()
+                                },
+                                WoodpeckerStyle {
+                                    position: WidgetPosition::Absolute,
+                                    margin: Edge::all(50.),
+                                    font_size: 125.0,
+                                    color: SLATE_950.into(),
+                                    font: Some(fonts.outfit_bold.id()),
+                                    left: Units::Percentage(50.),
+                                    top: Units::Percentage(45.),
+                                    ..default()
+                                },
+                                WoodpeckerStyle {
+                                    position: WidgetPosition::Absolute,
+                                    margin: Edge::all(50.),
+                                    font_size: 125.0,
+                                    color: SLATE_950.into(),
+                                    font: Some(fonts.outfit_bold.id()),
+                                    left: Units::Percentage(50.),
+                                    top: Units::Percentage(45.),
+                                    ..default()
+                                },
+                                WoodpeckerStyle {
+                                    position: WidgetPosition::Absolute,
+                                    margin: Edge::all(50.),
+                                    font_size: 125.0,
+                                    color: SLATE_950.into(),
+                                    font: Some(fonts.outfit_bold.id()),
+                                    left: Units::Percentage(0.),
+                                    top: Units::Percentage(0.),
+                                    ..default()
+                                }],
+                                ..default()
+                            }
+                        )
+                    ).with_child::<Element>((
                         ElementBundle {
                             styles: WoodpeckerStyle {
                                 background_color: Srgba::hex("FF007F").unwrap().into(),
-                                margin: Edge { top: Units::Pixels(25.), right: Units::Pixels(25.), bottom: Units::Pixels(25.), left: Units::Pixels(25.) },
+                                margin: Edge { top: Units::Percentage(25.), right: Units::Pixels(25.), bottom: Units::Pixels(25.), left: Units::Percentage(15.) },
                                 width: Units::Pixels(300.),
                                 height: Units::Pixels(300.),
                                 gap: (Units::Pixels(10.), Units::Pixels(5.)),
@@ -124,7 +197,19 @@ fn spawn_main_menu(
                             children: buttons,
                             ..Default::default()
                         },
-                    )),
+                    ))
+                    .with_child::<OptionsModal>(
+                        OptionsModalBundle {
+                            styles: WoodpeckerStyle {
+                                width: Units::Percentage(100.0),
+                                justify_content: Some(
+                                    WidgetAlignContent::Center,
+                                ),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        },
+                    ),
                     ..Default::default()
                 }),
                 ..Default::default()
