@@ -36,19 +36,19 @@ bevy_kira_audio = "0.20.0"
 iyes_progress = { version = "0.12.0", features = ["bevy_asset"] }
 leafwing-input-manager = "0.14.0"
 vleue_kinetoscope = "0.2.0"
-# woodpecker_ui = { git = "ssh://git@github.com/StarArawn/woodpecker_ui.git" }
-woodpecker_ui = { path = "../../stararawn/woodpecker_ui" }
+woodpecker_ui = { git = "ssh://git@github.com/StarArawn/woodpecker_ui.git" }
+# woodpecker_ui = { path = "../../stararawn/woodpecker_ui" }
 bevy_mod_picking = "0.20"
 taffy = "0.5"
 bevy-tnua = "0.19.0"
 bevy-tnua-avian3d = "0.1.0"
 avian3d = { version = "0.1.1", features = ["collider-from-mesh"] }
-# blenvy = { git = "https://github.com/kaosat-dev/Blenvy.git", branch = "blenvy" }
-blenvy = { path = "../../kaosat-dev/Blenvy/crates/blenvy" }
+blenvy = { git = "https://github.com/kaosat-dev/Blenvy.git", branch = "blenvy" }
+# blenvy = { path = "../../kaosat-dev/Blenvy/crates/blenvy" }
 bevy_vello = "0.5.0"
 interpolation = "0.2"
-# vleue_navigator = "0.8.0"
-vleue_navigator = { path = "../../vleue/vleue_navigator" }
+vleue_navigator = "0.8.0"
+# vleue_navigator = { path = "../../vleue/vleue_navigator" }
 rand = "0.8.5"
 geo = "0.28.0"
 
