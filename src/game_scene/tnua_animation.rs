@@ -295,7 +295,7 @@ pub fn animate_platformer_character(
                         //     .start(
                         //         handler.
                         // animations
-                        //             
+                        //
                         // ["Standing"],
                         //     )
                         //     .set_speed(1.0)
@@ -335,7 +335,7 @@ pub fn animate_platformer_character(
                         //     .start(
                         //         handler.
                         // animations
-                        //             
+                        //
                         // ["Running"],
                         //     )
                         //     .set_speed(*speed
@@ -347,7 +347,7 @@ pub fn animate_platformer_character(
                         //     .start(
                         //         handler.
                         // animations
-                        //             
+                        //
                         // ["Jumping"],
                         //     )
                         //     .set_speed(2.0);
@@ -357,7 +357,7 @@ pub fn animate_platformer_character(
                         //     .start(
                         //         handler.
                         // animations
-                        //             
+                        //
                         // ["Falling"],
                         //     )
                         //     .set_speed(1.0);
@@ -367,7 +367,7 @@ pub fn animate_platformer_character(
                         //     .start(
                         //         handler.
                         // animations
-                        //             
+                        //
                         // ["Crouching"],
                         //     )
                         //     .set_speed(1.0)
@@ -378,7 +378,7 @@ pub fn animate_platformer_character(
                         //     .start(
                         //         handler.
                         // animations
-                        //             
+                        //
                         // ["Crawling"],
                         //     )
                         //     .set_speed(*speed
@@ -390,7 +390,7 @@ pub fn animate_platformer_character(
                         //     .start(
                         //         handler.
                         // animations
-                        //             
+                        //
                         // ["Dashing"],
                         //     )
                         //     .set_speed(10.0);

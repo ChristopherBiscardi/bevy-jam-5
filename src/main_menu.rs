@@ -1,8 +1,7 @@
 use std::time::{Duration, Instant};
 
 use bevy::{
-    color::palettes::tailwind::*,
-    prelude::*,
+    color::palettes::tailwind::*, prelude::*,
     render::view::RenderLayers,
 };
 use bevy_mod_picking::prelude::*;
@@ -32,8 +31,6 @@ fn spawn_main_menu(
     mut font_manager: ResMut<FontManager>,
     asset_server: Res<AssetServer>,
 ) {
-   
-
     let mut buttons = WidgetChildren::default();
     buttons.add::<MainMenuButtonWidget>((
         MainMenuButtonWidgetBundle {
@@ -45,7 +42,9 @@ fn spawn_main_menu(
             ..default()
         },
         On::<Pointer<Click>>::run(
-            |mut next_state: ResMut<NextState<AppState>>| {
+            |mut next_state: ResMut<
+                NextState<AppState>,
+            >| {
                 next_state.set(AppState::InGame);
             },
         ),
@@ -79,13 +78,12 @@ fn spawn_main_menu(
             ..default()
         },
         On::<Pointer<Click>>::run(
-            |mut commands: Commands, mut exit: EventWriter<AppExit>| {
+            |mut commands: Commands,
+             mut exit: EventWriter<AppExit>| {
                 exit.send(AppExit::Success);
             },
         ),
-   ) );
-
-
+    ));
 
     let root = commands
         .spawn((

@@ -1,6 +1,5 @@
 use bevy::{color::palettes::tailwind::*, prelude::*};
-use bevy_kira_audio::Audio;
-use bevy_kira_audio::AudioControl;
+use bevy_kira_audio::{Audio, AudioControl};
 use bevy_mod_picking::prelude::*;
 use std::time::Duration;
 use woodpecker_ui::prelude::*;
@@ -65,7 +64,7 @@ pub struct PickingInteractionSubscriber;
 // systems passing in the widget_systems is
 // optional and if we don't pass them in we need
 // to call `app.add_widget_systems`!
-#[derive(Component, Widget, Clone)]
+#[derive(Component, Widget, Clone, Reflect)]
 #[widget_systems(update, render)]
 pub struct MainMenuButtonWidget {
     pub content: String,
@@ -138,7 +137,8 @@ pub fn update(
     //     return props.is_changed();
     // };
 
-    // let Ok(mut state) = states.get_mut(state_entity) else {
+    // let Ok(mut state) =
+    // states.get_mut(state_entity) else {
     //     warn!(
     //         "MainMenuButtonWidget::state not
     // available in update query"
@@ -195,7 +195,8 @@ pub fn render(
         );
         return;
     };
-    // let Ok(mut state) = states.get_mut(state_entity) else {
+    // let Ok(mut state) =
+    // states.get_mut(state_entity) else {
     //     warn!(
     //         "MainMenuButtonWidget State not
     // available in render query"
@@ -247,7 +248,8 @@ pub fn render(
     //     ElementBundle::default(),
     //     WidgetRender::Quad,
     //     TransitionTimer {
-    //         easing: timer_transition::TransitionEasing::QuinticOut,
+    //         easing:
+    // timer_transition::TransitionEasing::QuinticOut,
     //         start: Timer::new(
     //             Duration::from_millis(300),
     //             TimerMode::Once,
@@ -259,17 +261,17 @@ pub fn render(
     //         looping: false,
     //         styles: vec![WoodpeckerStyle {
     //             position: WidgetPosition::Absolute,
-    //             background_color: Color::WHITE.into(),
-    //             width: Units::Pixels(0.),
-    //             height: Units::Pixels(60.),
-    //             ..default()
+    //             background_color:
+    // Color::WHITE.into(),             width:
+    // Units::Pixels(0.),             height:
+    // Units::Pixels(60.),             ..default()
     //         },
     //         WoodpeckerStyle {
     //             position: WidgetPosition::Absolute,
-    //             background_color: Color::WHITE.into(),
-    //             width: props.width,
-    //             height: Units::Pixels(60.),
-    //             ..default()
+    //             background_color:
+    // Color::WHITE.into(),             width:
+    // props.width,             height:
+    // Units::Pixels(60.),             ..default()
     //         }],
     //         ..default()
     //     }

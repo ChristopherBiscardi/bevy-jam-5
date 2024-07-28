@@ -106,6 +106,8 @@ pub struct PlayerAssets {
 pub struct NavMeshAssets {
     #[asset(path = "blueprints/navmesh_collection.glb")]
     pub navmesh_gltf: Handle<Gltf>,
+    #[asset(path = "materials/test_scenes_materials.glb")]
+    pub materials_preload: Handle<Gltf>,
 }
 
 #[derive(AssetCollection, Resource)]

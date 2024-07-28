@@ -6,8 +6,10 @@ use bevy::{
         dof::{DepthOfFieldMode, DepthOfFieldSettings},
         tonemapping::Tonemapping,
     },
+    math::vec3,
     pbr::{VolumetricFogSettings, VolumetricLight},
     prelude::*,
+    render::primitives::Aabb,
 };
 
 use bevy_tnua::{prelude::*, TnuaAnimatingState};

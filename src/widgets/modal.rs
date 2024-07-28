@@ -14,6 +14,7 @@ use woodpecker_ui::prelude::*;
     Default,
     Copy,
     PartialEq,
+    Reflect,
 )]
 #[widget_systems(update, render)]
 pub struct OptionsModal {
@@ -63,19 +64,19 @@ fn render(
     //                     ..Default::default()
     //                 },
     //                 WidgetRender::Text {
-    //                     content: "Open Modal".into(),
-    //                     word_wrap: false,
-    //                 },
+    //                     content: "Open
+    // Modal".into(),
+    // word_wrap: false,                 },
     //             )),
     //         ..Default::default()
     //     },
     //     On::<Pointer<Click>>::run(
-    //         move |mut query: Query<&mut OptionsModal>| {
-    //             if let Ok(mut my_widget) =
-    //                 query.get_mut(my_widget_entity)
-    //             {
-    //                 my_widget.show_modal = true;
-    //             }
+    //         move |mut query: Query<&mut
+    // OptionsModal>| {             if let Ok(mut
+    // my_widget) =
+    // query.get_mut(my_widget_entity)
+    // {                 my_widget.show_modal =
+    // true;             }
     //         },
     //     ),
     // ));

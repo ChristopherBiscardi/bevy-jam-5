@@ -57,7 +57,7 @@ impl Plugin for AppPlugin {
         #[cfg(feature = "dev")]
         app.add_plugins(
             (
-                // bevy_inspector_egui::quick::WorldInspectorPlugin::new(),
+                bevy_inspector_egui::quick::WorldInspectorPlugin::new(),
                 DefaultPickingPlugins
             ),
         )

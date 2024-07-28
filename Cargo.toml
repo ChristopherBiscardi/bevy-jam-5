@@ -47,8 +47,10 @@ avian3d = { version = "0.1.1", features = ["collider-from-mesh"] }
 blenvy = { path = "../../kaosat-dev/Blenvy/crates/blenvy" }
 bevy_vello = "0.5.0"
 interpolation = "0.2"
-vleue_navigator = "0.8.0"
+# vleue_navigator = "0.8.0"
+vleue_navigator = { path = "../../vleue/vleue_navigator" }
 rand = "0.8.5"
+geo = "0.28.0"
 
 [features]
 default = ["dev"]

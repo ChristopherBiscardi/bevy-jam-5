@@ -5357,8 +5357,6 @@ dependencies = [
 [[package]]
 name = "vleue_navigator"
 version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2fd1fdcd36ab478e65cbbf9932af8e35335fdd9464e15174c049a0b2cc4ef532"
 dependencies = [
  "bevy",
  "itertools 0.13.0",
@@ -5389,6 +5387,7 @@ dependencies = [
  "bevy_mod_picking",
  "bevy_vello",
  "blenvy",
+ "geo",
  "interpolation",
  "iyes_progress",
  "leafwing-input-manager",

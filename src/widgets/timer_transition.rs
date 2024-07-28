@@ -289,7 +289,8 @@ pub fn update_transitions(
     for (mut transition, mut styles) in query.iter_mut() {
         let Some(new_styles) = transition.update(*time)
         else {
-            // if the transition isn't playing, don't update style
+            // if the transition isn't playing, don't update
+            // style
             continue;
         };
         *styles = new_styles;
