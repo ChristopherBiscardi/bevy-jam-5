@@ -1,0 +1,35 @@
+(
+    graph: (
+        nodes: [
+            (
+                clip: None,
+                weight: 1.0,
+            ),
+            (
+                clip: Some(AssetPath("mini_characters_1/character-male-a.glb#Animation0")),
+                weight: 1.0,
+            ),
+            (
+                clip: Some(AssetPath("mini_characters_1/character-male-a.glb#Animation1")),
+                weight: 1.0,
+            ),
+            (
+                clip: Some(AssetPath("mini_characters_1/character-male-a.glb#Animation2")),
+                weight: 1.0,
+            ),
+            (
+                clip: Some(AssetPath("mini_characters_1/character-male-a.glb#Animation3")),
+                weight: 1.0,
+            ),
+        ],
+        node_holes: [],
+        edge_property: directed,
+        edges: [
+            Some((0, 1, ())),
+            Some((0, 2, ())),
+            Some((0, 3, ())),
+            Some((0, 4, ())),
+        ],
+    ),
+    root: 0,
+)
