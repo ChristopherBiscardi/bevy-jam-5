@@ -6197,7 +6197,7 @@ dependencies = [
 [[package]]
 name = "woodpecker_ui"
 version = "0.1.0"
-source = "git+ssh://git@github.com/StarArawn/woodpecker_ui.git#5a98c1bf3a386547e098b1af26579fb7db6b9b69"
+source = "git+ssh://git@github.com/StarArawn/woodpecker_ui.git?branch=state-management#fcfe395b87b20941b725ff8a7f8b2ba507b46a8d"
 dependencies = [
  "arboard",
  "bevy",
@@ -6216,7 +6216,7 @@ dependencies = [
 [[package]]
 name = "woodpecker_ui_macros"
 version = "0.1.0"
-source = "git+ssh://git@github.com/StarArawn/woodpecker_ui.git#5a98c1bf3a386547e098b1af26579fb7db6b9b69"
+source = "git+ssh://git@github.com/StarArawn/woodpecker_ui.git?branch=state-management#fcfe395b87b20941b725ff8a7f8b2ba507b46a8d"
 dependencies = [
  "proc-macro-error",
  "proc-macro2",

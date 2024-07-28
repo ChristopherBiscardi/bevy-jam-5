@@ -1,4 +1,6 @@
-use bevy::prelude::*;
+use bevy::{
+    color::palettes::tailwind::SLATE_50, prelude::*,
+};
 use bevy_mod_picking::{
     events::{Click, Pointer},
     prelude::On,
@@ -85,7 +87,7 @@ fn render(
         modal: Modal {
             visible: my_widget.show_modal,
             title: "I am a modal".into(),
-            overlay_alpha: 0.85,
+            overlay_color: SLATE_50.with_alpha(0.85).into(),
             ..Default::default()
         },
         children: PassedChildren(
