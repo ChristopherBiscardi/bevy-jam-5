@@ -8,9 +8,7 @@ use bevy_mod_picking::prelude::*;
 use woodpecker_ui::prelude::*;
 
 use crate::{
-    assets::{FontAssets, FontVelloAssets},
-    widgets::{self, *},
-    AppState,
+    assets::{FontAssets, FontVelloAssets}, spawn_2d_camera, widgets::{self, *}, AppState
 };
 
 pub struct MainMenuPlugin;
@@ -19,7 +17,7 @@ impl Plugin for MainMenuPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             OnEnter(AppState::MainMenu),
-            spawn_main_menu,
+            (spawn_main_menu,spawn_2d_camera),
         );
     }
 }

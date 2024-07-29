@@ -19124,6 +19124,28 @@
       "type": "object",
       "typeInfo": "Struct"
     },
+    "wash_cycle::game_scene::GameOverSensor": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::game_scene::GameOverSensor",
+      "properties": {},
+      "required": [],
+      "short_name": "GameOverSensor",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::game_scene::WashingMachine": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::game_scene::WashingMachine",
+      "properties": {},
+      "required": [],
+      "short_name": "WashingMachine",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "wash_cycle::navmesh::Obstacle": {
       "additionalProperties": false,
       "isComponent": true,

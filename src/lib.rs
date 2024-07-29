@@ -91,10 +91,10 @@ impl Plugin for AppPlugin {
                 },
             ))
             .insert_resource(DebugPickingMode::Normal)
-            .add_systems(
-                OnEnter(AppState::AssetLoading),
-                spawn_2d_camera,
-            )
+            // .add_systems(
+            //     OnEnter(AppState::AssetLoading),
+            //     spawn_2d_camera,
+            // )
             .add_systems(
                 OnEnter(AppState::ErrorScreen),
                 on_error,

@@ -1,7 +1,11 @@
 use std::f32::consts::PI;
 
+use avian3d::prelude::{Collider, Sensor};
 use bevy::{
-    color::palettes,
+    color::palettes::{
+        self,
+        tailwind::{GREEN_400, RED_400},
+    },
     gltf::GltfMesh,
     math::{vec2, vec3},
     pbr::NotShadowCaster,
@@ -42,6 +46,9 @@ impl Plugin for NavMeshPlugin {
         );
     }
 }
+
+#[derive(Component)]
+pub struct Spawner;
 
 fn debug(
     navmeshes: Res<Assets<NavMesh>>,
@@ -205,14 +212,16 @@ fn setup_navmesh(
 
     commands
         .spawn((
+            Spawner,
+            Sensor,
+            Collider::capsule(1., 1.),
             PbrBundle {
                 mesh: meshes.add(Mesh::from(Capsule3d {
                     ..default()
                 })),
                 material: materials.add(StandardMaterial {
-                    base_color: palettes::css::BLUE.into(),
-                    emissive: (palettes::css::BLUE * 5.0)
-                        .into(),
+                    base_color: RED_400.into(),
+                    emissive: (RED_400 * 5.0).into(),
                     ..default()
                 }),
                 transform: Transform::from_xyz(5., 1.0, 5.),
@@ -224,7 +233,7 @@ fn setup_navmesh(
         .with_children(|object| {
             object.spawn(PointLightBundle {
                 point_light: PointLight {
-                    color: palettes::css::BLUE.into(),
+                    color: RED_400.into(),
                     range: 500.0,
                     intensity: 100000.0,
                     shadows_enabled: true,
@@ -289,13 +298,10 @@ fn give_target_auto(
                         )),
                         material: materials.add(
                             StandardMaterial {
-                                base_color:
-                                    palettes::css::RED
-                                        .into(),
-                                emissive:
-                                    (palettes::css::RED
-                                        * 5.0)
-                                        .into(),
+                                base_color: GREEN_400
+                                    .into(),
+                                emissive: (GREEN_400 * 5.0)
+                                    .into(),
                                 ..default()
                             },
                         ),
@@ -310,8 +316,7 @@ fn give_target_auto(
                 .with_children(|target| {
                     target.spawn(PointLightBundle {
                         point_light: PointLight {
-                            color: palettes::css::RED
-                                .into(),
+                            color: GREEN_400.into(),
                             shadows_enabled: true,
                             range: 10.0,
                             ..default()

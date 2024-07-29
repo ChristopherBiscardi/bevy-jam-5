@@ -136,7 +136,7 @@ jobs:
         if: ${{ matrix.platform != 'web' }}
         run: |
           for target in ${{ matrix.targets }}; do
-            cargo build --profile='${{ matrix.profile }}' --target="${target}" --no-default-features --features='${{ matrix.features }}'
+            cargo build --profile='${{ matrix.profile }}' --target="${target}" --no-default-features --features="with_main_menu" --features='${{ matrix.features }}'
             mv target/"${target}"/'${{ matrix.profile }}/${{ env.BINARY }}${{ matrix.binary_ext }}' tmp/binary/"${target}"'${{ matrix.binary_ext }}'
           done
 

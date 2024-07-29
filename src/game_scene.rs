@@ -27,6 +27,7 @@ mod tnua_animation;
 use crate::{
     assets::PlayerAssets,
     collision_layers::{CollisionGrouping, GameLayer},
+    navmesh::Spawner,
     AppState, Dof, GameRenderLayer,
 };
 
@@ -36,6 +37,8 @@ impl Plugin for GameScenePlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<DropTimer>()
             .register_type::<ExampleAnimationWeights>()
+            .register_type::<GameOverSensor>()
+            .register_type::<WashingMachine>()
             .add_plugins((
                 PhysicsPlugins::default(),
                 PhysicsDebugPlugin::default(),
@@ -63,7 +66,7 @@ impl Plugin for GameScenePlugin {
             )
             .add_systems(
                 Update,
-                randomize_washers
+                (randomize_washers, game_over, spawners)
                     .run_if(in_state(AppState::InGame)),
             )
             .add_systems(
@@ -74,6 +77,85 @@ impl Plugin for GameScenePlugin {
             .observe(init_animations);
     }
 }
+
+fn spawners(
+    mut commands: Commands,
+    sensors: Query<
+        &CollidingEntities,
+        (With<Sensor>, With<Spawner>),
+    >,
+    players: Query<Entity, With<Player>>,
+) {
+    for sensor in &sensors {
+        for player in &players {
+            if sensor.0.contains(&player) {
+                let mut rng = rand::thread_rng();
+
+                let x = rand::thread_rng()
+                    .gen_range(-10.0..10.0);
+                let z = rand::thread_rng()
+                    .gen_range(-10.0..10.0);
+
+                commands.spawn((
+                    // Obstacle,
+                    // Aabb::from_min_max(
+                    //     vec3(0., 0., 0.),
+                    //     vec3(1., 1., 1.),
+                    // ),
+                    BlueprintInfo::from_path(
+                        "blueprints/washing_machine.glb",
+                    ),
+                    SpawnBlueprint,
+                    TransformBundle::from_transform(
+                        Transform::from_xyz(x, 10.0, z)
+                            .with_rotation(
+                                Quat::from_rotation_z(
+                                    rng.gen_range(0.0..PI),
+                                ),
+                            ),
+                    ),
+                    // CollisionGrouping::Enemy,
+                    RigidBody::Dynamic,
+                ));
+            }
+        }
+    }
+}
+fn game_over(
+    mut commands: Commands,
+    sensors: Query<
+        &CollidingEntities,
+        With<GameOverSensor>,
+    >,
+    machines: Query<Entity, With<WashingMachine>>,
+    players: Query<Entity, With<Player>>,
+    mut next_state: ResMut<NextState<AppState>>,
+) {
+    for sensor in &sensors {
+        for machine in &machines {
+            if sensor.0.contains(&machine) {
+                commands
+                    .entity(machine)
+                    .despawn_recursive();
+            }
+        }
+
+        for player in &players {
+            if sensor.0.contains(&player) {
+                // commands.entity(player).despawn_recursive();
+                next_state.set(AppState::MainMenu);
+            }
+        }
+    }
+}
+
+#[derive(Component, Reflect)]
+#[reflect(Component)]
+struct GameOverSensor;
+
+#[derive(Component, Reflect)]
+#[reflect(Component)]
+struct WashingMachine;
 
 #[derive(Resource)]
 struct DropTimer(Timer);
@@ -114,7 +196,7 @@ fn randomize_washers(
                         rng.gen_range(0.0..PI),
                     )),
             ),
-            CollisionGrouping::Enemy,
+            // CollisionGrouping::Enemy,
             RigidBody::Dynamic,
         ));
     }
@@ -160,6 +242,7 @@ fn setup_level(
     // ));
     #[cfg(feature = "spawn_sacrifice")]
     commands.spawn((
+        StateScoped(AppState::InGame),
         BlueprintInfo::from_path(
             "levels/Sacrifical Scene.glb",
         ),
@@ -169,6 +252,7 @@ fn setup_level(
     ));
     #[cfg(not(feature = "spawn_sacrifice"))]
     commands.spawn((
+        StateScoped(AppState::InGame),
         BlueprintInfo::from_path("levels/Scene.glb"),
         SpawnBlueprint,
         HideUntilReady,
@@ -177,16 +261,16 @@ fn setup_level(
 
     // Spawn a little platform for the player to jump
     // on.
-    commands.spawn((
-        PbrBundle {
-            mesh: meshes.add(Cuboid::new(4.0, 1.0, 4.0)),
-            material: materials.add(Color::from(SLATE_200)),
-            transform: Transform::from_xyz(-6.0, 2.0, 0.0),
-            ..Default::default()
-        },
-        RigidBody::Static,
-        Collider::cuboid(4.0, 1.0, 4.0),
-    ));
+    // commands.spawn((
+    //     PbrBundle {
+    //         mesh: meshes.add(Cuboid::new(4.0, 1.0, 4.0)),
+    //         material: materials.add(Color::from(SLATE_200)),
+    //         transform: Transform::from_xyz(-6.0, 2.0, 0.0),
+    //         ..Default::default()
+    //     },
+    //     RigidBody::Static,
+    //     Collider::cuboid(4.0, 1.0, 4.0),
+    // ));
 }
 
 fn apply_controls(
@@ -430,6 +514,7 @@ fn sync_weights(
 fn spawn_3d_camera(mut commands: Commands, dof: Res<Dof>) {
     // commands.spawn(Camera3dBundle::default());
     commands.spawn((
+        StateScoped(AppState::InGame),
         Camera3dBundle {
             transform: Transform::from_xyz(83., 92., 100.0)
                 .with_rotation(Quat::from_euler(
