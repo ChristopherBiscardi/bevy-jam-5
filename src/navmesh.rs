@@ -397,34 +397,34 @@ fn spawn_obstacle_on_click(
     mut commands: Commands,
     settings: Query<Ref<NavMeshSettings>>,
 ) {
-    if mouse_button_input.just_pressed(MouseButton::Left) {
-        let mut rng = rand::thread_rng();
-        let x = rand::thread_rng().gen_range(-10.0..10.0);
-        let z = rand::thread_rng().gen_range(-10.0..10.0);
+    // if mouse_button_input.just_pressed(MouseButton::Left) {
+    //     let mut rng = rand::thread_rng();
+    //     let x = rand::thread_rng().gen_range(-10.0..10.0);
+    //     let z = rand::thread_rng().gen_range(-10.0..10.0);
 
-        // new_obstacle(
-        //     &mut commands,
-        //     &mut rng,
-        //     Transform::from_xyz(x, 0.0, z),
-        // );
-        commands.spawn((
-            Obstacle,
-            Aabb::from_min_max(
-                vec3(0., 0., 0.),
-                vec3(1., 1., 1.),
-            ),
-            BlueprintInfo::from_path(
-                "blueprints/washing_machine.glb",
-            ),
-            SpawnBlueprint,
-            TransformBundle::from_transform(
-                Transform::from_xyz(x, 0.0, z)
-                    .with_rotation(Quat::from_rotation_z(
-                        rng.gen_range(0.0..PI),
-                    )),
-            ),
-        ));
-    }
+    //     // new_obstacle(
+    //     //     &mut commands,
+    //     //     &mut rng,
+    //     //     Transform::from_xyz(x, 0.0, z),
+    //     // );
+    //     commands.spawn((
+    //         Obstacle,
+    //         Aabb::from_min_max(
+    //             vec3(0., 0., 0.),
+    //             vec3(1., 1., 1.),
+    //         ),
+    //         BlueprintInfo::from_path(
+    //             "blueprints/washing_machine.glb",
+    //         ),
+    //         SpawnBlueprint,
+    //         TransformBundle::from_transform(
+    //             Transform::from_xyz(x, 0.0, z)
+    //                 .with_rotation(Quat::from_rotation_z(
+    //                     rng.gen_range(0.0..PI),
+    //                 )),
+    //         ),
+    //     ));
+    // }
 }
 // Aabb::from_min_max(
 //     Vec3::ZERO,

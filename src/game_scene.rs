@@ -1,3 +1,5 @@
+use std::{f32::consts::PI, time::Duration};
+
 use avian3d::prelude::*;
 use bevy::{
     color::palettes::tailwind::SLATE_200,
@@ -18,6 +20,7 @@ use blenvy::{
     BlueprintInfo, GameWorldTag, HideUntilReady,
     SpawnBlueprint,
 };
+use rand::Rng;
 use tnua_animation::{AnimationState, TnuaAnimationPlugin};
 mod tnua_animation;
 
@@ -30,7 +33,8 @@ pub struct GameScenePlugin;
 
 impl Plugin for GameScenePlugin {
     fn build(&self, app: &mut App) {
-        app.register_type::<ExampleAnimationWeights>()
+        app.init_resource::<DropTimer>()
+            .register_type::<ExampleAnimationWeights>()
             .add_plugins((
                 PhysicsPlugins::default(),
                 PhysicsDebugPlugin::default(),
@@ -58,6 +62,11 @@ impl Plugin for GameScenePlugin {
             )
             .add_systems(
                 Update,
+                randomize_washers
+                    .run_if(in_state(AppState::InGame)),
+            )
+            .add_systems(
+                Update,
                 (apply_controls
                     .in_set(TnuaUserControlsSystemSet),),
             )
@@ -65,21 +74,64 @@ impl Plugin for GameScenePlugin {
     }
 }
 
-fn spawn_the_cube(
+#[derive(Resource)]
+struct DropTimer(Timer);
+
+impl Default for DropTimer {
+    fn default() -> Self {
+        Self(Timer::from_seconds(
+            5.,
+            TimerMode::Repeating,
+        ))
+    }
+}
+
+fn randomize_washers(
     mut commands: Commands,
-    keycode: Res<ButtonInput<KeyCode>>,
+    mut timer: ResMut<DropTimer>,
+    time: Res<Time>,
 ) {
-    if keycode.just_pressed(KeyCode::KeyS) {
+    if timer.0.tick(time.delta()).just_finished() {
+        let mut rng = rand::thread_rng();
+
+        let x = rand::thread_rng().gen_range(-10.0..10.0);
+        let z = rand::thread_rng().gen_range(-10.0..10.0);
+
         commands.spawn((
+            // Obstacle,
+            // Aabb::from_min_max(
+            //     vec3(0., 0., 0.),
+            //     vec3(1., 1., 1.),
+            // ),
             BlueprintInfo::from_path(
                 "blueprints/washing_machine.glb",
             ),
             SpawnBlueprint,
             TransformBundle::from_transform(
-                Transform::from_xyz(0., 2., 0.),
+                Transform::from_xyz(x, 10.0, z)
+                    .with_rotation(Quat::from_rotation_z(
+                        rng.gen_range(0.0..PI),
+                    )),
             ),
+            RigidBody::Dynamic,
         ));
     }
+}
+fn spawn_the_cube(
+    mut commands: Commands,
+    keycode: Res<ButtonInput<KeyCode>>,
+) {
+    // if keycode.just_pressed(KeyCode::KeyS) {
+    //     commands.spawn((
+    //         BlueprintInfo::from_path(
+    //             "blueprints/washing_machine.glb",
+    //         ),
+    //         SpawnBlueprint,
+    //         TransformBundle::from_transform(
+    //             Transform::from_xyz(0., 2., 0.),
+    //         ),
+    //     ));
+    // }
 }
 
 #[derive(Component)]

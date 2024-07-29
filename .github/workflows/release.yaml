@@ -17,12 +17,12 @@ on:
 # Configure constants for this workflow.
 env:
   # The base filename of the binary produced by `cargo build`.
-  BINARY: wash_cycle
+  BINARY: wash-cycle
   # The name to use for the packaged application produced by this workflow.
-  PACKAGE_NAME: wash_cycle
+  PACKAGE_NAME: wash-cycle
   # The itch.io page to upload to, in the format: `user-name/project-name`.
   # Comment this out to disable.
-  ITCH_TARGET: chrisbiscardi/wash_cycle
+  ITCH_TARGET: chrisbiscardi/wash-cycle
   # The organization or author that owns the rights to the game.
   OWNER: chrisbiscardi
   # The path to the assets directory.
