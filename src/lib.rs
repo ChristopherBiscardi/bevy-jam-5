@@ -5,6 +5,7 @@ use avian3d::{
     sync::ancestor_marker::AncestorMarker,
 };
 use bevy::{
+    asset::AssetMetaCheck,
     color::palettes::tailwind::*,
     core_pipeline::{
         bloom::BloomSettings,
@@ -52,19 +53,28 @@ impl Plugin for AppPlugin {
                 max_circle_of_confusion_diameter: 64.0,
                 max_depth: f32::INFINITY,
             })
-            .add_plugins(DefaultPlugins);
+            .add_plugins(
+                DefaultPlugins.set(WindowPlugin {
+                    primary_window: Window {
+                        title: "Wash Cycle".to_string(),
+                        ..default()
+                    }
+                    .into(),
+                    ..default()
+                }),
+            );
 
         #[cfg(feature = "dev")]
         app.add_plugins(
             (
                 bevy_inspector_egui::quick::WorldInspectorPlugin::new(),
-                DefaultPickingPlugins
             ),
         )
-        .insert_resource(DebugPickingMode::Normal);
+        ;
 
         app.init_state::<AppState>()
             .add_plugins((
+                DefaultPickingPlugins,
                 AssetsPlugin,
                 AudioPlugin,
                 WoodpeckerUIPlugin,
@@ -80,9 +90,14 @@ impl Plugin for AppPlugin {
                     ..default()
                 },
             ))
+            .insert_resource(DebugPickingMode::Normal)
             .add_systems(
                 OnEnter(AppState::AssetLoading),
                 spawn_2d_camera,
+            )
+            .add_systems(
+                OnEnter(AppState::ErrorScreen),
+                on_error,
             )
             .add_systems(
                 Update,
@@ -153,9 +168,15 @@ fn dof_on_change(
 enum AppState {
     #[default]
     AssetLoading,
+    ErrorScreen,
     BevyEngineSplash,
     MainMenu,
     InGame,
+}
+
+fn on_error() {
+    panic!("here");
+    dbg!("error");
 }
 
 fn spawn_2d_camera(mut commands: Commands) {

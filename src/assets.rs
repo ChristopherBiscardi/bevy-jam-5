@@ -34,7 +34,10 @@ impl Plugin for AssetsPlugin {
                 .load_collection::<FontAssets>()
                 .load_collection::<FontVelloAssets>()
                 .load_collection::<PlayerAssets>()
-                .load_collection::<NavMeshAssets>(),
+                .load_collection::<NavMeshAssets>()
+                .on_failure_continue_to_state(
+                    AppState::ErrorScreen,
+                ),
         )
         .add_systems(
             Update,
@@ -70,13 +73,13 @@ fn load_new_default(
 
 #[derive(AssetCollection, Resource)]
 pub struct AudioAssets {
-    #[asset(
-        path = "audio/UnderwaterAmbience_SFXB.486.ogg"
-    )]
-    pub ambiance:
-        Handle<bevy_kira_audio::prelude::AudioSource>,
-    #[asset(path = "audio/nr_perc_plop.ogg")]
-    pub plop: Handle<bevy_kira_audio::prelude::AudioSource>,
+    // #[asset(
+    //     path = "audio/UnderwaterAmbience_SFXB.486.ogg"
+    // )]
+    // pub ambiance:
+    //     Handle<bevy_kira_audio::prelude::AudioSource>,
+    // #[asset(path = "audio/nr_perc_plop.ogg")]
+    // pub plop: Handle<bevy_kira_audio::prelude::AudioSource>,
     #[asset(path = "audio/PE-Data_BW.29124.ogg")]
     pub data_long:
         Handle<bevy_kira_audio::prelude::AudioSource>,
@@ -106,8 +109,16 @@ pub struct PlayerAssets {
 pub struct NavMeshAssets {
     #[asset(path = "blueprints/navmesh_collection.glb")]
     pub navmesh_gltf: Handle<Gltf>,
-    #[asset(path = "materials/test_scenes_materials.glb")]
-    pub materials_preload: Handle<Gltf>,
+    #[asset(path = "materials/Material.001.glb")]
+    pub material_001: Handle<Gltf>,
+    #[asset(path = "materials/Material.002.glb")]
+    pub material_002: Handle<Gltf>,
+    #[asset(path = "materials/Material.003.glb")]
+    pub material_003: Handle<Gltf>,
+    #[asset(path = "materials/Pink Fabric.glb")]
+    pub pink_fabric: Handle<Gltf>,
+    #[asset(path = "materials/Neon Plexi Pink by LP.glb")]
+    pub neon_plexi_pink_by_lp: Handle<Gltf>,
 }
 
 #[derive(AssetCollection, Resource)]
