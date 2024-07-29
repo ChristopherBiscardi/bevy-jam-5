@@ -115,6 +115,9 @@ jobs:
       - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_WOODPECKER }}
+      - run: |
+          eval ssh-agent -s
+          ssh-add
 
       - name: Prepare output directories
         run: rm -rf tmp; mkdir -p tmp/binary '${{ env.OUT_DIR }}'
