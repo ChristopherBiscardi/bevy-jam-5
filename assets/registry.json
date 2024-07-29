@@ -19098,7 +19098,8 @@
       "long_name": "wash_cycle::collision_layers::CollisionGrouping",
       "oneOf": [
         "Environment",
-        "Player"
+        "Player",
+        "Enemy"
       ],
       "short_name": "CollisionGrouping",
       "type": "string",

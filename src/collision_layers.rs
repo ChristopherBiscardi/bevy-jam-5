@@ -31,6 +31,7 @@ pub enum GameLayer {
 pub enum CollisionGrouping {
     Environment,
     Player,
+    Enemy,
 }
 
 impl Component for CollisionGrouping {
@@ -67,6 +68,19 @@ impl Component for CollisionGrouping {
                                 GameLayer::Player,
                                 [
                                     GameLayer::Enemy,
+                                    GameLayer::Ground,
+                                ],
+                            ))
+                            .remove::<CollisionGrouping>();
+                    }
+                    CollisionGrouping::Enemy => {
+                        world
+                            .commands()
+                            .entity(entity)
+                            .insert(CollisionLayers::new(
+                                GameLayer::Enemy,
+                                [
+                                    GameLayer::Player,
                                     GameLayer::Ground,
                                 ],
                             ))
