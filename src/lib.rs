@@ -64,13 +64,12 @@ impl Plugin for AppPlugin {
                 }),
             );
 
-        #[cfg(feature = "dev")]
-        app.add_plugins(
-            (
-                bevy_inspector_egui::quick::WorldInspectorPlugin::new(),
-            ),
-        )
-        ;
+        // #[cfg(feature = "dev")]
+        // app.add_plugins(
+        //     (
+        //         bevy_inspector_egui::quick::WorldInspectorPlugin::new(),
+        //     ),
+        // );
 
         app.init_state::<AppState>()
             .add_plugins((
