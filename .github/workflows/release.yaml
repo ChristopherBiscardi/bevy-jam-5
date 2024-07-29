@@ -54,12 +54,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - platform: web
-            targets: wasm32-unknown-unknown
-            profile: release
-            binary_ext: .wasm
-            package_ext: .zip
-            runner: ubuntu-latest
+          # - platform: web
+          #   targets: wasm32-unknown-unknown
+          #   profile: release
+          #   binary_ext: .wasm
+          #   package_ext: .zip
+          #   runner: ubuntu-latest
 
           - platform: linux
             targets: x86_64-unknown-linux-gnu
@@ -111,6 +111,10 @@ jobs:
       - name: Install dependencies (Linux)
         if: ${{ matrix.platform == 'linux' }}
         run: sudo apt-get update; sudo apt-get install --no-install-recommends libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_WOODPECKER }}
 
       - name: Prepare output directories
         run: rm -rf tmp; mkdir -p tmp/binary '${{ env.OUT_DIR }}'

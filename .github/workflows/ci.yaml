@@ -30,6 +30,10 @@ jobs:
       - name: Populate target directory from cache
         uses: Leafwing-Studios/cargo-cache@v2
 
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_WOODPECKER }}
+
       - name: Run tests
         run: |
           cargo test --workspace --all-features --all-targets
@@ -56,6 +60,10 @@ jobs:
       - name: Populate target directory from cache
         uses: Leafwing-Studios/cargo-cache@v2
 
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_WOODPECKER }}
+
       - name: Run clippy lints
         run: cargo clippy --workspace --all-targets --all-features -- --deny warnings
 
@@ -72,6 +80,10 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_WOODPECKER }}
 
       - name: Run cargo fmt
         run: cargo fmt --all -- --check
@@ -93,6 +105,10 @@ jobs:
 
       - name: Populate target directory from cache
         uses: Leafwing-Studios/cargo-cache@v2
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_WOODPECKER }}
 
       - name: Check documentation
         run: cargo doc --workspace --all-features --document-private-items --no-deps
