@@ -25,7 +25,8 @@ use tnua_animation::{AnimationState, TnuaAnimationPlugin};
 mod tnua_animation;
 
 use crate::{
-    assets::PlayerAssets, collision_layers::GameLayer,
+    assets::PlayerAssets,
+    collision_layers::{CollisionGrouping, GameLayer},
     AppState, Dof, GameRenderLayer,
 };
 
@@ -113,6 +114,7 @@ fn randomize_washers(
                         rng.gen_range(0.0..PI),
                     )),
             ),
+            CollisionGrouping::Enemy,
             RigidBody::Dynamic,
         ));
     }
