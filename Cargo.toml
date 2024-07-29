@@ -71,3 +71,11 @@ opt-level = 3
 # Enable only a small amount of optimization in debug mode
 [profile.dev]
 opt-level = 1
+
+[profile.release-native]
+# Default to release profile values.
+inherits = "release"
+# Optimize with performance in mind.
+opt-level = 3
+# Keep debug information in the binary.
+strip = "none"
