@@ -15,7 +15,9 @@ use bevy::{
 use blenvy::{BlueprintInfo, SpawnBlueprint};
 use geo::{LineString, Polygon as GeoPolygon};
 use rand::{rngs::ThreadRng, Rng};
-use vleue_navigator::{prelude::*, Triangulation};
+use vleue_navigator::{
+    prelude::*, NavMeshDebug, Triangulation,
+};
 
 use crate::{assets::NavMeshAssets, AppState};
 
@@ -23,9 +25,12 @@ pub struct NavMeshPlugin;
 
 impl Plugin for NavMeshPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((
+        app.insert_resource(NavMeshesDebug(
+            palettes::tailwind::PINK_400.into(),
+        ))
+        .add_plugins((
             VleueNavigatorPlugin,
-            NavmeshUpdaterPlugin::<Aabb, Obstacle>::default(
+            NavmeshUpdaterPlugin::<Collider, Obstacle>::default(
             ),
         ))
         .register_type::<Obstacle>()
@@ -40,7 +45,6 @@ impl Plugin for NavMeshPlugin {
                 trigger_navmesh_visibility,
                 move_object,
                 spawn_obstacle_on_click,
-                debug,
             )
                 .run_if(in_state(AppState::InGame)),
         );
@@ -49,25 +53,6 @@ impl Plugin for NavMeshPlugin {
 
 #[derive(Component)]
 pub struct Spawner;
-
-fn debug(
-    navmeshes: Res<Assets<NavMesh>>,
-    current_mesh: Res<CurrentMesh>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut handles: Query<
-        &mut Handle<Mesh>,
-        With<NavMeshDisp>,
-    >,
-) {
-    // info!("navmeshes.len: {}", navmeshes.len());
-    let navmesh = navmeshes.get(&current_mesh.0).unwrap();
-
-    let navmesh_wireframe =
-        meshes.add(navmesh.to_wireframe_mesh());
-    for mut handle in &mut handles {
-        *handle = navmesh_wireframe.clone();
-    }
-}
 
 #[derive(Component, Debug, Reflect)]
 #[reflect(Component)]
@@ -150,63 +135,47 @@ fn setup_navmesh(
         let navmesh =
             vleue_navigator::NavMesh::from_bevy_mesh(mesh);
 
+        let transform = navmesh.transform();
         let mut material: StandardMaterial =
             Color::Srgba(palettes::css::ANTIQUE_WHITE)
                 .into();
         material.unlit = true;
 
-        let navmesh_wireframe =
-            meshes.add(navmesh.to_wireframe_mesh());
         let navmesh_handle = navmeshes.add(navmesh);
 
-        // commands.spawn(NavMeshBundle {
-        //     settings: NavMeshSettings {
-        //         // Define the outer borders of the
-        // navmesh.         fixed:
-        // Triangulation::from_outer_edges(
-        //             &vec![
-        //                 vec2(
-        //                     -(aabb.half_extents.x *
-        // 20.),
-        // -(aabb.half_extents.z * 20.),
-        //                 ),
-        //                 vec2(
-        //                     -(aabb.half_extents.x *
-        // 20.),
-        // (aabb.half_extents.z * 20.),
-        //                 ),
-        //                 vec2(
-        //                     (aabb.half_extents.x *
-        // 20.),
-        // (aabb.half_extents.z * 20.),
-        //                 ),
-        //                 vec2(
-        //                     (aabb.half_extents.x *
-        // 20.),
-        // -(aabb.half_extents.z * 20.),
-        //                 ),
-        //             ],
-        //         ),
-        //         ..default()
-        //     },
-        //     update_mode: NavMeshUpdateMode::Direct,
-        //     handle: navmesh_handle.clone(),
-        //     ..default()
-        // });
+        commands.spawn(NavMeshBundle {
+            settings: NavMeshSettings {
+                // Define the outer borders of the
+                // navmesh.
+                fixed: Triangulation::from_outer_edges(
+                    &vec![
+                        vec2(
+                            -(aabb.half_extents.x),
+                            -(aabb.half_extents.z),
+                        ),
+                        vec2(
+                            -(aabb.half_extents.x),
+                            (aabb.half_extents.z),
+                        ),
+                        vec2(
+                            (aabb.half_extents.x),
+                            (aabb.half_extents.z),
+                        ),
+                        vec2(
+                            (aabb.half_extents.x),
+                            -(aabb.half_extents.z),
+                        ),
+                    ],
+                ),
+                ..default()
+            },
+            update_mode: NavMeshUpdateMode::Direct,
+            handle: navmesh_handle.clone(),
+            transform: transform,
+            ..default()
+        });
         commands.insert_resource(CurrentMesh(
             navmesh_handle.clone(),
-        ));
-        commands.spawn((
-            PbrBundle {
-                mesh: navmesh_wireframe,
-                material: materials.add(material),
-                transform: Transform::from_xyz(
-                    0.0, 0.2, 0.0,
-                ),
-                visibility: Visibility::Hidden,
-                ..Default::default()
-            },
-            NavMeshDisp(navmesh_handle),
         ));
     }
 
@@ -402,34 +371,34 @@ fn spawn_obstacle_on_click(
     mut commands: Commands,
     settings: Query<Ref<NavMeshSettings>>,
 ) {
-    // if mouse_button_input.just_pressed(MouseButton::Left) {
-    //     let mut rng = rand::thread_rng();
-    //     let x = rand::thread_rng().gen_range(-10.0..10.0);
-    //     let z = rand::thread_rng().gen_range(-10.0..10.0);
+    if mouse_button_input.just_pressed(MouseButton::Left) {
+        let mut rng = rand::thread_rng();
+        let x = rand::thread_rng().gen_range(-10.0..10.0);
+        let z = rand::thread_rng().gen_range(-10.0..10.0);
 
-    //     // new_obstacle(
-    //     //     &mut commands,
-    //     //     &mut rng,
-    //     //     Transform::from_xyz(x, 0.0, z),
-    //     // );
-    //     commands.spawn((
-    //         Obstacle,
-    //         Aabb::from_min_max(
-    //             vec3(0., 0., 0.),
-    //             vec3(1., 1., 1.),
-    //         ),
-    //         BlueprintInfo::from_path(
-    //             "blueprints/washing_machine.glb",
-    //         ),
-    //         SpawnBlueprint,
-    //         TransformBundle::from_transform(
-    //             Transform::from_xyz(x, 0.0, z)
-    //                 .with_rotation(Quat::from_rotation_z(
-    //                     rng.gen_range(0.0..PI),
-    //                 )),
-    //         ),
-    //     ));
-    // }
+        //     // new_obstacle(
+        //     //     &mut commands,
+        //     //     &mut rng,
+        //     //     Transform::from_xyz(x, 0.0, z),
+        //     // );
+        commands.spawn((
+            Obstacle,
+            // Aabb::from_min_max(
+            //     vec3(0., 0., 0.),
+            //     vec3(1., 1., 1.),
+            // ),
+            BlueprintInfo::from_path(
+                "blueprints/washing_machine.glb",
+            ),
+            SpawnBlueprint,
+            TransformBundle::from_transform(
+                Transform::from_xyz(x, 0.0, z)
+                    .with_rotation(Quat::from_rotation_z(
+                        rng.gen_range(0.0..PI),
+                    )),
+            ),
+        ));
+    }
 }
 // Aabb::from_min_max(
 //     Vec3::ZERO,
