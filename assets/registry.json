@@ -4524,10 +4524,10 @@
       "type": "object",
       "typeInfo": "Enum"
     },
-    "bevy_asset::handle::Handle<blenvy::blueprints::spawn_from_blueprints::RawGltfAsset>": {
+    "bevy_asset::handle::Handle<blenvy::blueprints::assets::BlueprintPreloadAssets>": {
       "isComponent": true,
       "isResource": false,
-      "long_name": "bevy_asset::handle::Handle<blenvy::blueprints::spawn_from_blueprints::RawGltfAsset>",
+      "long_name": "bevy_asset::handle::Handle<blenvy::blueprints::assets::BlueprintPreloadAssets>",
       "oneOf": [
         {
           "items": false,
@@ -4549,7 +4549,7 @@
           "prefixItems": [
             {
               "type": {
-                "$ref": "#/$defs/bevy_asset::id::AssetId<blenvy::blueprints::spawn_from_blueprints::RawGltfAsset>"
+                "$ref": "#/$defs/bevy_asset::id::AssetId<blenvy::blueprints::assets::BlueprintPreloadAssets>"
               }
             }
           ],
@@ -4558,7 +4558,7 @@
           "typeInfo": "Tuple"
         }
       ],
-      "short_name": "Handle<RawGltfAsset>",
+      "short_name": "Handle<BlueprintPreloadAssets>",
       "type": "object",
       "typeInfo": "Enum"
     },
@@ -4597,6 +4597,44 @@
         }
       ],
       "short_name": "Handle<NavMesh>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "bevy_asset::handle::Handle<woodpecker_ui::svg::SvgAsset>": {
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "bevy_asset::handle::Handle<woodpecker_ui::svg::SvgAsset>",
+      "oneOf": [
+        {
+          "items": false,
+          "long_name": "Strong",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/std::sync::Arc<bevy_asset::handle::StrongHandle>"
+              }
+            }
+          ],
+          "short_name": "Strong",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Weak",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/bevy_asset::id::AssetId<woodpecker_ui::svg::SvgAsset>"
+              }
+            }
+          ],
+          "short_name": "Weak",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "Handle<SvgAsset>",
       "type": "object",
       "typeInfo": "Enum"
     },
@@ -5842,10 +5880,10 @@
       "type": "object",
       "typeInfo": "Enum"
     },
-    "bevy_asset::id::AssetId<blenvy::blueprints::spawn_from_blueprints::RawGltfAsset>": {
+    "bevy_asset::id::AssetId<blenvy::blueprints::assets::BlueprintPreloadAssets>": {
       "isComponent": false,
       "isResource": false,
-      "long_name": "bevy_asset::id::AssetId<blenvy::blueprints::spawn_from_blueprints::RawGltfAsset>",
+      "long_name": "bevy_asset::id::AssetId<blenvy::blueprints::assets::BlueprintPreloadAssets>",
       "oneOf": [
         {
           "additionalProperties": false,
@@ -5884,7 +5922,7 @@
           "typeInfo": "Struct"
         }
       ],
-      "short_name": "AssetId<RawGltfAsset>",
+      "short_name": "AssetId<BlueprintPreloadAssets>",
       "type": "object",
       "typeInfo": "Enum"
     },
@@ -5931,6 +5969,52 @@
         }
       ],
       "short_name": "AssetId<NavMesh>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "bevy_asset::id::AssetId<woodpecker_ui::svg::SvgAsset>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "bevy_asset::id::AssetId<woodpecker_ui::svg::SvgAsset>",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "long_name": "Index",
+          "properties": {
+            "index": {
+              "long_name": "index",
+              "type": {
+                "$ref": "#/$defs/bevy_asset::assets::AssetIndex"
+              }
+            }
+          },
+          "required": [
+            "index"
+          ],
+          "short_name": "Index",
+          "type": "object",
+          "typeInfo": "Struct"
+        },
+        {
+          "additionalProperties": false,
+          "long_name": "Uuid",
+          "properties": {
+            "uuid": {
+              "long_name": "uuid",
+              "type": {
+                "$ref": "#/$defs/uuid::Uuid"
+              }
+            }
+          },
+          "required": [
+            "uuid"
+          ],
+          "short_name": "Uuid",
+          "type": "object",
+          "typeInfo": "Struct"
+        }
+      ],
+      "short_name": "AssetId<SvgAsset>",
       "type": "object",
       "typeInfo": "Enum"
     },
@@ -19285,6 +19369,17 @@
       "properties": {},
       "required": [],
       "short_name": "Element",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "woodpecker_ui::widgets::icon_button::IconButton": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::icon_button::IconButton",
+      "properties": {},
+      "required": [],
+      "short_name": "IconButton",
       "type": "object",
       "typeInfo": "Struct"
     },
