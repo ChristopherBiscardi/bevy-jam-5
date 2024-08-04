@@ -20,10 +20,13 @@ use bevy_kira_audio::prelude::*;
 use bevy_mod_picking::{
     debug::DebugPickingMode, DefaultPickingPlugins,
 };
+use bevy_picking_avian::AvianBackendSettings;
+use bevy_vello::render::VelloRenderSettings;
 use blenvy::BlenvyPlugin;
 use blenvy_helpers::BlenvyHelpersPlugin;
 use collision_layers::CollisionLayersPlugin;
 use game_scene::{GameScenePlugin, Player};
+use grid::GridPlugin;
 use main_menu::MainMenuPlugin;
 use navmesh::NavMeshPlugin;
 use woodpecker_ui::WoodpeckerUIPlugin;
@@ -32,6 +35,7 @@ mod assets;
 mod blenvy_helpers;
 pub mod collision_layers;
 mod game_scene;
+mod grid;
 mod main_menu;
 mod navmesh;
 mod widgets;
@@ -64,14 +68,17 @@ impl Plugin for AppPlugin {
                 }),
             );
 
-        // #[cfg(feature = "dev")]
-        // app.add_plugins(
-        //     (
-        //         bevy_inspector_egui::quick::WorldInspectorPlugin::new(),
-        //     ),
-        // );
+        #[cfg(feature = "dev")]
+        app.add_plugins(
+            (
+                bevy_inspector_egui::quick::WorldInspectorPlugin::new(),
+            ),
+        );
 
         app.init_state::<AppState>()
+            // .insert_resource(AvianBackendSettings {
+            //     require_markers: true,
+            // })
             .add_plugins((
                 DefaultPickingPlugins,
                 AssetsPlugin,
@@ -88,12 +95,18 @@ impl Plugin for AppPlugin {
                     export_registry: true,
                     ..default()
                 },
+                GridPlugin,
             ))
+            .insert_resource(VelloRenderSettings {
+                canvas_render_layers: RenderLayers::layer(
+                    1,
+                ),
+            })
             .insert_resource(DebugPickingMode::Normal)
-            // .add_systems(
-            //     OnEnter(AppState::AssetLoading),
-            //     spawn_2d_camera,
-            // )
+            .add_systems(
+                OnEnter(AppState::AssetLoading),
+                spawn_2d_camera,
+            )
             .add_systems(
                 OnEnter(AppState::ErrorScreen),
                 on_error,
@@ -181,10 +194,11 @@ fn on_error() {
 fn spawn_2d_camera(mut commands: Commands) {
     #[cfg(feature = "with_main_menu")]
     commands.spawn((
-        StateScoped(AppState::MainMenu),
+        RenderLayers::layer(1),
+        // StateScoped(AppState::MainMenu),
         Camera2dBundle {
             camera: Camera {
-                // order: 1,
+                order: 1,
                 // if hdr is true on 3d camera, then hdr
                 // must be true here too
                 hdr: true,

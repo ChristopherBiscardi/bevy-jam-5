@@ -44,10 +44,10 @@ impl Plugin for NavMeshPlugin {
                 give_target_auto,
                 trigger_navmesh_visibility,
                 move_object,
-                spawn_obstacle_on_click,
             )
                 .run_if(in_state(AppState::InGame)),
-        );
+        )
+        .observe(spawn_obstacle);
     }
 }
 
@@ -56,7 +56,7 @@ pub struct Spawner;
 
 #[derive(Component, Debug, Reflect)]
 #[reflect(Component)]
-struct Obstacle;
+pub struct Obstacle;
 
 #[derive(Resource)]
 struct CurrentMesh(Handle<NavMesh>);
@@ -365,103 +365,31 @@ fn move_object(
     }
 }
 
-fn spawn_obstacle_on_click(
-    mouse_button_input: Res<ButtonInput<MouseButton>>,
+#[derive(Event)]
+pub struct SpawnObstacle;
+
+fn spawn_obstacle(
+    trigger: Trigger<SpawnObstacle>,
     camera_q: Query<(&Camera, &GlobalTransform)>,
     mut commands: Commands,
     settings: Query<Ref<NavMeshSettings>>,
 ) {
-    if mouse_button_input.just_pressed(MouseButton::Left) {
-        let mut rng = rand::thread_rng();
-        let x = rand::thread_rng().gen_range(-10.0..10.0);
-        let z = rand::thread_rng().gen_range(-10.0..10.0);
+    let mut rng = rand::thread_rng();
+    let x = rand::thread_rng().gen_range(-10.0..10.0);
+    let z = rand::thread_rng().gen_range(-10.0..10.0);
 
-        //     // new_obstacle(
-        //     //     &mut commands,
-        //     //     &mut rng,
-        //     //     Transform::from_xyz(x, 0.0, z),
-        //     // );
-        commands.spawn((
-            Obstacle,
-            // Aabb::from_min_max(
-            //     vec3(0., 0., 0.),
-            //     vec3(1., 1., 1.),
-            // ),
-            BlueprintInfo::from_path(
-                "blueprints/washing_machine.glb",
-            ),
-            SpawnBlueprint,
-            TransformBundle::from_transform(
-                Transform::from_xyz(x, 0.0, z)
-                    .with_rotation(Quat::from_rotation_z(
-                        rng.gen_range(0.0..PI),
-                    )),
-            ),
-        ));
-    }
-}
-// Aabb::from_min_max(
-//     Vec3::ZERO,
-//     Vec3::new(
-//         rng.gen_range(0.1..0.5),
-//         rng.gen_range(0.1..0.5),
-//         0.0,
-//     ),
-// ),
-
-fn new_obstacle(
-    commands: &mut Commands,
-    rng: &mut ThreadRng,
-    transform: Transform,
-) {
     commands.spawn((
-        match rng.gen_range(0..8) {
-            0 => PrimitiveObstacle::Rectangle(Rectangle {
-                half_size: vec2(
-                    rng.gen_range(1.0..5.0),
-                    rng.gen_range(1.0..5.0),
-                ),
-            }),
-            1 => PrimitiveObstacle::Circle(Circle {
-                radius: rng.gen_range(1.0..5.0),
-            }),
-            2 => PrimitiveObstacle::Ellipse(Ellipse {
-                half_size: vec2(
-                    rng.gen_range(1.0..5.0),
-                    rng.gen_range(1.0..5.0),
-                ),
-            }),
-            3 => PrimitiveObstacle::CircularSector(
-                CircularSector::new(
-                    rng.gen_range(1.5..5.0),
-                    rng.gen_range(0.5..PI),
+        Obstacle,
+        BlueprintInfo::from_path(
+            "blueprints/washing_machine.glb",
+        ),
+        SpawnBlueprint,
+        TransformBundle::from_transform(
+            Transform::from_xyz(x, 0.0, z).with_rotation(
+                Quat::from_rotation_z(
+                    rng.gen_range(0.0..PI),
                 ),
             ),
-            4 => PrimitiveObstacle::CircularSegment(
-                CircularSegment::new(
-                    rng.gen_range(1.5..5.0),
-                    rng.gen_range(1.0..PI),
-                ),
-            ),
-            5 => {
-                PrimitiveObstacle::Capsule(Capsule2d::new(
-                    rng.gen_range(1.0..3.0),
-                    rng.gen_range(1.5..5.0),
-                ))
-            }
-            6 => PrimitiveObstacle::RegularPolygon(
-                RegularPolygon::new(
-                    rng.gen_range(1.0..5.0),
-                    rng.gen_range(3..8),
-                ),
-            ),
-            7 => PrimitiveObstacle::Rhombus(Rhombus::new(
-                rng.gen_range(3.0..6.0),
-                rng.gen_range(2.0..3.0),
-            )),
-            _ => unreachable!(),
-        },
-        transform,
-        GlobalTransform::default(),
+        ),
     ));
 }

@@ -3451,7 +3451,7 @@
     },
     "bevy_animation::transition::AnimationTransitions": {
       "additionalProperties": false,
-      "isComponent": false,
+      "isComponent": true,
       "isResource": false,
       "long_name": "bevy_animation::transition::AnimationTransitions",
       "properties": {
@@ -7108,6 +7108,30 @@
       "type": "object",
       "typeInfo": "Value"
     },
+    "bevy_egui::EguiSettings": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "bevy_egui::EguiSettings",
+      "properties": {
+        "default_open_url_target": {
+          "type": {
+            "$ref": "#/$defs/core::option::Option<alloc::string::String>"
+          }
+        },
+        "scale_factor": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "scale_factor"
+      ],
+      "short_name": "EguiSettings",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "bevy_gizmos::aabb::AabbGizmoConfigGroup": {
       "additionalProperties": false,
       "isComponent": false,
@@ -10057,6 +10081,78 @@
         "max"
       ],
       "short_name": "URect",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "bevy_mod_raycast::deferred::RaycastMesh<()>": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "bevy_mod_raycast::deferred::RaycastMesh<()>",
+      "properties": {},
+      "required": [],
+      "short_name": "RaycastMesh<()>",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "bevy_mod_raycast::deferred::RaycastMethod": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "bevy_mod_raycast::deferred::RaycastMethod",
+      "oneOf": [
+        {
+          "long_name": "Cursor"
+        },
+        {
+          "items": false,
+          "long_name": "Screenspace",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/glam::Vec2"
+              }
+            }
+          ],
+          "short_name": "Screenspace",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "long_name": "Transform"
+        }
+      ],
+      "short_name": "RaycastMethod",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "bevy_mod_raycast::deferred::RaycastSource<()>": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "bevy_mod_raycast::deferred::RaycastSource<()>",
+      "properties": {
+        "cast_method": {
+          "type": {
+            "$ref": "#/$defs/bevy_mod_raycast::deferred::RaycastMethod"
+          }
+        },
+        "should_early_exit": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "visibility": {
+          "type": {
+            "$ref": "#/$defs/bevy_mod_raycast::immediate::RaycastVisibility"
+          }
+        }
+      },
+      "required": [
+        "cast_method",
+        "should_early_exit",
+        "visibility"
+      ],
+      "short_name": "RaycastSource<()>",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -14380,7 +14476,7 @@
     },
     "bevy_ui::ui_node::BorderRadius": {
       "additionalProperties": false,
-      "isComponent": false,
+      "isComponent": true,
       "isResource": false,
       "long_name": "bevy_ui::ui_node::BorderRadius",
       "properties": {
@@ -16888,6 +16984,28 @@
       "type": "string",
       "typeInfo": "Enum"
     },
+    "blenvy::save_load::Dynamic": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "blenvy::save_load::Dynamic",
+      "properties": {},
+      "required": [],
+      "short_name": "Dynamic",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "blenvy::save_load::StaticEntitiesRoot": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "blenvy::save_load::StaticEntitiesRoot",
+      "properties": {},
+      "required": [],
+      "short_name": "StaticEntitiesRoot",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "bool": {
       "isComponent": false,
       "isResource": false,
@@ -16933,6 +17051,14 @@
       "isResource": false,
       "long_name": "core::ops::Range<f32>",
       "short_name": "Range<f32>",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "core::ops::Range<f64>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "core::ops::Range<f64>",
+      "short_name": "Range<f64>",
       "type": "object",
       "typeInfo": "Value"
     },
@@ -18028,6 +18154,295 @@
       "type": "object",
       "typeInfo": "Struct"
     },
+    "glam::BVec2": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::BVec2",
+      "properties": {
+        "x": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "short_name": "BVec2",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::BVec3": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::BVec3",
+      "properties": {
+        "x": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "z": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "short_name": "BVec3",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::BVec3A": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::BVec3A",
+      "short_name": "BVec3A",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "glam::BVec4": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::BVec4",
+      "properties": {
+        "w": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "x": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "z": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z",
+        "w"
+      ],
+      "short_name": "BVec4",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::BVec4A": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::BVec4A",
+      "short_name": "BVec4A",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "glam::DAffine2": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::DAffine2",
+      "properties": {
+        "matrix2": {
+          "type": {
+            "$ref": "#/$defs/glam::DMat2"
+          }
+        },
+        "translation": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec2"
+          }
+        }
+      },
+      "required": [
+        "matrix2",
+        "translation"
+      ],
+      "short_name": "DAffine2",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::DAffine3": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::DAffine3",
+      "properties": {
+        "matrix3": {
+          "type": {
+            "$ref": "#/$defs/glam::DMat3"
+          }
+        },
+        "translation": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec3"
+          }
+        }
+      },
+      "required": [
+        "matrix3",
+        "translation"
+      ],
+      "short_name": "DAffine3",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::DMat2": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::DMat2",
+      "properties": {
+        "x_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec2"
+          }
+        },
+        "y_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec2"
+          }
+        }
+      },
+      "required": [
+        "x_axis",
+        "y_axis"
+      ],
+      "short_name": "DMat2",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::DMat3": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::DMat3",
+      "properties": {
+        "x_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec3"
+          }
+        },
+        "y_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec3"
+          }
+        },
+        "z_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec3"
+          }
+        }
+      },
+      "required": [
+        "x_axis",
+        "y_axis",
+        "z_axis"
+      ],
+      "short_name": "DMat3",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::DMat4": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::DMat4",
+      "properties": {
+        "w_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec4"
+          }
+        },
+        "x_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec4"
+          }
+        },
+        "y_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec4"
+          }
+        },
+        "z_axis": {
+          "type": {
+            "$ref": "#/$defs/glam::DVec4"
+          }
+        }
+      },
+      "required": [
+        "x_axis",
+        "y_axis",
+        "z_axis",
+        "w_axis"
+      ],
+      "short_name": "DMat4",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::DQuat": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::DQuat",
+      "properties": {
+        "w": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        },
+        "x": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        },
+        "z": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z",
+        "w"
+      ],
+      "short_name": "DQuat",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "glam::DVec2": {
       "additionalProperties": false,
       "isComponent": false,
@@ -18053,6 +18468,74 @@
       "type": "object",
       "typeInfo": "Struct"
     },
+    "glam::DVec3": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::DVec3",
+      "properties": {
+        "x": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        },
+        "z": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "short_name": "DVec3",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::DVec4": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::DVec4",
+      "properties": {
+        "w": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        },
+        "x": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        },
+        "z": {
+          "type": {
+            "$ref": "#/$defs/f64"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z",
+        "w"
+      ],
+      "short_name": "DVec4",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "glam::IVec2": {
       "additionalProperties": false,
       "isComponent": false,
@@ -18075,6 +18558,74 @@
         "y"
       ],
       "short_name": "IVec2",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::IVec3": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::IVec3",
+      "properties": {
+        "x": {
+          "type": {
+            "$ref": "#/$defs/i32"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/i32"
+          }
+        },
+        "z": {
+          "type": {
+            "$ref": "#/$defs/i32"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "short_name": "IVec3",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::IVec4": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::IVec4",
+      "properties": {
+        "w": {
+          "type": {
+            "$ref": "#/$defs/i32"
+          }
+        },
+        "x": {
+          "type": {
+            "$ref": "#/$defs/i32"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/i32"
+          }
+        },
+        "z": {
+          "type": {
+            "$ref": "#/$defs/i32"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z",
+        "w"
+      ],
+      "short_name": "IVec4",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -18292,6 +18843,43 @@
         "z"
       ],
       "short_name": "UVec3",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "glam::UVec4": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "glam::UVec4",
+      "properties": {
+        "w": {
+          "type": {
+            "$ref": "#/$defs/u32"
+          }
+        },
+        "x": {
+          "type": {
+            "$ref": "#/$defs/u32"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/u32"
+          }
+        },
+        "z": {
+          "type": {
+            "$ref": "#/$defs/u32"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z",
+        "w"
+      ],
+      "short_name": "UVec4",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -18733,6 +19321,25 @@
       "properties": {},
       "required": [],
       "short_name": "WashingMachine",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::grid::BlenderOnClick": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::grid::BlenderOnClick",
+      "properties": {
+        "observer_name": {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        }
+      },
+      "required": [
+        "observer_name"
+      ],
+      "short_name": "BlenderOnClick",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -19689,6 +20296,37 @@
       "type": "object",
       "typeInfo": "Struct"
     },
+    "woodpecker_ui::widgets::slider::Slider": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::slider::Slider",
+      "properties": {
+        "end": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "start": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "value": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "value"
+      ],
+      "short_name": "Slider",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "woodpecker_ui::widgets::text_box::TextBox": {
       "additionalProperties": false,
       "isComponent": false,
@@ -19705,6 +20343,17 @@
         "initial_value"
       ],
       "short_name": "TextBox",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "woodpecker_ui::widgets::toggle::Toggle": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::toggle::Toggle",
+      "properties": {},
+      "required": [],
+      "short_name": "Toggle",
       "type": "object",
       "typeInfo": "Struct"
     }

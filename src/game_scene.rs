@@ -14,20 +14,23 @@ use bevy::{
     render::primitives::Aabb,
 };
 
+use bevy_mod_raycast::prelude::RaycastSource;
 use bevy_tnua::{prelude::*, TnuaAnimatingState};
 use bevy_tnua_avian3d::*;
 use blenvy::{
     BlueprintInfo, GameWorldTag, HideUntilReady,
     SpawnBlueprint,
 };
+use game_menu::spawn_game_menu;
 use rand::Rng;
 use tnua_animation::{AnimationState, TnuaAnimationPlugin};
+mod game_menu;
 mod tnua_animation;
 
 use crate::{
     assets::PlayerAssets,
     collision_layers::{CollisionGrouping, GameLayer},
-    navmesh::Spawner,
+    navmesh::{Obstacle, Spawner},
     AppState, Dof, GameRenderLayer,
 };
 
@@ -56,14 +59,12 @@ impl Plugin for GameScenePlugin {
                     spawn_3d_camera,
                     spawn_player,
                     setup_level,
+                    spawn_game_menu,
                     // spawn_the_cube,
                 )
                     .chain(),
             )
-            .add_systems(
-                Update,
-                (sync_weights, spawn_the_cube),
-            )
+            .add_systems(Update, sync_weights)
             .add_systems(
                 Update,
                 (randomize_washers, game_over, spawners)
@@ -97,11 +98,7 @@ fn spawners(
                     .gen_range(-10.0..10.0);
 
                 commands.spawn((
-                    // Obstacle,
-                    // Aabb::from_min_max(
-                    //     vec3(0., 0., 0.),
-                    //     vec3(1., 1., 1.),
-                    // ),
+                    Obstacle,
                     BlueprintInfo::from_path(
                         "blueprints/washing_machine.glb",
                     ),
@@ -181,11 +178,7 @@ fn randomize_washers(
         let z = rand::thread_rng().gen_range(-10.0..10.0);
 
         commands.spawn((
-            // Obstacle,
-            // Aabb::from_min_max(
-            //     vec3(0., 0., 0.),
-            //     vec3(1., 1., 1.),
-            // ),
+            Obstacle,
             BlueprintInfo::from_path(
                 "blueprints/washing_machine.glb",
             ),
@@ -200,22 +193,6 @@ fn randomize_washers(
             RigidBody::Dynamic,
         ));
     }
-}
-fn spawn_the_cube(
-    mut commands: Commands,
-    keycode: Res<ButtonInput<KeyCode>>,
-) {
-    // if keycode.just_pressed(KeyCode::KeyS) {
-    //     commands.spawn((
-    //         BlueprintInfo::from_path(
-    //             "blueprints/washing_machine.glb",
-    //         ),
-    //         SpawnBlueprint,
-    //         TransformBundle::from_transform(
-    //             Transform::from_xyz(0., 2., 0.),
-    //         ),
-    //     ));
-    // }
 }
 
 #[derive(Component)]
@@ -253,7 +230,7 @@ fn setup_level(
     #[cfg(not(feature = "spawn_sacrifice"))]
     commands.spawn((
         StateScoped(AppState::InGame),
-        BlueprintInfo::from_path("levels/Scene.glb"),
+        BlueprintInfo::from_path("levels/level-001.glb"),
         SpawnBlueprint,
         HideUntilReady,
         GameWorldTag,
@@ -511,10 +488,31 @@ fn sync_weights(
     // }
 }
 
-fn spawn_3d_camera(mut commands: Commands, dof: Res<Dof>) {
+fn spawn_3d_camera(
+    mut commands: Commands,
+    dof: Res<Dof>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+) {
+    commands.spawn((
+        PbrBundle {
+            mesh: meshes.add(
+                Plane3d::default()
+                    .mesh()
+                    .size(50.0, 50.0)
+                    .subdivisions(10),
+            ),
+            material: materials.add(Color::from(
+                bevy::color::palettes::tailwind::GREEN_400,
+            )),
+            ..default()
+        },
+        bevy_mod_raycast::prelude::RaycastMesh::<()>::default(),
+    ));
     // commands.spawn(Camera3dBundle::default());
     commands.spawn((
         StateScoped(AppState::InGame),
+        RaycastSource::<()>::new_cursor(),
         Camera3dBundle {
             transform: Transform::from_xyz(83., 92., 100.0)
                 .with_rotation(Quat::from_euler(
@@ -556,17 +554,6 @@ fn spawn_3d_camera(mut commands: Commands, dof: Res<Dof>) {
             max_circle_of_confusion_diameter: dof
                 .max_circle_of_confusion_diameter,
             max_depth: dof.max_depth,
-            // focal_distance: dof.            //
-            // focal_distance,
-
-            // // Set a nice blur level.
-            // //
-            // // This is a really low F-number, but we want
-            // to demonstrate the // effect,
-            // even if it's kind of unrealistic.
-            // aperture_f_stops: 1.0 / 50.0,
-            // max_depth: 14.0,
-            // ..default()
         },
         VolumetricFogSettings {
             // This value is explicitly set to 0 since we
