@@ -233,14 +233,14 @@ impl TransitionTimer {
         if self.reversing {
             x = 1.0 - x;
         }
-        // TODO: lerp!
-        // Some(
-        //     self.styles[self.current_index].lerp(
-        //         &self.styles[self.current_index + 1],
-        //         x,
-        //     ),
-        // )
-        None
+
+        Some(
+            self.styles[self.current_index].lerp(
+                &self.styles[self.current_index + 1],
+                x,
+            ),
+        )
+
         // } else if self.looping && self.playing
         // {     // Restart animation
         //     self.start = Instant::now();

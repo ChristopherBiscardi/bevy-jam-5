@@ -70,7 +70,7 @@ spawn_sacrifice = []
 [patch.crates-io]
 bevy_mod_picking = { git = "https://github.com/StarArawn/bevy_mod_picking", branch = "main" }
 bevy_eventlistener = { git = "https://github.com/StarArawn/bevy_eventlistener", branch = "main" }
-bevy_vello = { git = "https://github.com/linebender/bevy_vello.git" }
+bevy_vello = { git = "https://github.com/linebender/bevy_vello", rev = "7fe648ccb9766ecf2ef469f08c9f21093c3544e6" }
 # bevy_vello = { path = "../../linebender/bevy_vello" }
 
 [profile.dev.package."*"]

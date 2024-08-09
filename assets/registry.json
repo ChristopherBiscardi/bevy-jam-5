@@ -18088,6 +18088,141 @@
       "type": "object",
       "typeInfo": "Enum"
     },
+    "core::option::Option<woodpecker_ui::styles::layout::WidgetDisplay>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "core::option::Option<woodpecker_ui::styles::layout::WidgetDisplay>",
+      "oneOf": [
+        {
+          "long_name": "None"
+        },
+        {
+          "items": false,
+          "long_name": "Some",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/woodpecker_ui::styles::layout::WidgetDisplay"
+              }
+            }
+          ],
+          "short_name": "Some",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "Option<WidgetDisplay>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "core::option::Option<woodpecker_ui::styles::layout::WidgetFlexDirection>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "core::option::Option<woodpecker_ui::styles::layout::WidgetFlexDirection>",
+      "oneOf": [
+        {
+          "long_name": "None"
+        },
+        {
+          "items": false,
+          "long_name": "Some",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/woodpecker_ui::styles::layout::WidgetFlexDirection"
+              }
+            }
+          ],
+          "short_name": "Some",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "Option<WidgetFlexDirection>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "core::option::Option<woodpecker_ui::styles::layout::WidgetFlexWrap>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "core::option::Option<woodpecker_ui::styles::layout::WidgetFlexWrap>",
+      "oneOf": [
+        {
+          "long_name": "None"
+        },
+        {
+          "items": false,
+          "long_name": "Some",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/woodpecker_ui::styles::layout::WidgetFlexWrap"
+              }
+            }
+          ],
+          "short_name": "Some",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "Option<WidgetFlexWrap>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "core::option::Option<woodpecker_ui::styles::layout::WidgetOverflow>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "core::option::Option<woodpecker_ui::styles::layout::WidgetOverflow>",
+      "oneOf": [
+        {
+          "long_name": "None"
+        },
+        {
+          "items": false,
+          "long_name": "Some",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/woodpecker_ui::styles::layout::WidgetOverflow"
+              }
+            }
+          ],
+          "short_name": "Some",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "Option<WidgetOverflow>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "core::option::Option<woodpecker_ui::styles::layout::WidgetPosition>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "core::option::Option<woodpecker_ui::styles::layout::WidgetPosition>",
+      "oneOf": [
+        {
+          "long_name": "None"
+        },
+        {
+          "items": false,
+          "long_name": "Some",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/woodpecker_ui::styles::layout::WidgetPosition"
+              }
+            }
+          ],
+          "short_name": "Some",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "Option<WidgetPosition>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
     "f32": {
       "isComponent": false,
       "isResource": false,
@@ -19490,6 +19625,123 @@
       "type": "array",
       "typeInfo": "TupleStruct"
     },
+    "woodpecker_ui::render::WidgetRender": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::render::WidgetRender",
+      "oneOf": [
+        {
+          "long_name": "Quad"
+        },
+        {
+          "additionalProperties": false,
+          "long_name": "Text",
+          "properties": {
+            "content": {
+              "long_name": "content",
+              "type": {
+                "$ref": "#/$defs/alloc::string::String"
+              }
+            },
+            "word_wrap": {
+              "long_name": "word_wrap",
+              "type": {
+                "$ref": "#/$defs/bool"
+              }
+            }
+          },
+          "required": [
+            "content",
+            "word_wrap"
+          ],
+          "short_name": "Text",
+          "type": "object",
+          "typeInfo": "Struct"
+        },
+        {
+          "additionalProperties": false,
+          "long_name": "Custom",
+          "properties": {},
+          "required": [],
+          "short_name": "Custom",
+          "type": "object",
+          "typeInfo": "Struct"
+        },
+        {
+          "long_name": "Layer"
+        },
+        {
+          "additionalProperties": false,
+          "long_name": "Image",
+          "properties": {
+            "handle": {
+              "long_name": "handle",
+              "type": {
+                "$ref": "#/$defs/bevy_asset::handle::Handle<bevy_render::texture::image::Image>"
+              }
+            }
+          },
+          "required": [
+            "handle"
+          ],
+          "short_name": "Image",
+          "type": "object",
+          "typeInfo": "Struct"
+        },
+        {
+          "additionalProperties": false,
+          "long_name": "NinePatch",
+          "properties": {
+            "handle": {
+              "long_name": "handle",
+              "type": {
+                "$ref": "#/$defs/bevy_asset::handle::Handle<bevy_render::texture::image::Image>"
+              }
+            },
+            "scale_mode": {
+              "long_name": "scale_mode",
+              "type": {
+                "$ref": "#/$defs/bevy_sprite::sprite::ImageScaleMode"
+              }
+            }
+          },
+          "required": [
+            "handle",
+            "scale_mode"
+          ],
+          "short_name": "NinePatch",
+          "type": "object",
+          "typeInfo": "Struct"
+        },
+        {
+          "additionalProperties": false,
+          "long_name": "Svg",
+          "properties": {
+            "color": {
+              "long_name": "color",
+              "type": {
+                "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
+              }
+            },
+            "handle": {
+              "long_name": "handle",
+              "type": {
+                "$ref": "#/$defs/bevy_asset::handle::Handle<woodpecker_ui::svg::SvgAsset>"
+              }
+            }
+          },
+          "required": [
+            "handle"
+          ],
+          "short_name": "Svg",
+          "type": "object",
+          "typeInfo": "Struct"
+        }
+      ],
+      "short_name": "WidgetRender",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
     "woodpecker_ui::styles::WoodpeckerStyle": {
       "additionalProperties": false,
       "isComponent": true,
@@ -19676,6 +19928,11 @@
             "$ref": "#/$defs/woodpecker_ui::styles::units::Units"
           }
         },
+        "visibility": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::layout::WidgetVisibility"
+          }
+        },
         "width": {
           "type": {
             "$ref": "#/$defs/woodpecker_ui::styles::units::Units"
@@ -19691,6 +19948,7 @@
         "padding",
         "width",
         "display",
+        "visibility",
         "overflow",
         "position",
         "left",
@@ -19894,6 +20152,18 @@
       "type": "string",
       "typeInfo": "Enum"
     },
+    "woodpecker_ui::styles::layout::WidgetVisibility": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::styles::layout::WidgetVisibility",
+      "oneOf": [
+        "Visible",
+        "Hidden"
+      ],
+      "short_name": "WidgetVisibility",
+      "type": "string",
+      "typeInfo": "Enum"
+    },
     "woodpecker_ui::styles::units::Units": {
       "isComponent": false,
       "isResource": false,
@@ -19946,6 +20216,31 @@
       "type": "object",
       "typeInfo": "Struct"
     },
+    "woodpecker_ui::widgets::button::ButtonStyles": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::button::ButtonStyles",
+      "properties": {
+        "hovered": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        },
+        "normal": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        }
+      },
+      "required": [
+        "normal",
+        "hovered"
+      ],
+      "short_name": "ButtonStyles",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "woodpecker_ui::widgets::button::WButton": {
       "additionalProperties": false,
       "isComponent": false,
@@ -19957,6 +20252,17 @@
       "type": "object",
       "typeInfo": "Struct"
     },
+    "woodpecker_ui::widgets::checkbox::Checkbox": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::checkbox::Checkbox",
+      "properties": {},
+      "required": [],
+      "short_name": "Checkbox",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "woodpecker_ui::widgets::clip::Clip": {
       "additionalProperties": false,
       "isComponent": false,
@@ -19965,6 +20271,99 @@
       "properties": {},
       "required": [],
       "short_name": "Clip",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "woodpecker_ui::widgets::color_picker::ColorPicker": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::color_picker::ColorPicker",
+      "properties": {
+        "initial_color": {
+          "type": {
+            "$ref": "#/$defs/bevy_color::color::Color"
+          }
+        }
+      },
+      "required": [
+        "initial_color"
+      ],
+      "short_name": "ColorPicker",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "woodpecker_ui::widgets::dropdown::Dropdown": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::dropdown::Dropdown",
+      "properties": {
+        "current_value": {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        },
+        "list": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<alloc::string::String>"
+          }
+        },
+        "styles": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::widgets::dropdown::DropdownStyles"
+          }
+        }
+      },
+      "required": [
+        "current_value",
+        "list",
+        "styles"
+      ],
+      "short_name": "Dropdown",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "woodpecker_ui::widgets::dropdown::DropdownStyles": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::dropdown::DropdownStyles",
+      "properties": {
+        "background": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        },
+        "icon": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        },
+        "list_area": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        },
+        "list_item": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::widgets::button::ButtonStyles"
+          }
+        },
+        "text": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        }
+      },
+      "required": [
+        "background",
+        "text",
+        "icon",
+        "list_area",
+        "list_item"
+      ],
+      "short_name": "DropdownStyles",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -20327,6 +20726,81 @@
       "type": "object",
       "typeInfo": "Struct"
     },
+    "woodpecker_ui::widgets::tab::TabContextProvider": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::tab::TabContextProvider",
+      "properties": {
+        "initial_tab_index": {
+          "type": {
+            "$ref": "#/$defs/usize"
+          }
+        }
+      },
+      "required": [
+        "initial_tab_index"
+      ],
+      "short_name": "TabContextProvider",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "woodpecker_ui::widgets::tab::tab_button::TabButton": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::tab::tab_button::TabButton",
+      "properties": {
+        "active_styles": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::widgets::button::ButtonStyles"
+          }
+        },
+        "inactive_styles": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::widgets::button::ButtonStyles"
+          }
+        },
+        "index": {
+          "type": {
+            "$ref": "#/$defs/usize"
+          }
+        },
+        "title": {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        }
+      },
+      "required": [
+        "index",
+        "title",
+        "inactive_styles",
+        "active_styles"
+      ],
+      "short_name": "TabButton",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "woodpecker_ui::widgets::tab::tab_content::TabContent": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::tab::tab_content::TabContent",
+      "properties": {
+        "index": {
+          "type": {
+            "$ref": "#/$defs/usize"
+          }
+        }
+      },
+      "required": [
+        "index"
+      ],
+      "short_name": "TabContent",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
     "woodpecker_ui::widgets::text_box::TextBox": {
       "additionalProperties": false,
       "isComponent": false,
@@ -20354,6 +20828,55 @@
       "properties": {},
       "required": [],
       "short_name": "Toggle",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "woodpecker_ui::widgets::window::WoodpeckerWindow": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "woodpecker_ui::widgets::window::WoodpeckerWindow",
+      "properties": {
+        "children_styles": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        },
+        "divider_styles": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        },
+        "initial_position": {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        },
+        "title": {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        },
+        "title_styles": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        },
+        "window_styles": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        }
+      },
+      "required": [
+        "title",
+        "initial_position",
+        "window_styles",
+        "title_styles",
+        "divider_styles",
+        "children_styles"
+      ],
+      "short_name": "WoodpeckerWindow",
       "type": "object",
       "typeInfo": "Struct"
     }

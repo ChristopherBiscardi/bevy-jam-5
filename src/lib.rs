@@ -29,7 +29,7 @@ use game_scene::{GameScenePlugin, Player};
 use grid::GridPlugin;
 use main_menu::MainMenuPlugin;
 use navmesh::NavMeshPlugin;
-use woodpecker_ui::WoodpeckerUIPlugin;
+use woodpecker_ui::{RenderSettings, WoodpeckerUIPlugin};
 
 mod assets;
 mod blenvy_helpers;
@@ -83,7 +83,12 @@ impl Plugin for AppPlugin {
                 DefaultPickingPlugins,
                 AssetsPlugin,
                 AudioPlugin,
-                WoodpeckerUIPlugin,
+                WoodpeckerUIPlugin {
+                    render_settings: RenderSettings {
+                        layer: RenderLayers::layer(1),
+                        ..default()
+                    },
+                },
                 #[cfg(feature = "with_main_menu")]
                 MainMenuPlugin,
                 GameScenePlugin,
@@ -97,11 +102,11 @@ impl Plugin for AppPlugin {
                 },
                 GridPlugin,
             ))
-            .insert_resource(VelloRenderSettings {
-                canvas_render_layers: RenderLayers::layer(
-                    1,
-                ),
-            })
+            // .insert_resource(VelloRenderSettings {
+            //     canvas_render_layers: RenderLayers::layer(
+            //         1,
+            //     ),
+            // })
             .insert_resource(DebugPickingMode::Normal)
             .add_systems(
                 OnEnter(AppState::AssetLoading),

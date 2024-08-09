@@ -39,7 +39,6 @@ pub fn spawn_game_menu(
 
     let root = commands
         .spawn((
-            Name::new("InGameUI"),
             StateScoped(AppState::InGame),
             WoodpeckerAppBundle {
                 children: WidgetChildren::default().with_child::<Element>(ElementBundle {
@@ -54,7 +53,7 @@ pub fn spawn_game_menu(
                             top: 25.0.into(),
                             bottom: 0.0.into(),
                         },
-                        ..Default::default()
+                        ..default()
                     },
    
                     children: WidgetChildren::default().with_child::<Element>((
@@ -70,10 +69,10 @@ pub fn spawn_game_menu(
                                 flex_direction: WidgetFlexDirection::Column,
                                 position: WidgetPosition::Relative,
                                 // flex_wrap: WidgetFlexWrap::Wrap,
-                                ..Default::default()
+                                ..default()
                             },
                             children: buttons,
-                            ..Default::default()
+                            ..default()
                         },
                     ))
                     .with_child::<OptionsModal>(
@@ -83,14 +82,14 @@ pub fn spawn_game_menu(
                                 justify_content: Some(
                                     WidgetAlignContent::Center,
                                 ),
-                                ..Default::default()
+                                ..default()
                             },
-                            ..Default::default()
+                            ..default()
                         },
                     ),
-                    ..Default::default()
+                    ..default()
                 }),
-                ..Default::default()
+                ..default()
             },
         ))
         .id();

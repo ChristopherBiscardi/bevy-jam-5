@@ -101,7 +101,7 @@ fn spawn_main_menu(
                             top: 25.0.into(),
                             bottom: 0.0.into(),
                         },
-                        ..Default::default()
+                        ..default()
                     },
    
                     children: WidgetChildren::default().with_child::<Element>(
@@ -190,10 +190,10 @@ fn spawn_main_menu(
                                 flex_direction: WidgetFlexDirection::Column,
                                 position: WidgetPosition::Relative,
                                 // flex_wrap: WidgetFlexWrap::Wrap,
-                                ..Default::default()
+                                ..default()
                             },
                             children: buttons,
-                            ..Default::default()
+                            ..default()
                         },
                     ))
                     .with_child::<OptionsModal>(
@@ -203,14 +203,14 @@ fn spawn_main_menu(
                                 justify_content: Some(
                                     WidgetAlignContent::Center,
                                 ),
-                                ..Default::default()
+                                ..default()
                             },
-                            ..Default::default()
+                            ..default()
                         },
                     ),
-                    ..Default::default()
+                    ..default()
                 }),
-                ..Default::default()
+                ..default()
             },
         ))
         .id();
