@@ -37,6 +37,10 @@ impl Plugin for GridPlugin {
                 OnEnter(GameMode::VirtualGridPlacement),
                 spawn_virtual_placement_grid,
             )
+            .add_systems(
+                OnExit(GameMode::VirtualGridPlacement),
+                exit_virtual_grid_placement,
+            )
             .observe(test);
     }
 }
@@ -46,6 +50,17 @@ struct GridStore(HashMap<IVec3, bool>);
 
 #[derive(TypePath)]
 struct VirtualGridRaycast;
+
+fn exit_virtual_grid_placement(
+    mut commands: Commands,
+    current_cameras: Query<Entity, With<GameCamera>>,
+) {
+    for entity in &current_cameras {
+        commands
+            .entity(entity)
+            .remove::<RaycastSource<VirtualGridRaycast>>();
+    }
+}
 
 fn spawn_virtual_placement_grid(
     mut commands: Commands,
@@ -62,6 +77,7 @@ fn spawn_virtual_placement_grid(
     >::new_cursor());
 
     commands.spawn((
+        StateScoped(GameMode::VirtualGridPlacement),
         PbrBundle {
             mesh: meshes.add(
                 Plane3d::default()

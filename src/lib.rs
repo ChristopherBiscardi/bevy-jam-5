@@ -1,5 +1,4 @@
 #![allow(warnings)]
-use assets::WashCycleAssetsPlugin;
 use avian3d::{
     prelude::RigidBody,
     sync::ancestor_marker::AncestorMarker,
@@ -23,28 +22,28 @@ use bevy_mod_picking::{
 use bevy_picking_avian::AvianBackendSettings;
 use bevy_vello::render::VelloRenderSettings;
 use blenvy::BlenvyPlugin;
-use camera::WashCycleCameraPlugin;
-use states::WashCycleStatesPlugin;
 use woodpecker_ui::{RenderSettings, WoodpeckerUIPlugin};
 
 use crate::{
+    assets::WashCycleAssetsPlugin,
     blenvy_helpers::BlenvyHelpersPlugin,
+    camera::WashCycleCameraPlugin,
     collision_layers::CollisionLayersPlugin,
+    controls::ControlsPlugin,
     game_scene::{GameScenePlugin, Player},
     grid::GridPlugin,
-    leafwing_test::LeafwingTestPlugin,
     main_menu::MainMenuPlugin,
     navmesh::NavMeshPlugin,
-    states::AppState,
+    states::{AppState, WashCycleStatesPlugin},
 };
 
 mod assets;
 mod blenvy_helpers;
 mod camera;
 pub mod collision_layers;
+mod controls;
 mod game_scene;
 mod grid;
-mod leafwing_test;
 mod main_menu;
 mod navmesh;
 mod states;
@@ -91,25 +90,38 @@ impl Plugin for AppPlugin {
             NavMeshPlugin,
             BlenvyHelpersPlugin,
             BlenvyPlugin {
-                // TODO: when releasing this should be
-                // turned off
-                export_registry: true,
+                // only export registry if the debug assertions are on
+                // giving us effectively only
+                export_registry: cfg!(
+                    feature = "only_write_registry"
+                ) || cfg!(
+                    debug_assertions
+                ),
                 ..default()
             },
             GridPlugin,
-            LeafwingTestPlugin,
+            ControlsPlugin,
             (
                 WashCycleAssetsPlugin,
                 WashCycleCameraPlugin,
                 widgets::WashCycleWidgetsPlugin,
             ),
         ))
-        .insert_resource(DebugPickingMode::Normal)
+        // .insert_resource(DebugPickingMode::Normal)
         .add_systems(
             OnEnter(AppState::ErrorScreen),
             on_error,
         );
+
+        #[cfg(feature = "only_write_registry")]
+        app.add_systems(Startup, write_registry_then_exit);
     }
+}
+
+fn write_registry_then_exit(
+    mut app_exit: EventWriter<AppExit>,
+) {
+    app_exit.send(AppExit::Success);
 }
 
 fn on_error() {

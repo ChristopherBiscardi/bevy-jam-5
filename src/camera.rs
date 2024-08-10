@@ -68,7 +68,7 @@ fn spawn_2d_camera(mut commands: Commands) {
 }
 
 fn dof_finder(
-    query: Query<&Transform, With<Camera>>,
+    query: Query<&Transform, With<GameCamera>>,
     query_player: Query<&Transform, With<Player>>,
     mut dof: ResMut<Dof>,
 ) {

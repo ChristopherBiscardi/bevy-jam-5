@@ -65,6 +65,8 @@ dev = ["dep:bevy-inspector-egui", "bevy/file_watcher"]
 long_loading = []
 with_main_menu = []
 spawn_sacrifice = []
+# only do enough to write out the registry.json, then exit
+only_write_registry = []
 
 
 [patch.crates-io]
@@ -72,7 +74,8 @@ bevy_mod_picking = { git = "https://github.com/StarArawn/bevy_mod_picking", bran
 bevy_eventlistener = { git = "https://github.com/StarArawn/bevy_eventlistener", branch = "main" }
 bevy_vello = { git = "https://github.com/linebender/bevy_vello", rev = "7fe648ccb9766ecf2ef469f08c9f21093c3544e6" }
 # bevy_vello = { path = "../../linebender/bevy_vello" }
-leafwing-input-manager = { path = "../../leafwing-studios/leafwing_input_manager" }
+# leafwing-input-manager = { path = "../../leafwing-studios/leafwing_input_manager" }
+leafwing-input-manager = { git = "https://github.com/Leafwing-Studios/leafwing-input-manager.git", rev = "d32883661c72b4ff01be71ce65d9e9f2375d5f69" }
 
 [profile.dev.package."*"]
 opt-level = 3
