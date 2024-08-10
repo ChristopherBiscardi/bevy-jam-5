@@ -16,20 +16,27 @@ use bevy_mod_picking::{
 };
 use bevy_mod_raycast::prelude::*;
 
+use crate::{camera::GameCamera, states::GameMode};
+
 pub struct GridPlugin;
 
 impl Plugin for GridPlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<BlenderOnClick>()
             .init_resource::<GridStore>()
-            .insert_resource(
-                RaycastPluginState::<()>::default(),
+            .add_plugins(DeferredRaycastingPlugin::<
+                VirtualGridRaycast,
+            >::default())
+            .add_systems(
+                Update,
+                raycast_system.run_if(in_state(
+                    GameMode::VirtualGridPlacement,
+                )),
             )
-            .add_plugins((
-                CursorRayPlugin,
-                DeferredRaycastingPlugin::<()>::default(),
-            ))
-            .add_systems(Update, raycast_system)
+            .add_systems(
+                OnEnter(GameMode::VirtualGridPlacement),
+                spawn_virtual_placement_grid,
+            )
             .observe(test);
     }
 }
@@ -37,10 +44,44 @@ impl Plugin for GridPlugin {
 #[derive(Resource, Debug, Default, Deref, DerefMut)]
 struct GridStore(HashMap<IVec3, bool>);
 
+#[derive(TypePath)]
+struct VirtualGridRaycast;
+
+fn spawn_virtual_placement_grid(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    current_camera: Query<Entity, With<GameCamera>>,
+) {
+    let Ok(entity) = current_camera.get_single() else {
+        error!("Wrong number of cameras");
+        return;
+    };
+    commands.entity(entity).insert(RaycastSource::<
+        VirtualGridRaycast,
+    >::new_cursor());
+
+    commands.spawn((
+        PbrBundle {
+            mesh: meshes.add(
+                Plane3d::default()
+                    .mesh()
+                    .size(50.0, 50.0)
+                    .subdivisions(10),
+            ),
+            material: materials.add(Color::from(
+                bevy::color::palettes::tailwind::GREEN_400,
+            )),
+            ..default()
+        },
+        RaycastMesh::<VirtualGridRaycast>::default(),
+    ));
+}
+
 fn raycast_system(
     mut commands: Commands,
     mut gizmos: Gizmos,
-    query: Query<&RaycastMesh<()>>,
+    query: Query<&RaycastMesh<VirtualGridRaycast>>,
     input: Res<ButtonInput<MouseButton>>,
     mut grid_store: ResMut<GridStore>,
 ) {

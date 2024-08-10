@@ -19,7 +19,7 @@ use vleue_navigator::{
     prelude::*, NavMeshDebug, Triangulation,
 };
 
-use crate::{assets::NavMeshAssets, AppState};
+use crate::{assets::NavMeshAssets, states::AppState};
 
 pub struct NavMeshPlugin;
 

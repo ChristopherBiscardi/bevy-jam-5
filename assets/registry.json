@@ -422,6 +422,71 @@
       "type": "array",
       "typeInfo": "List"
     },
+    "alloc::vec::Vec<leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor>": {
+      "isComponent": false,
+      "isResource": false,
+      "items": {
+        "type": {
+          "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor"
+        }
+      },
+      "long_name": "alloc::vec::Vec<leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor>",
+      "short_name": "Vec<DualAxisProcessor>",
+      "type": "array",
+      "typeInfo": "List"
+    },
+    "alloc::vec::Vec<leafwing_input_manager::input_processing::single_axis::AxisProcessor>": {
+      "isComponent": false,
+      "isResource": false,
+      "items": {
+        "type": {
+          "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::AxisProcessor"
+        }
+      },
+      "long_name": "alloc::vec::Vec<leafwing_input_manager::input_processing::single_axis::AxisProcessor>",
+      "short_name": "Vec<AxisProcessor>",
+      "type": "array",
+      "typeInfo": "List"
+    },
+    "alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>>": {
+      "isComponent": false,
+      "isResource": false,
+      "items": {
+        "type": {
+          "$ref": "#/$defs/std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>"
+        }
+      },
+      "long_name": "alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>>",
+      "short_name": "Vec<Box<dyn Axislike>>",
+      "type": "array",
+      "typeInfo": "List"
+    },
+    "alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>>": {
+      "isComponent": false,
+      "isResource": false,
+      "items": {
+        "type": {
+          "$ref": "#/$defs/std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>"
+        }
+      },
+      "long_name": "alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>>",
+      "short_name": "Vec<Box<dyn Buttonlike>>",
+      "type": "array",
+      "typeInfo": "List"
+    },
+    "alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>>": {
+      "isComponent": false,
+      "isResource": false,
+      "items": {
+        "type": {
+          "$ref": "#/$defs/std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>"
+        }
+      },
+      "long_name": "alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>>",
+      "short_name": "Vec<Box<dyn DualAxislike>>",
+      "type": "array",
+      "typeInfo": "List"
+    },
     "alloc::vec::Vec<u16>": {
       "isComponent": false,
       "isResource": false,
@@ -10084,14 +10149,14 @@
       "type": "object",
       "typeInfo": "Struct"
     },
-    "bevy_mod_raycast::deferred::RaycastMesh<()>": {
+    "bevy_mod_raycast::deferred::RaycastMesh<wash_cycle::grid::VirtualGridRaycast>": {
       "additionalProperties": false,
       "isComponent": true,
       "isResource": false,
-      "long_name": "bevy_mod_raycast::deferred::RaycastMesh<()>",
+      "long_name": "bevy_mod_raycast::deferred::RaycastMesh<wash_cycle::grid::VirtualGridRaycast>",
       "properties": {},
       "required": [],
-      "short_name": "RaycastMesh<()>",
+      "short_name": "RaycastMesh<VirtualGridRaycast>",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -10125,11 +10190,11 @@
       "type": "object",
       "typeInfo": "Enum"
     },
-    "bevy_mod_raycast::deferred::RaycastSource<()>": {
+    "bevy_mod_raycast::deferred::RaycastSource<wash_cycle::grid::VirtualGridRaycast>": {
       "additionalProperties": false,
       "isComponent": true,
       "isResource": false,
-      "long_name": "bevy_mod_raycast::deferred::RaycastSource<()>",
+      "long_name": "bevy_mod_raycast::deferred::RaycastSource<wash_cycle::grid::VirtualGridRaycast>",
       "properties": {
         "cast_method": {
           "type": {
@@ -10152,7 +10217,7 @@
         "should_early_exit",
         "visibility"
       ],
-      "short_name": "RaycastSource<()>",
+      "short_name": "RaycastSource<VirtualGridRaycast>",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -15526,6 +15591,78 @@
         }
       }
     },
+    "bevy_utils::hashbrown::HashMap<std::any::TypeId, leafwing_input_manager::user_input::updating::UpdatedValues, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "keyType": {
+        "type": {
+          "$ref": "#/$defs/std::any::TypeId"
+        }
+      },
+      "long_name": "bevy_utils::hashbrown::HashMap<std::any::TypeId, leafwing_input_manager::user_input::updating::UpdatedValues, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashMap<TypeId, UpdatedValues, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Map",
+      "valueType": {
+        "type": {
+          "$ref": "#/$defs/leafwing_input_manager::user_input::updating::UpdatedValues"
+        }
+      }
+    },
+    "bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>, f32, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "keyType": {
+        "type": {
+          "$ref": "#/$defs/std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>"
+        }
+      },
+      "long_name": "bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>, f32, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashMap<Box<dyn Axislike>, f32, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Map",
+      "valueType": {
+        "type": {
+          "$ref": "#/$defs/f32"
+        }
+      }
+    },
+    "bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>, bool, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "keyType": {
+        "type": {
+          "$ref": "#/$defs/std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>"
+        }
+      },
+      "long_name": "bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>, bool, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashMap<Box<dyn Buttonlike>, bool, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Map",
+      "valueType": {
+        "type": {
+          "$ref": "#/$defs/bool"
+        }
+      }
+    },
+    "bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>, glam::Vec2, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "keyType": {
+        "type": {
+          "$ref": "#/$defs/std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>"
+        }
+      },
+      "long_name": "bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>, glam::Vec2, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashMap<Box<dyn DualAxislike>, Vec2, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Map",
+      "valueType": {
+        "type": {
+          "$ref": "#/$defs/glam::Vec2"
+        }
+      }
+    },
     "bevy_utils::hashbrown::HashMap<u32, alloc::vec::Vec<alloc::string::String>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
       "isComponent": false,
       "isResource": false,
@@ -15544,11 +15681,91 @@
         }
       }
     },
+    "bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "keyType": {
+        "type": {
+          "$ref": "#/$defs/wash_cycle::leafwing_test::PlayerAction"
+        }
+      },
+      "long_name": "bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashMap<PlayerAction, Vec<Box<dyn Axislike>>, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Map",
+      "valueType": {
+        "type": {
+          "$ref": "#/$defs/alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>>"
+        }
+      }
+    },
+    "bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "keyType": {
+        "type": {
+          "$ref": "#/$defs/wash_cycle::leafwing_test::PlayerAction"
+        }
+      },
+      "long_name": "bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashMap<PlayerAction, Vec<Box<dyn Buttonlike>>, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Map",
+      "valueType": {
+        "type": {
+          "$ref": "#/$defs/alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>>"
+        }
+      }
+    },
+    "bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "keyType": {
+        "type": {
+          "$ref": "#/$defs/wash_cycle::leafwing_test::PlayerAction"
+        }
+      },
+      "long_name": "bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashMap<PlayerAction, Vec<Box<dyn DualAxislike>>, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Map",
+      "valueType": {
+        "type": {
+          "$ref": "#/$defs/alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>>"
+        }
+      }
+    },
+    "bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, leafwing_input_manager::action_state::action_data::ActionData, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "keyType": {
+        "type": {
+          "$ref": "#/$defs/wash_cycle::leafwing_test::PlayerAction"
+        }
+      },
+      "long_name": "bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, leafwing_input_manager::action_state::action_data::ActionData, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashMap<PlayerAction, ActionData, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Map",
+      "valueType": {
+        "type": {
+          "$ref": "#/$defs/leafwing_input_manager::action_state::action_data::ActionData"
+        }
+      }
+    },
     "bevy_utils::hashbrown::HashSet<bevy_ecs::entity::Entity, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
       "isComponent": false,
       "isResource": false,
       "long_name": "bevy_utils::hashbrown::HashSet<bevy_ecs::entity::Entity, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
       "short_name": "HashSet<Entity, DefaultHashBuilder>",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "bevy_utils::hashbrown::HashSet<std::any::TypeId, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "bevy_utils::hashbrown::HashSet<std::any::TypeId, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>",
+      "short_name": "HashSet<TypeId, DefaultHashBuilder>",
       "type": "object",
       "typeInfo": "Value"
     },
@@ -17494,6 +17711,33 @@
       "type": "object",
       "typeInfo": "Enum"
     },
+    "core::option::Option<bevy_input::gamepad::Gamepad>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "core::option::Option<bevy_input::gamepad::Gamepad>",
+      "oneOf": [
+        {
+          "long_name": "None"
+        },
+        {
+          "items": false,
+          "long_name": "Some",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/bevy_input::gamepad::Gamepad"
+              }
+            }
+          ],
+          "short_name": "Some",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "Option<Gamepad>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
     "core::option::Option<bevy_input::touch::ForceTouch>": {
       "isComponent": false,
       "isResource": false,
@@ -19190,6 +19434,1237 @@
       "type": "int",
       "typeInfo": "Value"
     },
+    "leafwing_input_manager::action_state::ActionState<wash_cycle::leafwing_test::PlayerAction>": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": true,
+      "long_name": "leafwing_input_manager::action_state::ActionState<wash_cycle::leafwing_test::PlayerAction>",
+      "properties": {
+        "action_data": {
+          "type": {
+            "$ref": "#/$defs/bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, leafwing_input_manager::action_state::action_data::ActionData, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+          }
+        },
+        "disabled": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        }
+      },
+      "required": [
+        "disabled",
+        "action_data"
+      ],
+      "short_name": "ActionState<PlayerAction>",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::action_state::action_data::ActionData": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::action_state::action_data::ActionData",
+      "properties": {
+        "disabled": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "kind_data": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::action_state::action_data::ActionKindData"
+          }
+        }
+      },
+      "required": [
+        "disabled",
+        "kind_data"
+      ],
+      "short_name": "ActionData",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::action_state::action_data::ActionKindData": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::action_state::action_data::ActionKindData",
+      "oneOf": [
+        {
+          "items": false,
+          "long_name": "Button",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::action_state::action_data::ButtonData"
+              }
+            }
+          ],
+          "short_name": "Button",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Axis",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::action_state::action_data::AxisData"
+              }
+            }
+          ],
+          "short_name": "Axis",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "DualAxis",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::action_state::action_data::DualAxisData"
+              }
+            }
+          ],
+          "short_name": "DualAxis",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "ActionKindData",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "leafwing_input_manager::action_state::action_data::AxisData": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::action_state::action_data::AxisData",
+      "properties": {
+        "fixed_update_value": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "update_value": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "value": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "value",
+        "update_value",
+        "fixed_update_value"
+      ],
+      "short_name": "AxisData",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::action_state::action_data::ButtonData": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::action_state::action_data::ButtonData",
+      "properties": {
+        "fixed_update_state": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::buttonlike::ButtonState"
+          }
+        },
+        "state": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::buttonlike::ButtonState"
+          }
+        },
+        "update_state": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::buttonlike::ButtonState"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "update_state",
+        "fixed_update_state"
+      ],
+      "short_name": "ButtonData",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::action_state::action_data::DualAxisData": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::action_state::action_data::DualAxisData",
+      "properties": {
+        "fixed_update_pair": {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        },
+        "pair": {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        },
+        "update_pair": {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        }
+      },
+      "required": [
+        "pair",
+        "update_pair",
+        "fixed_update_pair"
+      ],
+      "short_name": "DualAxisData",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::axislike::AxisDirection": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::axislike::AxisDirection",
+      "oneOf": [
+        "Negative",
+        "Positive"
+      ],
+      "short_name": "AxisDirection",
+      "type": "string",
+      "typeInfo": "Enum"
+    },
+    "leafwing_input_manager::axislike::DualAxisDirection": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::axislike::DualAxisDirection",
+      "oneOf": [
+        "Up",
+        "Down",
+        "Left",
+        "Right"
+      ],
+      "short_name": "DualAxisDirection",
+      "type": "string",
+      "typeInfo": "Enum"
+    },
+    "leafwing_input_manager::axislike::DualAxisType": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::axislike::DualAxisType",
+      "oneOf": [
+        "X",
+        "Y"
+      ],
+      "short_name": "DualAxisType",
+      "type": "string",
+      "typeInfo": "Enum"
+    },
+    "leafwing_input_manager::buttonlike::ButtonState": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::buttonlike::ButtonState",
+      "oneOf": [
+        "JustPressed",
+        "Pressed",
+        "JustReleased",
+        "Released"
+      ],
+      "short_name": "ButtonState",
+      "type": "string",
+      "typeInfo": "Enum"
+    },
+    "leafwing_input_manager::input_map::InputMap<wash_cycle::leafwing_test::PlayerAction>": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": true,
+      "long_name": "leafwing_input_manager::input_map::InputMap<wash_cycle::leafwing_test::PlayerAction>",
+      "properties": {
+        "associated_gamepad": {
+          "type": {
+            "$ref": "#/$defs/core::option::Option<bevy_input::gamepad::Gamepad>"
+          }
+        },
+        "axislike_map": {
+          "type": {
+            "$ref": "#/$defs/bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+          }
+        },
+        "buttonlike_map": {
+          "type": {
+            "$ref": "#/$defs/bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+          }
+        },
+        "dual_axislike_map": {
+          "type": {
+            "$ref": "#/$defs/bevy_utils::hashbrown::HashMap<wash_cycle::leafwing_test::PlayerAction, alloc::vec::Vec<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>>, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+          }
+        }
+      },
+      "required": [
+        "buttonlike_map",
+        "axislike_map",
+        "dual_axislike_map"
+      ],
+      "short_name": "InputMap<PlayerAction>",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::DualAxisInverted": {
+      "isComponent": false,
+      "isResource": false,
+      "items": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::DualAxisInverted",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        }
+      ],
+      "short_name": "DualAxisInverted",
+      "type": "array",
+      "typeInfo": "TupleStruct"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor",
+      "oneOf": [
+        {
+          "long_name": "Digital"
+        },
+        {
+          "items": false,
+          "long_name": "Inverted",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::DualAxisInverted"
+              }
+            }
+          ],
+          "short_name": "Inverted",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Sensitivity",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::DualAxisSensitivity"
+              }
+            }
+          ],
+          "short_name": "Sensitivity",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "ValueBounds",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::range::DualAxisBounds"
+              }
+            }
+          ],
+          "short_name": "ValueBounds",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Exclusion",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::range::DualAxisExclusion"
+              }
+            }
+          ],
+          "short_name": "Exclusion",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "DeadZone",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::range::DualAxisDeadZone"
+              }
+            }
+          ],
+          "short_name": "DeadZone",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "CircleBounds",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::circle::CircleBounds"
+              }
+            }
+          ],
+          "short_name": "CircleBounds",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "CircleExclusion",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::circle::CircleExclusion"
+              }
+            }
+          ],
+          "short_name": "CircleExclusion",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "CircleDeadZone",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::dual_axis::circle::CircleDeadZone"
+              }
+            }
+          ],
+          "short_name": "CircleDeadZone",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Custom",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/std::boxed::Box<dyn leafwing_input_manager::input_processing::dual_axis::custom::CustomDualAxisProcessor>"
+              }
+            }
+          ],
+          "short_name": "Custom",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "DualAxisProcessor",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::DualAxisSensitivity": {
+      "isComponent": false,
+      "isResource": false,
+      "items": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::DualAxisSensitivity",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        }
+      ],
+      "short_name": "DualAxisSensitivity",
+      "type": "array",
+      "typeInfo": "TupleStruct"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::circle::CircleBounds": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::circle::CircleBounds",
+      "properties": {
+        "radius": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "radius"
+      ],
+      "short_name": "CircleBounds",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::circle::CircleDeadZone": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::circle::CircleDeadZone",
+      "properties": {
+        "livezone_recip": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "radius": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "radius",
+        "livezone_recip"
+      ],
+      "short_name": "CircleDeadZone",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::circle::CircleExclusion": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::circle::CircleExclusion",
+      "properties": {
+        "radius_squared": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "radius_squared"
+      ],
+      "short_name": "CircleExclusion",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::range::DualAxisBounds": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::range::DualAxisBounds",
+      "properties": {
+        "bounds_x": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisBounds"
+          }
+        },
+        "bounds_y": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisBounds"
+          }
+        }
+      },
+      "required": [
+        "bounds_x",
+        "bounds_y"
+      ],
+      "short_name": "DualAxisBounds",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::range::DualAxisDeadZone": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::range::DualAxisDeadZone",
+      "properties": {
+        "deadzone_x": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisDeadZone"
+          }
+        },
+        "deadzone_y": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisDeadZone"
+          }
+        }
+      },
+      "required": [
+        "deadzone_x",
+        "deadzone_y"
+      ],
+      "short_name": "DualAxisDeadZone",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::dual_axis::range::DualAxisExclusion": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::dual_axis::range::DualAxisExclusion",
+      "properties": {
+        "exclusion_x": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisExclusion"
+          }
+        },
+        "exclusion_y": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisExclusion"
+          }
+        }
+      },
+      "required": [
+        "exclusion_x",
+        "exclusion_y"
+      ],
+      "short_name": "DualAxisExclusion",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::single_axis::AxisProcessor": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::single_axis::AxisProcessor",
+      "oneOf": [
+        {
+          "long_name": "Digital"
+        },
+        {
+          "long_name": "Inverted"
+        },
+        {
+          "items": false,
+          "long_name": "Sensitivity",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/f32"
+              }
+            }
+          ],
+          "short_name": "Sensitivity",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "ValueBounds",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisBounds"
+              }
+            }
+          ],
+          "short_name": "ValueBounds",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Exclusion",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisExclusion"
+              }
+            }
+          ],
+          "short_name": "Exclusion",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "DeadZone",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisDeadZone"
+              }
+            }
+          ],
+          "short_name": "DeadZone",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Custom",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/std::boxed::Box<dyn leafwing_input_manager::input_processing::single_axis::custom::CustomAxisProcessor>"
+              }
+            }
+          ],
+          "short_name": "Custom",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "AxisProcessor",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
+    "leafwing_input_manager::input_processing::single_axis::range::AxisBounds": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::single_axis::range::AxisBounds",
+      "properties": {
+        "max": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "min": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "short_name": "AxisBounds",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::single_axis::range::AxisDeadZone": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::single_axis::range::AxisDeadZone",
+      "properties": {
+        "exclusion": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::input_processing::single_axis::range::AxisExclusion"
+          }
+        },
+        "livezone_lower_recip": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "livezone_upper_recip": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "exclusion",
+        "livezone_lower_recip",
+        "livezone_upper_recip"
+      ],
+      "short_name": "AxisDeadZone",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::input_processing::single_axis::range::AxisExclusion": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::input_processing::single_axis::range::AxisExclusion",
+      "properties": {
+        "negative_max": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "positive_min": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        }
+      },
+      "required": [
+        "negative_max",
+        "positive_min"
+      ],
+      "short_name": "AxisExclusion",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::gamepad::GamepadControlAxis": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::gamepad::GamepadControlAxis",
+      "properties": {
+        "axis": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadAxisType"
+          }
+        },
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::single_axis::AxisProcessor>"
+          }
+        }
+      },
+      "required": [
+        "axis",
+        "processors"
+      ],
+      "short_name": "GamepadControlAxis",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::gamepad::GamepadControlDirection": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::gamepad::GamepadControlDirection",
+      "properties": {
+        "axis": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadAxisType"
+          }
+        },
+        "side": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::axislike::AxisDirection"
+          }
+        }
+      },
+      "required": [
+        "axis",
+        "side"
+      ],
+      "short_name": "GamepadControlDirection",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::gamepad::GamepadStick": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::gamepad::GamepadStick",
+      "properties": {
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor>"
+          }
+        },
+        "x": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadAxisType"
+          }
+        },
+        "y": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadAxisType"
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "processors"
+      ],
+      "short_name": "GamepadStick",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::gamepad::GamepadVirtualAxis": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::gamepad::GamepadVirtualAxis",
+      "properties": {
+        "negative": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadButtonType"
+          }
+        },
+        "positive": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadButtonType"
+          }
+        },
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::single_axis::AxisProcessor>"
+          }
+        }
+      },
+      "required": [
+        "negative",
+        "positive",
+        "processors"
+      ],
+      "short_name": "GamepadVirtualAxis",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::gamepad::GamepadVirtualDPad": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::gamepad::GamepadVirtualDPad",
+      "properties": {
+        "down": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadButtonType"
+          }
+        },
+        "left": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadButtonType"
+          }
+        },
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor>"
+          }
+        },
+        "right": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadButtonType"
+          }
+        },
+        "up": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::gamepad::GamepadButtonType"
+          }
+        }
+      },
+      "required": [
+        "up",
+        "down",
+        "left",
+        "right",
+        "processors"
+      ],
+      "short_name": "GamepadVirtualDPad",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::keyboard::KeyboardVirtualAxis": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::keyboard::KeyboardVirtualAxis",
+      "properties": {
+        "negative": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::keyboard::KeyCode"
+          }
+        },
+        "positive": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::keyboard::KeyCode"
+          }
+        },
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::single_axis::AxisProcessor>"
+          }
+        }
+      },
+      "required": [
+        "negative",
+        "positive",
+        "processors"
+      ],
+      "short_name": "KeyboardVirtualAxis",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::keyboard::KeyboardVirtualDPad": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::keyboard::KeyboardVirtualDPad",
+      "properties": {
+        "down": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::keyboard::KeyCode"
+          }
+        },
+        "left": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::keyboard::KeyCode"
+          }
+        },
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor>"
+          }
+        },
+        "right": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::keyboard::KeyCode"
+          }
+        },
+        "up": {
+          "type": {
+            "$ref": "#/$defs/bevy_input::keyboard::KeyCode"
+          }
+        }
+      },
+      "required": [
+        "up",
+        "down",
+        "left",
+        "right",
+        "processors"
+      ],
+      "short_name": "KeyboardVirtualDPad",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::keyboard::ModifierKey": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::keyboard::ModifierKey",
+      "oneOf": [
+        "Alt",
+        "Control",
+        "Shift",
+        "Super"
+      ],
+      "short_name": "ModifierKey",
+      "type": "string",
+      "typeInfo": "Enum"
+    },
+    "leafwing_input_manager::user_input::mouse::AccumulatedMouseMovement": {
+      "isComponent": false,
+      "isResource": false,
+      "items": false,
+      "long_name": "leafwing_input_manager::user_input::mouse::AccumulatedMouseMovement",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        }
+      ],
+      "short_name": "AccumulatedMouseMovement",
+      "type": "array",
+      "typeInfo": "TupleStruct"
+    },
+    "leafwing_input_manager::user_input::mouse::AccumulatedMouseScroll": {
+      "isComponent": false,
+      "isResource": false,
+      "items": false,
+      "long_name": "leafwing_input_manager::user_input::mouse::AccumulatedMouseScroll",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        }
+      ],
+      "short_name": "AccumulatedMouseScroll",
+      "type": "array",
+      "typeInfo": "TupleStruct"
+    },
+    "leafwing_input_manager::user_input::mouse::MouseMove": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::mouse::MouseMove",
+      "properties": {
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor>"
+          }
+        }
+      },
+      "required": [
+        "processors"
+      ],
+      "short_name": "MouseMove",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::mouse::MouseMoveAxis": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::mouse::MouseMoveAxis",
+      "properties": {
+        "axis": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::axislike::DualAxisType"
+          }
+        },
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::single_axis::AxisProcessor>"
+          }
+        }
+      },
+      "required": [
+        "axis",
+        "processors"
+      ],
+      "short_name": "MouseMoveAxis",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::mouse::MouseMoveDirection": {
+      "isComponent": false,
+      "isResource": false,
+      "items": false,
+      "long_name": "leafwing_input_manager::user_input::mouse::MouseMoveDirection",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::axislike::DualAxisDirection"
+          }
+        }
+      ],
+      "short_name": "MouseMoveDirection",
+      "type": "array",
+      "typeInfo": "TupleStruct"
+    },
+    "leafwing_input_manager::user_input::mouse::MouseScroll": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::mouse::MouseScroll",
+      "properties": {
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::dual_axis::DualAxisProcessor>"
+          }
+        }
+      },
+      "required": [
+        "processors"
+      ],
+      "short_name": "MouseScroll",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::mouse::MouseScrollAxis": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::mouse::MouseScrollAxis",
+      "properties": {
+        "axis": {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::axislike::DualAxisType"
+          }
+        },
+        "processors": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<leafwing_input_manager::input_processing::single_axis::AxisProcessor>"
+          }
+        }
+      },
+      "required": [
+        "axis",
+        "processors"
+      ],
+      "short_name": "MouseScrollAxis",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::mouse::MouseScrollDirection": {
+      "isComponent": false,
+      "isResource": false,
+      "items": false,
+      "long_name": "leafwing_input_manager::user_input::mouse::MouseScrollDirection",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/leafwing_input_manager::axislike::DualAxisDirection"
+          }
+        }
+      ],
+      "short_name": "MouseScrollDirection",
+      "type": "array",
+      "typeInfo": "TupleStruct"
+    },
+    "leafwing_input_manager::user_input::updating::CentralInputStore": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::updating::CentralInputStore",
+      "properties": {
+        "registered_input_kinds": {
+          "type": {
+            "$ref": "#/$defs/bevy_utils::hashbrown::HashSet<std::any::TypeId, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+          }
+        },
+        "updated_values": {
+          "type": {
+            "$ref": "#/$defs/bevy_utils::hashbrown::HashMap<std::any::TypeId, leafwing_input_manager::user_input::updating::UpdatedValues, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+          }
+        }
+      },
+      "required": [
+        "updated_values",
+        "registered_input_kinds"
+      ],
+      "short_name": "CentralInputStore",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "leafwing_input_manager::user_input::updating::UpdatedValues": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "leafwing_input_manager::user_input::updating::UpdatedValues",
+      "oneOf": [
+        {
+          "items": false,
+          "long_name": "Buttonlike",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>, bool, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+              }
+            }
+          ],
+          "short_name": "Buttonlike",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Axislike",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>, f32, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+              }
+            }
+          ],
+          "short_name": "Axislike",
+          "type": "array",
+          "typeInfo": "Tuple"
+        },
+        {
+          "items": false,
+          "long_name": "Dualaxislike",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/bevy_utils::hashbrown::HashMap<std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>, glam::Vec2, bevy_utils::hashbrown::hash_map::DefaultHashBuilder>"
+              }
+            }
+          ],
+          "short_name": "Dualaxislike",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "UpdatedValues",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
     "petgraph::graph::DiGraph<bevy_animation::graph::AnimationGraphNode, (), u32>": {
       "isComponent": false,
       "isResource": false,
@@ -19250,6 +20725,54 @@
       "isResource": false,
       "long_name": "smol_str::SmolStr",
       "short_name": "SmolStr",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "std::any::TypeId": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "std::any::TypeId",
+      "short_name": "TypeId",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "std::boxed::Box<dyn leafwing_input_manager::input_processing::dual_axis::custom::CustomDualAxisProcessor>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "std::boxed::Box<dyn leafwing_input_manager::input_processing::dual_axis::custom::CustomDualAxisProcessor>",
+      "short_name": "Box<dyn CustomDualAxisProcessor>",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "std::boxed::Box<dyn leafwing_input_manager::input_processing::single_axis::custom::CustomAxisProcessor>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "std::boxed::Box<dyn leafwing_input_manager::input_processing::single_axis::custom::CustomAxisProcessor>",
+      "short_name": "Box<dyn CustomAxisProcessor>",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::axislike::Axislike>",
+      "short_name": "Box<dyn Axislike>",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::buttonlike::Buttonlike>",
+      "short_name": "Box<dyn Buttonlike>",
+      "type": "object",
+      "typeInfo": "Value"
+    },
+    "std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "std::boxed::Box<dyn leafwing_input_manager::user_input::trait_reflection::dualaxislike::DualAxislike>",
+      "short_name": "Box<dyn DualAxislike>",
       "type": "object",
       "typeInfo": "Value"
     },
@@ -19343,11 +20866,30 @@
       "type": "object",
       "typeInfo": "Value"
     },
-    "wash_cycle::Dof": {
+    "wash_cycle::blenvy_helpers::NameFromBlender": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::blenvy_helpers::NameFromBlender",
+      "properties": {
+        "name": {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "short_name": "NameFromBlender",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::camera::Dof": {
       "additionalProperties": false,
       "isComponent": false,
       "isResource": true,
-      "long_name": "wash_cycle::Dof",
+      "long_name": "wash_cycle::camera::Dof",
       "properties": {
         "aperture_f_stops": {
           "type": {
@@ -19386,22 +20928,14 @@
       "type": "object",
       "typeInfo": "Struct"
     },
-    "wash_cycle::blenvy_helpers::NameFromBlender": {
+    "wash_cycle::camera::GameCamera": {
       "additionalProperties": false,
       "isComponent": true,
       "isResource": false,
-      "long_name": "wash_cycle::blenvy_helpers::NameFromBlender",
-      "properties": {
-        "name": {
-          "type": {
-            "$ref": "#/$defs/alloc::string::String"
-          }
-        }
-      },
-      "required": [
-        "name"
-      ],
-      "short_name": "NameFromBlender",
+      "long_name": "wash_cycle::camera::GameCamera",
+      "properties": {},
+      "required": [],
+      "short_name": "GameCamera",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -19477,6 +21011,36 @@
       "short_name": "BlenderOnClick",
       "type": "object",
       "typeInfo": "Struct"
+    },
+    "wash_cycle::leafwing_test::BoxPlayer": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::leafwing_test::BoxPlayer",
+      "properties": {},
+      "required": [],
+      "short_name": "BoxPlayer",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::leafwing_test::PlayerAction": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "wash_cycle::leafwing_test::PlayerAction",
+      "oneOf": [
+        "Up",
+        "Down",
+        "Left",
+        "Right",
+        "Ability1",
+        "Ability2",
+        "Ability3",
+        "Ability4",
+        "Ultimate"
+      ],
+      "short_name": "PlayerAction",
+      "type": "string",
+      "typeInfo": "Enum"
     },
     "wash_cycle::navmesh::Obstacle": {
       "additionalProperties": false,

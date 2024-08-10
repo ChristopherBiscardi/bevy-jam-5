@@ -11,13 +11,12 @@ pub use timer_transition::TransitionTimer;
 pub mod modal;
 pub use modal::{OptionsModal, OptionsModalBundle};
 
-pub struct CustomWidgetsPlugin;
+pub struct WashCycleWidgetsPlugin;
 
-impl Plugin for CustomWidgetsPlugin {
+impl Plugin for WashCycleWidgetsPlugin {
     fn build(&self, app: &mut App) {
         app.register_widget::<MainMenuButtonWidget>()
             .register_widget::<OptionsModal>()
-            // .register_widget::<TransitionTimer>()
             .add_systems(
                 Update,
                 (

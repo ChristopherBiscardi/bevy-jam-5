@@ -12,11 +12,11 @@ use iyes_progress::{
 };
 // use woodpecker_ui::prelude::;
 
-use crate::AppState;
+use crate::states::AppState;
 
-pub struct AssetsPlugin;
+pub struct WashCycleAssetsPlugin;
 
-impl Plugin for AssetsPlugin {
+impl Plugin for WashCycleAssetsPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
             #[cfg(not(feature = "with_main_menu"))]

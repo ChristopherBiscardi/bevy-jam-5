@@ -34,7 +34,7 @@ bevy-inspector-egui = { version = "0.25.1", optional = true }
 bevy_asset_loader = { version = "0.21.0", features = ["progress_tracking"] }
 bevy_kira_audio = "0.20.0"
 iyes_progress = { version = "0.12.0", features = ["bevy_asset"] }
-leafwing-input-manager = "0.14.0"
+leafwing-input-manager = "0.15.0"
 vleue_kinetoscope = "0.2.0"
 # woodpecker_ui = { git = "ssh://git@github.com/ChristopherBiscardi/woodpecker_ui.git", branch = "main" }
 woodpecker_ui = { path = "../../stararawn/woodpecker_ui" }
@@ -72,6 +72,7 @@ bevy_mod_picking = { git = "https://github.com/StarArawn/bevy_mod_picking", bran
 bevy_eventlistener = { git = "https://github.com/StarArawn/bevy_eventlistener", branch = "main" }
 bevy_vello = { git = "https://github.com/linebender/bevy_vello", rev = "7fe648ccb9766ecf2ef469f08c9f21093c3544e6" }
 # bevy_vello = { path = "../../linebender/bevy_vello" }
+leafwing-input-manager = { path = "../../leafwing-studios/leafwing_input_manager" }
 
 [profile.dev.package."*"]
 opt-level = 3

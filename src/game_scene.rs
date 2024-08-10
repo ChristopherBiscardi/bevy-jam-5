@@ -1,5 +1,3 @@
-use std::{f32::consts::PI, time::Duration};
-
 use avian3d::prelude::*;
 use bevy::{
     color::palettes::tailwind::SLATE_200,
@@ -13,7 +11,6 @@ use bevy::{
     prelude::*,
     render::primitives::Aabb,
 };
-
 use bevy_mod_raycast::prelude::RaycastSource;
 use bevy_tnua::{prelude::*, TnuaAnimatingState};
 use bevy_tnua_avian3d::*;
@@ -21,9 +18,12 @@ use blenvy::{
     BlueprintInfo, GameWorldTag, HideUntilReady,
     SpawnBlueprint,
 };
-use game_menu::spawn_game_menu;
 use rand::Rng;
+use std::{f32::consts::PI, time::Duration};
+
+use game_menu::spawn_game_menu;
 use tnua_animation::{AnimationState, TnuaAnimationPlugin};
+
 mod game_menu;
 mod tnua_animation;
 
@@ -31,7 +31,7 @@ use crate::{
     assets::PlayerAssets,
     collision_layers::{CollisionGrouping, GameLayer},
     navmesh::{Obstacle, Spawner},
-    AppState, Dof, GameRenderLayer,
+    states::{AppState, IsPaused},
 };
 
 pub struct GameScenePlugin;
@@ -45,10 +45,6 @@ impl Plugin for GameScenePlugin {
             .add_plugins((
                 PhysicsPlugins::default(),
                 PhysicsDebugPlugin::default(),
-                // We need both Tnua's main controller
-                // plugin, and the plugin to connect to the
-                // physics backend (in this
-                // case XBPD-3D)
                 TnuaControllerPlugin::default(),
                 TnuaAvian3dPlugin::default(),
                 TnuaAnimationPlugin,
@@ -56,24 +52,21 @@ impl Plugin for GameScenePlugin {
             .add_systems(
                 OnEnter(AppState::InGame),
                 (
-                    spawn_3d_camera,
                     spawn_player,
                     setup_level,
                     spawn_game_menu,
-                    // spawn_the_cube,
                 )
                     .chain(),
             )
-            .add_systems(Update, sync_weights)
             .add_systems(
                 Update,
                 (randomize_washers, game_over, spawners)
-                    .run_if(in_state(AppState::InGame)),
+                    .run_if(in_state(IsPaused::Running)),
             )
             .add_systems(
                 Update,
                 (apply_controls
-                    .in_set(TnuaUserControlsSystemSet),),
+                    .in_set(TnuaUserControlsSystemSet)),
             )
             .observe(init_animations);
     }
@@ -139,7 +132,8 @@ fn game_over(
 
         for player in &players {
             if sensor.0.contains(&player) {
-                // commands.entity(player).despawn_recursive();
+                // commands.entity(player).
+                // despawn_recursive();
                 next_state.set(AppState::MainMenu);
             }
         }
@@ -236,13 +230,15 @@ fn setup_level(
         GameWorldTag,
     ));
 
-    // Spawn a little platform for the player to jump
-    // on.
+    // Spawn a little platform for the player to
+    // jump on.
     // commands.spawn((
     //     PbrBundle {
-    //         mesh: meshes.add(Cuboid::new(4.0, 1.0, 4.0)),
-    //         material: materials.add(Color::from(SLATE_200)),
-    //         transform: Transform::from_xyz(-6.0, 2.0, 0.0),
+    //         mesh: meshes.add(Cuboid::new(4.0,
+    // 1.0, 4.0)),         material:
+    // materials.add(Color::from(SLATE_200)),
+    //         transform:
+    // Transform::from_xyz(-6.0, 2.0, 0.0),
     //         ..Default::default()
     //     },
     //     RigidBody::Static,
@@ -443,142 +439,4 @@ impl Default for ExampleAnimationWeights {
             weights: [0., 1., 0., 0.],
         }
     }
-}
-/// Takes the weights that were set in the UI and
-/// assigns them to the actual playing animation.
-fn sync_weights(
-    mut query: Query<(
-        &mut AnimationPlayer,
-        &ExampleAnimationWeights,
-    )>,
-) {
-    // for (mut animation_player,
-    // animation_weights) in
-    //     query.iter_mut()
-    // {
-    //     for (&animation_node_index,
-    // &animation_weight) in
-    //         CLIP_NODE_INDICES
-    //             .iter()
-    //
-    // .zip(animation_weights.weights.iter())
-    //     {
-    //         // If the animation happens to be
-    // no longer active, restart it.
-    //         if
-    // !animation_player.animation_is_playing(
-    //             animation_node_index.into(),
-    //         ) {
-    //             animation_player
-    //
-    // .play(animation_node_index.into())
-    //                 .repeat();
-    //         }
-
-    //         // Set the weight.
-    //         if let Some(active_animation) =
-    // animation_player
-    // .animation_mut(animation_node_index.into())
-    //         {
-    //             active_animation
-    //
-    // .set_weight(animation_weight);
-    //         }
-    //     }
-    // }
-}
-
-fn spawn_3d_camera(
-    mut commands: Commands,
-    dof: Res<Dof>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
-    commands.spawn((
-        PbrBundle {
-            mesh: meshes.add(
-                Plane3d::default()
-                    .mesh()
-                    .size(50.0, 50.0)
-                    .subdivisions(10),
-            ),
-            material: materials.add(Color::from(
-                bevy::color::palettes::tailwind::GREEN_400,
-            )),
-            ..default()
-        },
-        bevy_mod_raycast::prelude::RaycastMesh::<()>::default(),
-    ));
-    // commands.spawn(Camera3dBundle::default());
-    commands.spawn((
-        StateScoped(AppState::InGame),
-        RaycastSource::<()>::new_cursor(),
-        Camera3dBundle {
-            transform: Transform::from_xyz(83., 92., 100.0)
-                .with_rotation(Quat::from_euler(
-                    EulerRot::XYZ,
-                    -0.78,
-                    0.61,
-                    0.5,
-                )),
-            projection: Projection::Perspective(
-                PerspectiveProjection {
-                    fov: 0.2,
-                    ..default()
-                },
-            ),
-            // .looking_at(Vec3::new(0.0, 0.3, 0.0),
-            // Vec3::Y), projection:
-            // Projection::Orthographic(
-            //     OrthographicProjection {
-            //         far: 1000.,
-            //         near: -1000.,
-            //         scale: 0.03,
-            //         ..Default::default()
-            //     },
-            // ),
-            camera: Camera {
-                hdr: true,
-                ..default()
-            },
-            tonemapping: Tonemapping::TonyMcMapface,
-            ..default()
-        },
-        BloomSettings::NATURAL,
-        DepthOfFieldSettings {
-            // Bokeh only works on Native
-            mode: DepthOfFieldMode::Bokeh,
-            focal_distance: dof.focal_distance,
-            aperture_f_stops: dof.aperture_f_stops,
-            sensor_height: dof.sensor_height,
-            max_circle_of_confusion_diameter: dof
-                .max_circle_of_confusion_diameter,
-            max_depth: dof.max_depth,
-        },
-        VolumetricFogSettings {
-            // This value is explicitly set to 0 since we
-            // have no environment map light
-            ambient_intensity: 0.0,
-            ..default()
-        },
-    ));
-
-    // commands.spawn((Camera3dBundle {
-    //     transform: Transform::from_xyz(0., 10.,
-    // 30.)         .looking_at(Vec3::new(0.,
-    // 0.5, 0.), Vec3::Y),     projection:
-    // Projection::Perspective(
-    //         PerspectiveProjection {
-    //             fov: 0.5,
-    //             ..default()
-    //         },
-    //     ),
-    //     camera: Camera {
-    //         hdr: true,
-    //         ..default()
-    //     },
-    //     tonemapping:
-    // Tonemapping::TonyMcMapface,
-    //     ..default()
-    // },));
 }

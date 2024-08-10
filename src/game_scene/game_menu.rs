@@ -1,4 +1,4 @@
-use std::time::{Duration, Instant};
+use std::{ops::Deref, time::{Duration, Instant}};
 
 use bevy::{
     color::palettes::tailwind::*, prelude::*,
@@ -8,7 +8,10 @@ use bevy_mod_picking::prelude::*;
 use woodpecker_ui::prelude::*;
 
 use crate::{
-    assets::{FontAssets, FontVelloAssets}, navmesh::SpawnObstacle, spawn_2d_camera, widgets::{self, *}, AppState
+    assets::{FontAssets, FontVelloAssets},
+    navmesh::SpawnObstacle,
+    states::{AppState, GameMode},
+    widgets::{self, *},
 };
 
 // TODO: enter pause menu
@@ -36,7 +39,28 @@ pub fn spawn_game_menu(
             },
         ),
     ));
-
+    buttons.add::<MainMenuButtonWidget>((
+        MainMenuButtonWidgetBundle {
+            props: MainMenuButtonWidget {
+                content: "Virtual Grid".to_string(),
+                offset: 50,
+                ..default()
+            },
+            ..default()
+        },
+        On::<Pointer<Click>>::run(
+            |current_state: Res<State<GameMode>>, mut next_state: ResMut<NextState<GameMode>>| {
+                match current_state.get() {
+                    GameMode::Regular => {
+                        next_state.set(GameMode::VirtualGridPlacement);
+                    },
+                    GameMode::VirtualGridPlacement => {
+                        next_state.set(GameMode::Regular);
+                    },
+                }
+            },
+        ),
+    ));
     let root = commands
         .spawn((
             StateScoped(AppState::InGame),
@@ -94,7 +118,8 @@ pub fn spawn_game_menu(
         ))
         .id();
 
-    // let mut root_children = WidgetChildren::default();
+    // let mut root_children =
+    // WidgetChildren::default();
 
     ui_context.set_root_widget(root);
 }
