@@ -649,6 +649,22 @@
       "type": "array",
       "typeInfo": "TupleStruct"
     },
+    "avian3d::collision::collider::PreviousColliderTransform": {
+      "isComponent": true,
+      "isResource": false,
+      "items": false,
+      "long_name": "avian3d::collision::collider::PreviousColliderTransform",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/avian3d::collision::collider::ColliderTransform"
+          }
+        }
+      ],
+      "short_name": "PreviousColliderTransform",
+      "type": "array",
+      "typeInfo": "TupleStruct"
+    },
     "avian3d::collision::collider::Sensor": {
       "additionalProperties": false,
       "isComponent": true,
@@ -1221,22 +1237,6 @@
       "short_name": "ColliderConstructorHierarchyConfig",
       "type": "object",
       "typeInfo": "Struct"
-    },
-    "avian3d::collision::collider::hierarchy::PreviousColliderTransform": {
-      "isComponent": true,
-      "isResource": false,
-      "items": false,
-      "long_name": "avian3d::collision::collider::hierarchy::PreviousColliderTransform",
-      "prefixItems": [
-        {
-          "type": {
-            "$ref": "#/$defs/avian3d::collision::collider::ColliderTransform"
-          }
-        }
-      ],
-      "short_name": "PreviousColliderTransform",
-      "type": "array",
-      "typeInfo": "TupleStruct"
     },
     "avian3d::collision::collider::parry::FillMode": {
       "isComponent": false,
@@ -3254,6 +3254,28 @@
         "transform_to_position"
       ],
       "short_name": "SyncConfig",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "avian3d::sync::ancestor_marker::AncestorMarker<avian3d::collision::collider::backend::ColliderMarker>": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "avian3d::sync::ancestor_marker::AncestorMarker<avian3d::collision::collider::backend::ColliderMarker>",
+      "properties": {},
+      "required": [],
+      "short_name": "AncestorMarker<ColliderMarker>",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "avian3d::sync::ancestor_marker::AncestorMarker<avian3d::dynamics::rigid_body::RigidBody>": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "avian3d::sync::ancestor_marker::AncestorMarker<avian3d::dynamics::rigid_body::RigidBody>",
+      "properties": {},
+      "required": [],
+      "short_name": "AncestorMarker<RigidBody>",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -20970,6 +20992,75 @@
       "short_name": "PlayerAction",
       "type": "string",
       "typeInfo": "Enum"
+    },
+    "wash_cycle::customer_npc::CustomerDropoffLocation": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::customer_npc::CustomerDropoffLocation",
+      "properties": {},
+      "required": [],
+      "short_name": "CustomerDropoffLocation",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::customer_npc::CustomerNpcSpawner": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::customer_npc::CustomerNpcSpawner",
+      "properties": {},
+      "required": [],
+      "short_name": "CustomerNpcSpawner",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::customer_npc::Inventory": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::customer_npc::Inventory",
+      "properties": {
+        "items": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<alloc::string::String>"
+          }
+        },
+        "max_item_count": {
+          "type": {
+            "$ref": "#/$defs/usize"
+          }
+        }
+      },
+      "required": [
+        "max_item_count",
+        "items"
+      ],
+      "short_name": "Inventory",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::customer_npc::PlayerReceiveFromCustomerLocation": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::customer_npc::PlayerReceiveFromCustomerLocation",
+      "properties": {},
+      "required": [],
+      "short_name": "PlayerReceiveFromCustomerLocation",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::customer_npc::TheLight": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::customer_npc::TheLight",
+      "properties": {},
+      "required": [],
+      "short_name": "TheLight",
+      "type": "object",
+      "typeInfo": "Struct"
     },
     "wash_cycle::game_scene::ExampleAnimationWeights": {
       "additionalProperties": false,

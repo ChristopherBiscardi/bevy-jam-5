@@ -25,13 +25,14 @@ use std::{f32::consts::PI, time::Duration};
 use game_menu::spawn_game_menu;
 use tnua_animation::{AnimationState, TnuaAnimationPlugin};
 
-mod game_menu;
+pub mod game_menu;
 mod tnua_animation;
 
 use crate::{
     assets::PlayerAssets,
     collision_layers::{CollisionGrouping, GameLayer},
     controls::PlayerAction,
+    customer_npc::Inventory,
     navmesh::{Obstacle, Spawner},
     states::{AppState, IsPaused},
 };
@@ -62,52 +63,57 @@ impl Plugin for GameScenePlugin {
             )
             .add_systems(
                 Update,
-                (randomize_washers, game_over, spawners)
+                (
+                    // randomize_washers,
+                    game_over,
+                    // spawners
+                )
                     .run_if(in_state(IsPaused::Running)),
             )
             .observe(init_animations);
     }
 }
 
-fn spawners(
-    mut commands: Commands,
-    sensors: Query<
-        &CollidingEntities,
-        (With<Sensor>, With<Spawner>),
-    >,
-    players: Query<Entity, With<Player>>,
-) {
-    for sensor in &sensors {
-        for player in &players {
-            if sensor.0.contains(&player) {
-                let mut rng = rand::thread_rng();
+// fn spawners(
+//     mut commands: Commands,
+//     sensors: Query<
+//         &CollidingEntities,
+//         (With<Sensor>, With<Spawner>),
+//     >,
+//     players: Query<Entity, With<Player>>,
+// ) {
+//     for sensor in &sensors {
+//         for player in &players {
+//             if sensor.0.contains(&player) {
+//                 let mut rng =
+// rand::thread_rng();
 
-                let x = rand::thread_rng()
-                    .gen_range(-10.0..10.0);
-                let z = rand::thread_rng()
-                    .gen_range(-10.0..10.0);
+//                 let x = rand::thread_rng()
+//                     .gen_range(-10.0..10.0);
+//                 let z = rand::thread_rng()
+//                     .gen_range(-10.0..10.0);
 
-                commands.spawn((
-                    Obstacle,
-                    BlueprintInfo::from_path(
-                        "blueprints/washing_machine.glb",
-                    ),
-                    SpawnBlueprint,
-                    TransformBundle::from_transform(
-                        Transform::from_xyz(x, 10.0, z)
-                            .with_rotation(
-                                Quat::from_rotation_z(
-                                    rng.gen_range(0.0..PI),
-                                ),
-                            ),
-                    ),
-                    // CollisionGrouping::Enemy,
-                    RigidBody::Dynamic,
-                ));
-            }
-        }
-    }
-}
+//                 commands.spawn((
+//                     Obstacle,
+//                     BlueprintInfo::from_path(
+//
+// "blueprints/washing_machine.glb",
+// ),                     SpawnBlueprint,
+//
+// TransformBundle::from_transform(
+// Transform::from_xyz(x, 10.0, z)
+// .with_rotation(
+// Quat::from_rotation_z(
+// rng.gen_range(0.0..PI),
+// ),                             ),
+//                     ),
+//                     //
+// CollisionGrouping::Enemy,
+// RigidBody::Dynamic,                 ));
+//             }
+//         }
+//     }
+// }
 fn game_over(
     mut commands: Commands,
     sensors: Query<
@@ -157,34 +163,38 @@ impl Default for DropTimer {
     }
 }
 
-fn randomize_washers(
-    mut commands: Commands,
-    mut timer: ResMut<DropTimer>,
-    time: Res<Time>,
-) {
-    if timer.0.tick(time.delta()).just_finished() {
-        let mut rng = rand::thread_rng();
+// fn randomize_washers(
+//     mut commands: Commands,
+//     mut timer: ResMut<DropTimer>,
+//     time: Res<Time>,
+// ) {
+//     if timer.0.tick(time.delta()).
+// just_finished() {         let mut rng =
+// rand::thread_rng();
 
-        let x = rand::thread_rng().gen_range(-10.0..10.0);
-        let z = rand::thread_rng().gen_range(-10.0..10.0);
+//         let x =
+// rand::thread_rng().gen_range(-10.0..10.0);
+//         let z =
+// rand::thread_rng().gen_range(-10.0..10.0);
 
-        commands.spawn((
-            Obstacle,
-            BlueprintInfo::from_path(
-                "blueprints/washing_machine.glb",
-            ),
-            SpawnBlueprint,
-            TransformBundle::from_transform(
-                Transform::from_xyz(x, 10.0, z)
-                    .with_rotation(Quat::from_rotation_z(
-                        rng.gen_range(0.0..PI),
-                    )),
-            ),
-            // CollisionGrouping::Enemy,
-            RigidBody::Dynamic,
-        ));
-    }
-}
+//         commands.spawn((
+//             Obstacle,
+//             BlueprintInfo::from_path(
+//
+// "blueprints/washing_machine.glb",
+// ),             SpawnBlueprint,
+//             TransformBundle::from_transform(
+//                 Transform::from_xyz(x, 10.0, z)
+//
+// .with_rotation(Quat::from_rotation_z(
+//                         rng.gen_range(0.0..PI),
+//                     )),
+//             ),
+//             // CollisionGrouping::Enemy,
+//             RigidBody::Dynamic,
+//         ));
+//     }
+// }
 
 #[derive(Component)]
 pub struct Player;
@@ -329,6 +339,10 @@ fn spawn_player(
             GameLayer::Player,
             [GameLayer::Enemy, GameLayer::Ground],
         ),
+        Inventory {
+            max_item_count: 20,
+            items: vec![],
+        },
     ));
 }
 

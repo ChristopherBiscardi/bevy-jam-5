@@ -22,6 +22,7 @@ use bevy_mod_picking::{
 use bevy_picking_avian::AvianBackendSettings;
 use bevy_vello::render::VelloRenderSettings;
 use blenvy::BlenvyPlugin;
+use customer_npc::CustomerNpcPlugin;
 use woodpecker_ui::{RenderSettings, WoodpeckerUIPlugin};
 
 use crate::{
@@ -42,6 +43,7 @@ mod blenvy_helpers;
 mod camera;
 pub mod collision_layers;
 mod controls;
+mod customer_npc;
 mod game_scene;
 mod grid;
 mod main_menu;
@@ -90,7 +92,8 @@ impl Plugin for AppPlugin {
             NavMeshPlugin,
             BlenvyHelpersPlugin,
             BlenvyPlugin {
-                // only export registry if the debug assertions are on
+                // only export registry if the debug
+                // assertions are on
                 // giving us effectively only
                 export_registry: cfg!(
                     feature = "only_write_registry"
@@ -99,6 +102,7 @@ impl Plugin for AppPlugin {
                 ),
                 ..default()
             },
+            CustomerNpcPlugin,
             GridPlugin,
             ControlsPlugin,
             (
@@ -114,7 +118,10 @@ impl Plugin for AppPlugin {
         );
 
         #[cfg(feature = "only_write_registry")]
-        app.add_systems(Startup, write_registry_then_exit);
+        app.add_systems(
+            PostStartup,
+            write_registry_then_exit,
+        );
     }
 }
 

@@ -1,15 +1,25 @@
-use std::{ops::Deref, time::{Duration, Instant}};
+use std::{
+    ops::Deref,
+    time::{Duration, Instant},
+};
 
 use bevy::{
-    color::palettes::tailwind::*, prelude::*,
-    render::view::RenderLayers,
+    color::palettes::tailwind::*,
+    prelude::*,
+    render::{
+        render_asset::RenderAssetUsages, view::RenderLayers,
+    },
 };
 use bevy_mod_picking::prelude::*;
+use vello::wgpu::{
+    Extent3d, TextureDimension, TextureFormat,
+};
 use woodpecker_ui::prelude::*;
 
 use crate::{
     assets::{FontAssets, FontVelloAssets},
-    navmesh::SpawnObstacle,
+    customer_npc::CustomerNpcSpawnEvent,
+    navmesh::{Object, SpawnObstacle},
     states::{AppState, GameMode},
     widgets::{self, *},
 };
@@ -49,15 +59,35 @@ pub fn spawn_game_menu(
             ..default()
         },
         On::<Pointer<Click>>::run(
-            |current_state: Res<State<GameMode>>, mut next_state: ResMut<NextState<GameMode>>| {
+            |current_state: Res<State<GameMode>>,
+             mut next_state: ResMut<
+                NextState<GameMode>,
+            >| {
                 match current_state.get() {
                     GameMode::Regular => {
-                        next_state.set(GameMode::VirtualGridPlacement);
-                    },
+                        next_state.set(
+                            GameMode::VirtualGridPlacement,
+                        );
+                    }
                     GameMode::VirtualGridPlacement => {
                         next_state.set(GameMode::Regular);
-                    },
+                    }
                 }
+            },
+        ),
+    ));
+    buttons.add::<MainMenuButtonWidget>((
+        MainMenuButtonWidgetBundle {
+            props: MainMenuButtonWidget {
+                content: "Spawn NPC".to_string(),
+                offset: 100,
+                ..default()
+            },
+            ..default()
+        },
+        On::<Pointer<Click>>::run(
+            |mut commands: Commands| {
+                commands.trigger(CustomerNpcSpawnEvent);
             },
         ),
     ));

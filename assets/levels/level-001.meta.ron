@@ -1,6 +1,5 @@
 (
   assets:
    [ 
-    ("test", File ( path: "blueprints/test.glb" )),
    ]
 )

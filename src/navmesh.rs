@@ -19,7 +19,11 @@ use vleue_navigator::{
     prelude::*, NavMeshDebug, Triangulation,
 };
 
-use crate::{assets::NavMeshAssets, states::AppState};
+use crate::{
+    assets::NavMeshAssets,
+    customer_npc::CustomerNpc,
+    states::{AppState, IsPaused},
+};
 
 pub struct NavMeshPlugin;
 
@@ -45,7 +49,7 @@ impl Plugin for NavMeshPlugin {
                 trigger_navmesh_visibility,
                 move_object,
             )
-                .run_if(in_state(AppState::InGame)),
+                .run_if(in_state(IsPaused::Running)),
         )
         .observe(spawn_obstacle);
     }
@@ -65,15 +69,15 @@ struct CurrentMesh(Handle<NavMesh>);
 struct NavMeshDisp(Handle<NavMesh>);
 
 #[derive(Component)]
-struct Object(Option<Entity>);
+pub struct Object(pub Option<Entity>);
 
 #[derive(Component)]
 struct Target;
 
 #[derive(Component)]
-struct Path {
-    current: Vec3,
-    next: Vec<Vec3>,
+pub struct Path {
+    pub current: Vec3,
+    pub next: Vec<Vec3>,
 }
 
 // pub fn from_outer_edges(edges: &[Vec2]) ->
@@ -220,7 +224,7 @@ fn give_target_auto(
     mut commands: Commands,
     mut object_query: Query<
         (Entity, &Transform, &mut Object),
-        Without<Path>,
+        (Without<Path>, Without<CustomerNpc>),
     >,
     navmeshes: Res<Assets<NavMesh>>,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -332,12 +336,15 @@ fn trigger_navmesh_visibility(
 
 fn move_object(
     mut commands: Commands,
-    mut object_query: Query<(
-        &mut Transform,
-        &mut Path,
-        Entity,
-        &mut Object,
-    )>,
+    mut object_query: Query<
+        (
+            &mut Transform,
+            &mut Path,
+            Entity,
+            &mut Object,
+        ),
+        Without<CustomerNpc>,
+    >,
     time: Res<Time>,
 ) {
     for (mut transform, mut target, entity, mut object) in

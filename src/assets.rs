@@ -111,10 +111,6 @@ pub struct NavMeshAssets {
     pub navmesh_gltf: Handle<Gltf>,
     #[asset(path = "materials/Material.001.glb")]
     pub material_001: Handle<Gltf>,
-    #[asset(path = "materials/Material.002.glb")]
-    pub material_002: Handle<Gltf>,
-    #[asset(path = "materials/Material.003.glb")]
-    pub material_003: Handle<Gltf>,
     #[asset(path = "materials/water.glb")]
     pub water: Handle<Gltf>,
     #[asset(path = "materials/Pink Fabric.glb")]
