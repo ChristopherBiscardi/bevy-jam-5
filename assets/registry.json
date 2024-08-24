@@ -73,6 +73,27 @@
       "type": "array",
       "typeInfo": "Tuple"
     },
+    "(wash_cycle::customer_npc::ProcessedState, alloc::string::String)": {
+      "isComponent": false,
+      "isResource": false,
+      "items": false,
+      "long_name": "(wash_cycle::customer_npc::ProcessedState, alloc::string::String)",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/wash_cycle::customer_npc::ProcessedState"
+          }
+        },
+        {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        }
+      ],
+      "short_name": "(ProcessedState, String)",
+      "type": "array",
+      "typeInfo": "Tuple"
+    },
     "(woodpecker_ui::styles::units::Units, woodpecker_ui::styles::units::Units)": {
       "isComponent": false,
       "isResource": false,
@@ -172,6 +193,19 @@
       },
       "long_name": "alloc::vec::Vec<(bevy_ecs::entity::Entity, bevy_picking_core::backend::HitData)>",
       "short_name": "Vec<(Entity, HitData)>",
+      "type": "array",
+      "typeInfo": "List"
+    },
+    "alloc::vec::Vec<(wash_cycle::customer_npc::ProcessedState, alloc::string::String)>": {
+      "isComponent": false,
+      "isResource": false,
+      "items": {
+        "type": {
+          "$ref": "#/$defs/(wash_cycle::customer_npc::ProcessedState, alloc::string::String)"
+        }
+      },
+      "long_name": "alloc::vec::Vec<(wash_cycle::customer_npc::ProcessedState, alloc::string::String)>",
+      "short_name": "Vec<(ProcessedState, String)>",
       "type": "array",
       "typeInfo": "List"
     },
@@ -1413,183 +1447,6 @@
         "match_contacts"
       ],
       "short_name": "NarrowPhaseConfig",
-      "type": "object",
-      "typeInfo": "Struct"
-    },
-    "avian3d::debug_render::configuration::ContactGizmoScale": {
-      "isComponent": false,
-      "isResource": false,
-      "long_name": "avian3d::debug_render::configuration::ContactGizmoScale",
-      "oneOf": [
-        {
-          "items": false,
-          "long_name": "Constant",
-          "prefixItems": [
-            {
-              "type": {
-                "$ref": "#/$defs/f32"
-              }
-            }
-          ],
-          "short_name": "Constant",
-          "type": "array",
-          "typeInfo": "Tuple"
-        },
-        {
-          "items": false,
-          "long_name": "Scaled",
-          "prefixItems": [
-            {
-              "type": {
-                "$ref": "#/$defs/f32"
-              }
-            }
-          ],
-          "short_name": "Scaled",
-          "type": "array",
-          "typeInfo": "Tuple"
-        }
-      ],
-      "short_name": "ContactGizmoScale",
-      "type": "object",
-      "typeInfo": "Enum"
-    },
-    "avian3d::debug_render::configuration::DebugRender": {
-      "additionalProperties": false,
-      "isComponent": true,
-      "isResource": false,
-      "long_name": "avian3d::debug_render::configuration::DebugRender",
-      "properties": {
-        "aabb_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "axis_lengths": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<glam::Vec3>"
-          }
-        },
-        "collider_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "hide_mesh": {
-          "type": {
-            "$ref": "#/$defs/bool"
-          }
-        },
-        "sleeping_color_multiplier": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<[f32; 4]>"
-          }
-        }
-      },
-      "required": [
-        "hide_mesh"
-      ],
-      "short_name": "DebugRender",
-      "type": "object",
-      "typeInfo": "Struct"
-    },
-    "avian3d::debug_render::configuration::PhysicsGizmos": {
-      "additionalProperties": false,
-      "isComponent": false,
-      "isResource": false,
-      "long_name": "avian3d::debug_render::configuration::PhysicsGizmos",
-      "properties": {
-        "aabb_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "axis_lengths": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<glam::Vec3>"
-          }
-        },
-        "collider_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "contact_normal_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "contact_normal_scale": {
-          "type": {
-            "$ref": "#/$defs/avian3d::debug_render::configuration::ContactGizmoScale"
-          }
-        },
-        "contact_point_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "hide_meshes": {
-          "type": {
-            "$ref": "#/$defs/bool"
-          }
-        },
-        "joint_anchor_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "joint_separation_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "raycast_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "raycast_normal_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "raycast_point_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "shapecast_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "shapecast_normal_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "shapecast_point_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "shapecast_shape_color": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<bevy_color::color::Color>"
-          }
-        },
-        "sleeping_color_multiplier": {
-          "type": {
-            "$ref": "#/$defs/core::option::Option<[f32; 4]>"
-          }
-        }
-      },
-      "required": [
-        "contact_normal_scale",
-        "hide_meshes"
-      ],
-      "short_name": "PhysicsGizmos",
       "type": "object",
       "typeInfo": "Struct"
     },
@@ -17328,33 +17185,6 @@
       "type": "object",
       "typeInfo": "Enum"
     },
-    "core::option::Option<[f32; 4]>": {
-      "isComponent": false,
-      "isResource": false,
-      "long_name": "core::option::Option<[f32; 4]>",
-      "oneOf": [
-        {
-          "long_name": "None"
-        },
-        {
-          "items": false,
-          "long_name": "Some",
-          "prefixItems": [
-            {
-              "type": {
-                "$ref": "#/$defs/[f32; 4]"
-              }
-            }
-          ],
-          "short_name": "Some",
-          "type": "array",
-          "typeInfo": "Tuple"
-        }
-      ],
-      "short_name": "Option<[f32; 4]>",
-      "type": "object",
-      "typeInfo": "Enum"
-    },
     "core::option::Option<alloc::string::String>": {
       "isComponent": false,
       "isResource": false,
@@ -21023,7 +20853,7 @@
       "properties": {
         "items": {
           "type": {
-            "$ref": "#/$defs/alloc::vec::Vec<alloc::string::String>"
+            "$ref": "#/$defs/alloc::vec::Vec<(wash_cycle::customer_npc::ProcessedState, alloc::string::String)>"
           }
         },
         "max_item_count": {
@@ -21050,6 +20880,18 @@
       "short_name": "PlayerReceiveFromCustomerLocation",
       "type": "object",
       "typeInfo": "Struct"
+    },
+    "wash_cycle::customer_npc::ProcessedState": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "wash_cycle::customer_npc::ProcessedState",
+      "oneOf": [
+        "Unprocessed",
+        "Processed"
+      ],
+      "short_name": "ProcessedState",
+      "type": "string",
+      "typeInfo": "Enum"
     },
     "wash_cycle::customer_npc::TheLight": {
       "additionalProperties": false,

@@ -1,13 +1,16 @@
 use avian3d::prelude::*;
 use bevy::{
-    color::palettes::tailwind::SLATE_200,
+    color::palettes::tailwind::*,
     core_pipeline::{
         bloom::BloomSettings,
         dof::{DepthOfFieldMode, DepthOfFieldSettings},
         tonemapping::Tonemapping,
     },
     math::vec3,
-    pbr::{VolumetricFogSettings, VolumetricLight},
+    pbr::{
+        NotShadowCaster, VolumetricFogSettings,
+        VolumetricLight,
+    },
     prelude::*,
     render::primitives::Aabb,
 };
@@ -47,7 +50,7 @@ impl Plugin for GameScenePlugin {
             .register_type::<WashingMachine>()
             .add_plugins((
                 PhysicsPlugins::default(),
-                PhysicsDebugPlugin::default(),
+                // PhysicsDebugPlugin::default(),
                 TnuaControllerPlugin::default(),
                 TnuaAvian3dPlugin::default(),
                 TnuaAnimationPlugin,
@@ -66,6 +69,7 @@ impl Plugin for GameScenePlugin {
                 (
                     // randomize_washers,
                     game_over,
+                    saturate_standard_material_alphas,
                     // spawners
                 )
                     .run_if(in_state(IsPaused::Running)),
@@ -149,7 +153,7 @@ struct GameOverSensor;
 
 #[derive(Component, Reflect)]
 #[reflect(Component)]
-struct WashingMachine;
+pub struct WashingMachine;
 
 #[derive(Resource)]
 struct DropTimer(Timer);
@@ -287,10 +291,62 @@ const AnimationNames: [&str; 32] = [
     "wheelchair-move-left",
     "wheelchair-move-right",
 ];
+
+#[derive(Component)]
+pub struct PlayerMachineRangeSensor;
+
+#[derive(Event)]
+pub struct InvalidRangeToObject {
+    pub object: Entity,
+}
+
+#[derive(Component)]
+pub struct SaturateStandardMaterialAlpha(Timer);
+
+fn saturate_standard_material_alphas(
+    mut query: Query<(
+        Entity,
+        &mut SaturateStandardMaterialAlpha,
+        &bevy::prelude::Handle<
+            bevy::prelude::StandardMaterial,
+        >,
+        &mut Visibility,
+    )>,
+    mut materials: ResMut<
+        Assets<bevy::prelude::StandardMaterial>,
+    >,
+    time: Res<Time>,
+    mut commands: Commands,
+) {
+    for (entity, mut timer, handle, mut visibility) in
+        &mut query
+    {
+        if timer.0.tick(time.delta()).just_finished() {
+            // remove component, set color alpha to 1.
+            commands
+                .entity(entity)
+                .remove::<SaturateStandardMaterialAlpha>();
+            let mut mat =
+                materials.get_mut(handle).unwrap();
+            mat.base_color.set_alpha(1.);
+            *visibility = Visibility::Hidden;
+        } else {
+            // set color alpha to timer percentage
+            let mut mat =
+                materials.get_mut(handle).unwrap();
+            mat.base_color
+                .set_alpha(timer.0.fraction_remaining());
+        }
+    }
+}
+
 fn spawn_player(
     mut commands: Commands,
     player_assets: Res<PlayerAssets>,
     gltfs: Res<Assets<Gltf>>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    // mut images: ResMut<Assets<Image>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     let Some(_player) = gltfs.get(&player_assets.gltf)
     else {
@@ -310,40 +366,75 @@ fn spawn_player(
         Name::new("DirectionalLight"),
     ));
 
-    commands.spawn((
-        Player,
-        SceneBundle {
-            scene: player_assets.player.clone(),
-            transform: Transform::from_xyz(0., 100., 0.),
-            ..default()
-        },
-        RigidBody::Dynamic,
-        Collider::capsule(0.5, 1.),
-        // This bundle holds the main components.
-        TnuaControllerBundle::default(),
-        // A sensor shape is not strictly necessary, but
-        // without it we'll get weird results.
-        TnuaAvian3dSensorShape(Collider::cylinder(
-            0.49, 0.0,
-        )),
-        TnuaAnimatingState::<AnimationState>::default(),
-        // Tnua can fix the rotation, but the character
-        // will still get rotated before it can do so.
-        // By locking the rotation we can prevent this.
-        // LockedAxes::ROTATION_LOCKED,
-        InputManagerBundle::with_map(
-            PlayerAction::default_input_map(),
-        ),
-        Name::new("Player Scene"),
-        CollisionLayers::new(
-            GameLayer::Player,
-            [GameLayer::Enemy, GameLayer::Ground],
-        ),
-        Inventory {
-            max_item_count: 20,
-            items: vec![],
-        },
-    ));
+    commands
+        .spawn((
+            Player,
+            SceneBundle {
+                scene: player_assets.player.clone(),
+                transform: Transform::from_xyz(
+                    0., 100., 0.,
+                ),
+                ..default()
+            },
+            RigidBody::Dynamic,
+            Collider::capsule(0.5, 1.),
+            // This bundle holds the main components.
+            TnuaControllerBundle::default(),
+            // A sensor shape is not strictly necessary, but
+            // without it we'll get weird results.
+            TnuaAvian3dSensorShape(Collider::cylinder(
+                0.49, 0.0,
+            )),
+            TnuaAnimatingState::<AnimationState>::default(),
+            // Tnua can fix the rotation, but the character
+            // will still get rotated before it can do so.
+            // By locking the rotation we can prevent this.
+            // LockedAxes::ROTATION_LOCKED,
+            InputManagerBundle::with_map(
+                PlayerAction::default_input_map(),
+            ),
+            Name::new("Player Scene"),
+            CollisionLayers::new(
+                GameLayer::Player,
+                [GameLayer::Enemy, GameLayer::Ground],
+            ),
+            Inventory {
+                max_item_count: 20,
+                items: vec![],
+            },
+        ))
+        .with_children(|builder| {
+            builder.spawn((
+                PbrBundle {
+                    mesh: meshes.add(Cylinder{
+                        radius: 3.,
+                        half_height: 0.05,
+                    }),
+                    material: materials.add(StandardMaterial{
+                        base_color: RED_400.into(),
+                        alpha_mode: AlphaMode::Multiply,
+                        ..default()
+                    }),
+                    transform: Transform::from_xyz(0., -1., 0.),
+                    visibility: Visibility::Hidden,
+                    ..default()
+                },
+                Collider::cylinder(3., 0.1),
+                Sensor,
+                PlayerMachineRangeSensor,
+                NotShadowCaster,
+            ));
+        }).observe(|
+            trigger: Trigger<InvalidRangeToObject>,
+            mut query: Query<(Entity, &mut Visibility), With<PlayerMachineRangeSensor>>,
+            mut commands: Commands
+        | {
+            info!("Player tried to select something out of range");
+            for (entity, mut visibility) in &mut query {
+                *visibility = Visibility::Visible;
+                commands.entity(entity).insert(SaturateStandardMaterialAlpha(Timer::from_seconds(0.2, TimerMode::Once)));
+            }
+        });
 }
 
 /// Attaches the animation graph to the scene, and
@@ -361,7 +452,8 @@ fn init_animations(
     for (entity, mut player, mut transform) in
         query.iter_mut()
     {
-        transform.scale = Vec3::splat(3.);
+        transform.scale = Vec3::splat(2.);
+        transform.translation.y = -1.;
         commands.entity(entity).insert((
             player_assets.animation_graph.clone(),
             ExampleAnimationWeights::default(),

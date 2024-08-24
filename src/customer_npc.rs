@@ -45,7 +45,8 @@ impl Plugin for CustomerNpcPlugin {
                 (
                     move_customer,
                     detect_customer_dropoff,
-                    detect_pickup
+                    detect_pickup,
+                    detect_player_return_to_customer_pickup
                 )
                     .run_if(in_state(IsPaused::Running)),
             )
@@ -56,11 +57,17 @@ impl Plugin for CustomerNpcPlugin {
 #[derive(Component)]
 pub struct CustomerNpc;
 
-#[derive(Component, Reflect)]
+#[derive(Debug, Reflect, PartialEq)]
+pub enum ProcessedState {
+    Unprocessed,
+    Processed,
+}
+
+#[derive(Debug, Component, Reflect)]
 #[reflect(Component)]
 pub struct Inventory {
     pub max_item_count: usize,
-    pub items: Vec<String>,
+    pub items: Vec<(ProcessedState, String)>,
 }
 
 #[derive(Component, Reflect)]
@@ -206,8 +213,14 @@ fn spawn_customer_npc(
         Inventory {
             max_item_count: 5,
             items: vec![
-                "suit".to_string(),
-                "pen".to_string(),
+                (
+                    ProcessedState::Unprocessed,
+                    "suit".to_string(),
+                ),
+                (
+                    ProcessedState::Unprocessed,
+                    "pen".to_string(),
+                ),
             ],
         },
     ));
@@ -289,16 +302,18 @@ fn detect_customer_dropoff(
         (Entity, &Inventory),
         With<CustomerNpc>,
     >,
-    // TODO: a dropoff point should likely be associated with
-    // some specific lights, but for now its just "all of them"
+    // TODO: a dropoff point should likely be associated
+    // with some specific lights, but for now its just
+    // "all of them"
     mut ready_lights: Query<
         &mut Visibility,
         With<TheLight>,
     >,
 ) {
     for entities_on_sensor in &dropoff_sensors {
-        // if a customer is standing on the sensor and has items
-        // in their inventory, then they are "ready to dropoff"
+        // if a customer is standing on the sensor and has
+        // items in their inventory, then they are
+        // "ready to dropoff"
         let customer =
             customers.iter().find(|(entity, inventory)| {
                 entities_on_sensor.contains(entity)
@@ -316,6 +331,9 @@ fn detect_customer_dropoff(
         }
     }
 }
+
+#[derive(Component)]
+struct WaitingForStuffBack;
 
 fn detect_pickup(
     query: Query<
@@ -338,6 +356,7 @@ fn detect_pickup(
         &mut Visibility,
         With<TheLight>,
     >,
+    mut commands: Commands,
 ) {
     let Ok(pickup_colliding_entities) =
         pickup_locations.get_single()
@@ -388,16 +407,122 @@ fn detect_pickup(
                 customer_inventory.items.drain(item_range);
 
             player_inventory.items.extend(transition_items);
+            commands
+                .entity(customer_entity)
+                .insert(WaitingForStuffBack);
         }
     }
 }
-// fn print_started_collisions() {
-//     for CollisionStarted(entity1, entity2) in
-//         collision_event_reader.read()
-//     {
-//         println!(
-//             "Entities {:?} and {:?} started colliding",
-//             entity1, entity2,
-//         );
-//     }
-// }
+
+// TODO: customer should expect all items
+fn detect_player_return_to_customer_pickup(
+    query: Query<
+        &CollidingEntities,
+        With<CustomerDropoffLocation>,
+    >,
+    pickup_locations: Query<
+        &CollidingEntities,
+        With<PlayerReceiveFromCustomerLocation>,
+    >,
+    mut player: Query<
+        (Entity, &mut Inventory),
+        (With<Player>, Without<CustomerNpc>),
+    >,
+    mut customers: Query<
+        (Entity, &mut Inventory),
+        (
+            With<CustomerNpc>,
+            With<WaitingForStuffBack>,
+        ),
+    >,
+    mut ready_lights: Query<
+        &mut Visibility,
+        With<TheLight>,
+    >,
+    spawner_meshes: Query<
+        (Entity, &Parent),
+        With<CustomerNpcSpawner>,
+    >,
+    transforms: Query<&Transform>,
+    mut commands: Commands,
+) {
+    let Ok(pickup_colliding_entities) =
+        pickup_locations.get_single()
+    else {
+        warn!("expected exactly 1 pickup location");
+        return;
+    };
+
+    let Ok((player_entity, mut player_inventory)) =
+        player.get_single_mut()
+    else {
+        warn!("expected exactly 1 player");
+        return;
+    };
+
+    for sensor_colliding_entities in &query {
+        let Some((customer_entity, mut customer_inventory)) =
+            customers.iter_mut().find(|(entity, _)| {
+                sensor_colliding_entities.contains(entity)
+            })
+        else {
+            continue;
+        };
+
+        if pickup_colliding_entities
+            .contains(&player_entity)
+            && player_inventory.items.iter().all(
+                |(state, _)| {
+                    state == &ProcessedState::Processed
+                },
+            )
+        {
+            let available_space = customer_inventory
+                .max_item_count
+                - customer_inventory.items.len();
+
+            // take all items, or only the amount that would
+            // fit in the available space in the player's
+            // inventory, whichever is smaller.
+            //
+            // this can be an empty range, resulting in no
+            // items transferring
+            let item_range = 0..(player_inventory
+                .items
+                .len()
+                .min(available_space));
+
+            let transition_items =
+                player_inventory.items.drain(item_range);
+
+            customer_inventory
+                .items
+                .extend(transition_items);
+
+            let Some((exit_entity, exit_parent)) =
+                spawner_meshes.iter().next()
+            else {
+                warn!("no way to leave");
+                return;
+            };
+            let Ok(exit_transform) =
+                transforms.get(exit_parent.get())
+            else {
+                warn!("no exit for customer");
+                return;
+            };
+            info!(
+                ?exit_entity,
+                location = ?exit_transform.translation,
+                "trying to exit"
+            );
+            commands
+                .entity(customer_entity)
+                .insert(Object(Some(exit_entity)))
+                .insert(Path {
+                    current: exit_transform.translation,
+                    next: vec![],
+                });
+        }
+    }
+}
