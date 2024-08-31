@@ -3,6 +3,7 @@ use bevy::{
         DiagnosticsStore, FrameTimeDiagnosticsPlugin,
     },
     prelude::*,
+    utils::HashMap,
 };
 use bevy_asset_loader::prelude::*;
 use bevy_vello::text::VelloFont;
@@ -97,10 +98,48 @@ pub struct PlayerAssets {
         path = "mini_characters_1/character-male-a.glb#Scene0"
     )]
     pub player: Handle<Scene>,
+    // #[asset(
+    //     path = "mini_characters_1/character-male-a.glb"
+    // )]
+    // pub gltf: Handle<Gltf>,
+    // #[asset(
+    //     paths(
+    //         // "mini_characters_1/character-female-b.glb#Scene0",
+    //         // "mini_characters_1/character-male-b.glb#Scene0",
+    //         // "mini_characters_1/character-male-c.glb#Scene0",
+    //         // "mini_characters_1/character-female-c.glb#Scene0",
+    //         "mini_characters_1/character-female-a.glb#Scene0",
+    //         "mini_characters_1/character-male-a.glb#Scene0",
+    //         // "mini_characters_1/character-female-d.glb#Scene0",
+    //         // "mini_characters_1/character-male-d.glb#Scene0",
+    //         // "mini_characters_1/character-male-e.glb#Scene0",
+    //         // "mini_characters_1/character-female-e.glb#Scene0",
+    //         // "mini_characters_1/character-male-f.glb#Scene0",
+    //         // "mini_characters_1/character-female-f.glb#Scene0",
+    //         // "mini_characters_1/character-male-a.gltf#Scene0",
+    //       ),
+    //     collection(typed, mapped)
+    // )]
+    // pub characters: HashMap<String, Handle<Scene>>,
     #[asset(
-        path = "mini_characters_1/character-male-a.glb"
+        paths(
+            // "mini_characters_1/character-female-b.glb",
+            // "mini_characters_1/character-male-b.glb",
+            // "mini_characters_1/character-male-c.glb",
+            // "mini_characters_1/character-female-c.glb",
+            "mini_characters_1/character-female-a.glb",
+            "mini_characters_1/character-male-a.glb",
+            // "mini_characters_1/character-female-d.glb",
+            // "mini_characters_1/character-male-d.glb",
+            // "mini_characters_1/character-male-e.glb",
+            // "mini_characters_1/character-female-e.glb",
+            // "mini_characters_1/character-male-f.glb",
+            // "mini_characters_1/character-female-f.glb",
+            // "mini_characters_1/character-male-a.gltf",
+          ),
+        collection(typed, mapped)
     )]
-    pub gltf: Handle<Gltf>,
+    pub character_gltfs: HashMap<String, Handle<Gltf>>,
     #[asset(path = "animation_graph/player.animgraph.ron")]
     pub animation_graph: Handle<AnimationGraph>,
 }

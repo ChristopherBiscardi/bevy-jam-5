@@ -355,6 +355,7 @@ fn move_object(
         transform.translation += move_direction.normalize()
             * time.delta_seconds()
             * 10.0;
+
         if transform.translation.distance(target.current)
             < 0.1
         {

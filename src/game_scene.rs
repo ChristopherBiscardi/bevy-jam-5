@@ -13,6 +13,7 @@ use bevy::{
     },
     prelude::*,
     render::primitives::Aabb,
+    scene::SceneInstance,
 };
 use bevy_mod_raycast::prelude::RaycastSource;
 use bevy_tnua::{prelude::*, TnuaAnimatingState};
@@ -32,10 +33,13 @@ pub mod game_menu;
 mod tnua_animation;
 
 use crate::{
+    animation_graph_processing::{
+        AnimationsList, LoadedAnimationGraphs,
+    },
     assets::PlayerAssets,
     collision_layers::{CollisionGrouping, GameLayer},
     controls::PlayerAction,
-    customer_npc::Inventory,
+    customer_npc::{CustomerNpc, Inventory},
     navmesh::{Obstacle, Spawner},
     states::{AppState, IsPaused},
 };
@@ -74,7 +78,8 @@ impl Plugin for GameScenePlugin {
                 )
                     .run_if(in_state(IsPaused::Running)),
             )
-            .observe(init_animations);
+            .observe(init_animations)
+            .observe(init_animations_on_scene_instance);
     }
 }
 
@@ -343,17 +348,10 @@ fn saturate_standard_material_alphas(
 fn spawn_player(
     mut commands: Commands,
     player_assets: Res<PlayerAssets>,
-    gltfs: Res<Assets<Gltf>>,
     mut meshes: ResMut<Assets<Mesh>>,
     // mut images: ResMut<Assets<Image>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    let Some(_player) = gltfs.get(&player_assets.gltf)
-    else {
-        warn!("player gltf should exist");
-        return;
-    };
-
     commands.spawn((
         DirectionalLightBundle {
             directional_light: DirectionalLight {
@@ -437,30 +435,57 @@ fn spawn_player(
         });
 }
 
+fn init_animations_on_scene_instance(
+    trigger: Trigger<OnAdd, SceneInstance>,
+) {
+    info!("scene instance");
+}
+
 /// Attaches the animation graph to the scene, and
 /// plays animations by weights.
 fn init_animations(
     trigger: Trigger<OnAdd, AnimationPlayer>,
     mut commands: Commands,
-    mut query: Query<(
-        Entity,
-        &mut AnimationPlayer,
-        &mut Transform,
-    )>,
+    mut query: Query<
+        (
+            Entity,
+            &mut AnimationPlayer,
+            &mut Transform,
+        ),
+        Without<ExampleAnimationWeights>,
+    >,
     player_assets: Res<PlayerAssets>,
+    gltfs: Res<Assets<Gltf>>,
+    animation_clips: Res<Assets<AnimationClip>>,
+    parent_query: Query<&Parent>,
+    npcs: Query<&CustomerNpc>,
+    mut graphs: ResMut<Assets<AnimationGraph>>,
+    names: Query<&Name>,
+    loaded_animation_graphs: Res<LoadedAnimationGraphs>,
 ) {
     for (entity, mut player, mut transform) in
         query.iter_mut()
     {
+        let Some((animations, graph)) =
+            names.get(entity).ok().and_then(|name| {
+                loaded_animation_graphs.get(name.as_str())
+            })
+        else {
+            continue;
+        };
+
         transform.scale = Vec3::splat(2.);
         transform.translation.y = -1.;
+
+        let mut trans = AnimationTransitions::new();
+        trans
+            .play(&mut player, 3.into(), Duration::ZERO)
+            .repeat();
         commands.entity(entity).insert((
-            player_assets.animation_graph.clone(),
-            ExampleAnimationWeights::default(),
+            trans,
+            graph.clone(),
+            animations.clone(),
         ));
-        for &node_index in &CLIP_NODE_INDICES {
-            player.play(node_index.into()).repeat();
-        }
     }
 }
 

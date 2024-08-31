@@ -18,13 +18,14 @@ use bevy::{
     utils::HashSet,
 };
 use bevy_mod_picking::prelude::*;
+use rand::seq::IteratorRandom;
 use vello::wgpu::{
     Extent3d, TextureDimension, TextureFormat,
 };
 use woodpecker_ui::prelude::*;
 
 use crate::{
-    assets::{FontAssets, FontVelloAssets},
+    assets::{FontAssets, FontVelloAssets, PlayerAssets},
     game_scene::Player,
     navmesh::{Object, Path, SpawnObstacle},
     states::{AppState, GameMode, IsPaused},
@@ -55,7 +56,7 @@ impl Plugin for CustomerNpcPlugin {
 }
 
 #[derive(Component)]
-pub struct CustomerNpc;
+pub struct CustomerNpc(pub Handle<Gltf>);
 
 #[derive(Debug, Reflect, PartialEq)]
 pub enum ProcessedState {
@@ -104,6 +105,8 @@ fn spawn_customer_npc(
         (Entity, &Transform),
         With<CustomerDropoffLocation>,
     >,
+    player_assets: Res<PlayerAssets>,
+    gltfs: Res<Assets<Gltf>>,
 ) {
     // TODO: bevy 0.15: UniformMeshSampling is now a
     // thing, we can remove this Rectangle
@@ -195,35 +198,55 @@ fn spawn_customer_npc(
         warn!("Only one dropoff location is supported");
         return;
     };
-    commands.spawn((
-        PbrBundle {
-            mesh: meshes.add(Capsule3d::default()),
-            material: debug_material,
-            // transform: Transform::from_xyz(5., 2., 10.),
-            transform: new_transform,
-            ..default()
-        },
-        CustomerNpc,
-        Object(Some(dropoff_entity)),
-        Path {
-            current: dropoff_transform.translation,
-            next: vec![],
-        },
-        Collider::capsule(0.5, 1.),
-        Inventory {
-            max_item_count: 5,
-            items: vec![
-                (
-                    ProcessedState::Unprocessed,
-                    "suit".to_string(),
-                ),
-                (
-                    ProcessedState::Unprocessed,
-                    "pen".to_string(),
-                ),
-            ],
-        },
-    ));
+    let (character_key, random_character) =
+        player_assets.character_gltfs
+          .iter()
+          .choose(&mut rng)
+          .expect("expect random character selection to always succeed");
+    let random_character_gltf =
+        gltfs.get(random_character).unwrap();
+    commands
+        .spawn((
+            SpatialBundle {
+                transform: new_transform,
+                ..default()
+            },
+            // PbrBundle {
+            //     mesh: meshes.add(Capsule3d::default()),
+            //     material: debug_material,
+            //     // transform: Transform::from_xyz(5., 2., 10.),
+            //     transform: new_transform,
+            //     ..default()
+            // },
+            CustomerNpc(random_character.clone()),
+            Object(Some(dropoff_entity)),
+            Path {
+                current: dropoff_transform.translation,
+                next: vec![],
+            },
+            Collider::capsule(0.5, 1.),
+            Inventory {
+                max_item_count: 5,
+                items: vec![
+                    (
+                        ProcessedState::Unprocessed,
+                        "suit".to_string(),
+                    ),
+                    (
+                        ProcessedState::Unprocessed,
+                        "pen".to_string(),
+                    ),
+                ],
+            },
+        ))
+        .with_children(|builder| {
+            builder.spawn(SceneBundle {
+                scene: random_character_gltf.scenes[0]
+                    .clone(),
+                transform: Transform::from_xyz(0., 0.5, 0.),
+                ..default()
+            });
+        });
 }
 
 fn uv_debug_texture() -> Image {
@@ -270,6 +293,11 @@ fn move_customer(
         With<CustomerNpc>,
     >,
     time: Res<Time>,
+    children: Query<&Children>,
+    mut transforms: Query<
+        &mut Transform,
+        (With<AnimationPlayer>, Without<Path>),
+    >,
 ) {
     for (mut transform, mut target, entity, mut object) in
         object_query.iter_mut()
@@ -279,6 +307,24 @@ fn move_customer(
         transform.translation += move_direction.normalize()
             * time.delta_seconds()
             * 10.0;
+
+        // if we have a child that is an animated character
+        // face them in a direction
+        if let Some(character_entity) = children
+            .iter_descendants(entity)
+            .find(|e| transforms.get(*e).is_ok())
+        {
+            let mut transform = transforms
+                .get_mut(character_entity)
+                .unwrap();
+            let mut new_direction = -move_direction;
+            new_direction.y = 0.;
+            transform.look_to(
+                new_direction.normalize(),
+                Vec3::Y,
+            );
+        }
+
         if transform.translation.distance(target.current)
             < 0.1
         {

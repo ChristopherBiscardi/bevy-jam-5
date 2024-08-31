@@ -9,7 +9,9 @@ use bevy_tnua::{
     TnuaAnimatingState, TnuaAnimatingStateDirective,
 };
 
-use super::{ExampleAnimationWeights, CLIP_NODE_INDICES};
+use super::{
+    ExampleAnimationWeights, Player, CLIP_NODE_INDICES,
+};
 
 pub struct TnuaAnimationPlugin;
 
@@ -61,10 +63,12 @@ pub fn animate_platformer_character(
         &mut ExampleAnimationWeights,
     )>,
     children: Query<&Children>,
+    parent_query: Query<&Parent>,
     mut graph_handles: Query<(
         Entity,
         &Handle<AnimationGraph>,
     )>,
+    player_query: Query<&Player>,
     graphs: Res<Assets<AnimationGraph>>,
 ) {
     for (entity, mut animating_state, controller) in
@@ -74,7 +78,27 @@ pub fn animate_platformer_character(
             children
                 .iter_descendants(entity)
                 .find_map(|entity| {
-                    graph_handles.get(entity).ok()
+                    let Ok((
+                        graph_handle_entity,
+                        graph_handle_animation_graph,
+                    )) = graph_handles.get(entity)
+                    else {
+                        return None;
+                    };
+                    if parent_query
+                        .iter_ancestors(graph_handle_entity)
+                        .find(|e| {
+                            player_query.get(*e).is_ok()
+                        })
+                        .is_some()
+                    {
+                        Some((
+                            graph_handle_entity,
+                            graph_handle_animation_graph,
+                        ))
+                    } else {
+                        return None;
+                    }
                 })
                 .and_then(|(entity, handle)| {
                     graphs
@@ -82,7 +106,7 @@ pub fn animate_platformer_character(
                         .map(|graph| (entity, graph))
                 })
         else {
-            warn!("no graph");
+            // warn!("no graph");
             continue;
         };
 

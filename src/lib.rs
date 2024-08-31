@@ -1,4 +1,5 @@
 #![allow(warnings)]
+use animation_graph_processing::AnimationGraphProcessingPlugin;
 use avian3d::{
     prelude::RigidBody,
     sync::ancestor_marker::AncestorMarker,
@@ -38,6 +39,7 @@ use crate::{
     states::{AppState, WashCycleStatesPlugin},
 };
 
+mod animation_graph_processing;
 mod assets;
 mod blenvy_helpers;
 mod camera;
@@ -109,6 +111,7 @@ impl Plugin for AppPlugin {
                 WashCycleAssetsPlugin,
                 WashCycleCameraPlugin,
                 widgets::WashCycleWidgetsPlugin,
+                AnimationGraphProcessingPlugin,
             ),
         ))
         // .insert_resource(DebugPickingMode::Normal)
