@@ -39,7 +39,9 @@ use crate::{
     assets::PlayerAssets,
     collision_layers::{CollisionGrouping, GameLayer},
     controls::PlayerAction,
-    customer_npc::{CustomerNpc, Inventory},
+    customer_npc::{
+        CustomerNpc, CustomerNpcAnimationNames, Inventory,
+    },
     navmesh::{Obstacle, Spawner},
     states::{AppState, IsPaused},
 };
@@ -262,41 +264,6 @@ fn setup_level(
     // ));
 }
 
-const AnimationNames: [&str; 32] = [
-    "static",
-    "idle",
-    "walk",
-    "sprint",
-    "jump",
-    "fall",
-    "crouch",
-    "sit",
-    "drive",
-    "die",
-    "pick-up",
-    "emote-yes",
-    "emote-no",
-    "holding-right",
-    "holding-left",
-    "holding-both",
-    "holding-right-shoot",
-    "holding-left-shoot",
-    "holding-both-shoot",
-    "attack-melee-right",
-    "attack-melee-left",
-    "attack-kick-right",
-    "attack-kick-left",
-    "interact-right",
-    "interact-left",
-    "wheelchair-sit",
-    "wheelchair-look-left",
-    "wheelchair-look-right",
-    "wheelchair-move-forward",
-    "wheelchair-move-back",
-    "wheelchair-move-left",
-    "wheelchair-move-right",
-];
-
 #[derive(Component)]
 pub struct PlayerMachineRangeSensor;
 
@@ -479,7 +446,11 @@ fn init_animations(
 
         let mut trans = AnimationTransitions::new();
         trans
-            .play(&mut player, 3.into(), Duration::ZERO)
+            .play(
+                &mut player,
+                CustomerNpcAnimationNames::Walk.into(),
+                Duration::ZERO,
+            )
             .repeat();
         commands.entity(entity).insert((
             trans,

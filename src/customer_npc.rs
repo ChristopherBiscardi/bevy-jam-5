@@ -55,6 +55,84 @@ impl Plugin for CustomerNpcPlugin {
     }
 }
 
+// const CUSTOMER_NPC_ANIMATION_NAMES: [&str; 32] = [
+//     "static",
+//     "idle",
+//     "walk",
+//     "sprint",
+//     "jump",
+//     "fall",
+//     "crouch",
+//     "sit",
+//     "drive",
+//     "die",
+//     "pick-up",
+//     "emote-yes",
+//     "emote-no",
+//     "holding-right",
+//     "holding-left",
+//     "holding-both",
+//     "holding-right-shoot",
+//     "holding-left-shoot",
+//     "holding-both-shoot",
+//     "attack-melee-right",
+//     "attack-melee-left",
+//     "attack-kick-right",
+//     "attack-kick-left",
+//     "interact-right",
+//     "interact-left",
+//     "wheelchair-sit",
+//     "wheelchair-look-left",
+//     "wheelchair-look-right",
+//     "wheelchair-move-forward",
+//     "wheelchair-move-back",
+//     "wheelchair-move-left",
+//     "wheelchair-move-right",
+// ];
+
+pub enum CustomerNpcAnimationNames {
+    Static = 1,
+    Idle,
+    Walk,
+    Sprint,
+    Jump,
+    Fall,
+    Crouch,
+    Sit,
+    Drive,
+    Die,
+    PickUp,
+    EmoteYes,
+    EmoteNo,
+    HoldingRight,
+    HoldingLeft,
+    HoldingBoth,
+    HoldingRightShoot,
+    HoldingLeftShoot,
+    HoldingBothShoot,
+    AttackMeleeRight,
+    AttackMeleeLeft,
+    AttackKickRight,
+    AttackKickLeft,
+    InteractRight,
+    InteractLeft,
+    WheelchairSit,
+    WheelchairLookLeft,
+    WheelchairLookRight,
+    WheelchairMoveForward,
+    WheelchairMoveBack,
+    WheelchairMoveLeft,
+    WheelchairMoveRight,
+}
+
+impl From<CustomerNpcAnimationNames>
+    for AnimationNodeIndex
+{
+    fn from(value: CustomerNpcAnimationNames) -> Self {
+        (value as u32).into()
+    }
+}
+
 #[derive(Component)]
 pub struct CustomerNpc(pub Handle<Gltf>);
 
@@ -283,7 +361,7 @@ fn uv_debug_texture() -> Image {
 
 fn move_customer(
     mut commands: Commands,
-    mut object_query: Query<
+    mut npc_query: Query<
         (
             &mut Transform,
             &mut Path,
@@ -295,45 +373,73 @@ fn move_customer(
     time: Res<Time>,
     children: Query<&Children>,
     mut transforms: Query<
-        &mut Transform,
-        (With<AnimationPlayer>, Without<Path>),
+        (
+            &mut Transform,
+            &mut AnimationTransitions,
+            &mut AnimationPlayer,
+        ),
+        Without<CustomerNpc>,
     >,
 ) {
-    for (mut transform, mut target, entity, mut object) in
-        object_query.iter_mut()
+    for (mut npc_transform, mut target, entity, mut npc) in
+        npc_query.iter_mut()
     {
         let move_direction =
-            target.current - transform.translation;
-        transform.translation += move_direction.normalize()
+            target.current - npc_transform.translation;
+        npc_transform.translation += move_direction
+            .normalize()
             * time.delta_seconds()
             * 10.0;
 
         // if we have a child that is an animated character
         // face them in a direction
-        if let Some(character_entity) = children
+        let Some(character_entity) = children
             .iter_descendants(entity)
             .find(|e| transforms.get(*e).is_ok())
-        {
-            let mut transform = transforms
-                .get_mut(character_entity)
-                .unwrap();
-            let mut new_direction = -move_direction;
-            new_direction.y = 0.;
-            transform.look_to(
-                new_direction.normalize(),
-                Vec3::Y,
-            );
-        }
+        else {
+            warn!("npc should always have a valid Transform, AnimationPlayer, and AnimationTransitions");
+            continue;
+        };
 
-        if transform.translation.distance(target.current)
+        let (
+            mut transform,
+            mut animation_transitions,
+            mut player,
+        ) = transforms.get_mut(character_entity).unwrap();
+        let mut new_direction = -move_direction;
+        new_direction.y = 0.;
+        transform
+            .look_to(new_direction.normalize(), Vec3::Y);
+
+        if npc_transform
+            .translation
+            .distance(target.current)
             < 0.1
         {
             if let Some(next) = target.next.pop() {
+                animation_transitions
+                    .play(
+                        &mut player,
+                        CustomerNpcAnimationNames::Walk
+                            .into(),
+                        Duration::from_secs(0),
+                    )
+                    .repeat();
                 target.current = next;
             } else {
                 commands.entity(entity).remove::<Path>();
-                let target_entity =
-                    object.0.take().unwrap();
+                let target_entity = npc.0.take().unwrap();
+                // npc has made it to final target,
+                // play idle animation
+                // commands.entity(entity).insert
+                animation_transitions
+                    .play(
+                        &mut player,
+                        CustomerNpcAnimationNames::Idle
+                            .into(),
+                        Duration::from_secs(1),
+                    )
+                    .repeat();
             }
         }
     }
