@@ -18,7 +18,7 @@ use bevy::{
     utils::HashSet,
 };
 use bevy_mod_picking::prelude::*;
-use rand::seq::IteratorRandom;
+use rand::{seq::IteratorRandom, Rng};
 use vello::wgpu::{
     Extent3d, TextureDimension, TextureFormat,
 };
@@ -47,9 +47,14 @@ impl Plugin for CustomerNpcPlugin {
                     move_customer,
                     detect_customer_dropoff,
                     detect_pickup,
-                    detect_player_return_to_customer_pickup
+                    detect_player_return_to_customer_pickup,
                 )
                     .run_if(in_state(IsPaused::Running)),
+            )
+            .add_systems(
+                FixedUpdate,
+                customer_spawn_cycle
+                    .run_if(in_state(IsPaused::Running))
             )
             .observe(spawn_customer_npc);
     }
@@ -142,6 +147,10 @@ pub enum ProcessedState {
     Processed,
 }
 
+// TODO: Inventory must be associated with
+// a customer. Otherwise multiple customers
+// is buggy because returning items goes to arbitrary
+// customer
 #[derive(Debug, Component, Reflect)]
 #[reflect(Component)]
 pub struct Inventory {
@@ -327,6 +336,17 @@ fn spawn_customer_npc(
         });
 }
 
+fn customer_spawn_cycle(mut commands: Commands) {
+    // 1 customer per 60 * n seconds
+    // because of FixedUpdate rate
+    let spawn_rate = 1. / (60. * 10.);
+    let mut rng = rand::thread_rng();
+    // TODO: when should this become rng.random (due to gen blocks)
+    if rng.r#gen::<f32>() < spawn_rate {
+        commands.trigger(CustomerNpcSpawnEvent);
+    }
+}
+
 fn uv_debug_texture() -> Image {
     const TEXTURE_SIZE: usize = 8;
 
@@ -380,6 +400,7 @@ fn move_customer(
         ),
         Without<CustomerNpc>,
     >,
+    leaving: Query<&Leaving>,
 ) {
     for (mut npc_transform, mut target, entity, mut npc) in
         npc_query.iter_mut()
@@ -431,15 +452,21 @@ fn move_customer(
                 let target_entity = npc.0.take().unwrap();
                 // npc has made it to final target,
                 // play idle animation
-                // commands.entity(entity).insert
-                animation_transitions
-                    .play(
-                        &mut player,
-                        CustomerNpcAnimationNames::Idle
-                            .into(),
-                        Duration::from_secs(1),
-                    )
-                    .repeat();
+                // entity
+                if leaving.get(entity).is_ok() {
+                    commands
+                        .entity(entity)
+                        .despawn_recursive();
+                } else {
+                    animation_transitions
+                        .play(
+                            &mut player,
+                            CustomerNpcAnimationNames::Idle
+                                .into(),
+                            Duration::from_secs(1),
+                        )
+                        .repeat();
+                }
             }
         }
     }
@@ -566,6 +593,9 @@ fn detect_pickup(
     }
 }
 
+#[derive(Component)]
+pub struct Leaving;
+
 // TODO: customer should expect all items
 fn detect_player_return_to_customer_pickup(
     query: Query<
@@ -674,7 +704,8 @@ fn detect_player_return_to_customer_pickup(
                 .insert(Path {
                     current: exit_transform.translation,
                     next: vec![],
-                });
+                })
+                .insert(Leaving);
         }
     }
 }

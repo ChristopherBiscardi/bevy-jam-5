@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use bevy::prelude::*;
 use bevy_tnua::{
     builtins::{
@@ -8,6 +10,8 @@ use bevy_tnua::{
     prelude::*,
     TnuaAnimatingState, TnuaAnimatingStateDirective,
 };
+
+use crate::customer_npc::CustomerNpcAnimationNames;
 
 use super::{
     ExampleAnimationWeights, Player, CLIP_NODE_INDICES,
@@ -60,7 +64,7 @@ pub fn animate_platformer_character(
     )>,
     mut animation_players_query: Query<(
         &mut AnimationPlayer,
-        &mut ExampleAnimationWeights,
+        &mut AnimationTransitions,
     )>,
     children: Query<&Children>,
     parent_query: Query<&Parent>,
@@ -110,7 +114,7 @@ pub fn animate_platformer_character(
             continue;
         };
 
-        let Ok((mut player, mut weights)) =
+        let Ok((mut player, mut animation_transitions)) =
             animation_players_query
                 .get_mut(animation_player_entity)
         else {
@@ -238,6 +242,7 @@ pub fn animate_platformer_character(
                 // the movement.
                 AnimationState::Running(speed)
                 | AnimationState::Crawling(speed) => {
+                    warn!("Must implement running/crawling speed");
                     for (_, active_animation) in
                         player.playing_animations_mut()
                     {
@@ -255,6 +260,7 @@ pub fn animate_platformer_character(
                         .just_starting()
                         .is_some()
                     {
+                        warn!("Must implement jumping/dashing seek");
                         player.seek_all_by(0.0);
                     }
                 }
@@ -276,148 +282,77 @@ pub fn animate_platformer_character(
                 old_state: _,
                 state,
             } => {
-                player.stop_all();
+                // player.stop_all();
                 match state {
                     AnimationState::Standing => {
-                        weights.weights = [1., 0., 0., 0.];
-                        for (
-                            &animation_node_index,
-                            &animation_weight,
-                        ) in CLIP_NODE_INDICES
-                            .iter()
-                            .zip(weights.weights.iter())
-                        {
-                            if animation_weight == 0. {
-                                info!(
-                                    "continuing for {}",
-                                    animation_node_index
-                                );
-                                continue;
-                            }
-                            player
-                                .play(
-                                    animation_node_index
-                                        .into(),
-                                )
-                                .set_speed(1.)
-                                .repeat();
-
-                            // Set the weight.
-                            if let Some(active_animation) =
-                                player.animation_mut(
-                                    animation_node_index
-                                        .into(),
-                                )
-                            {
-                                active_animation
-                                    .set_weight(
-                                        animation_weight,
-                                    );
-                            }
-                        }
-                        // player
-                        //     .start(
-                        //         handler.
-                        // animations
-                        //
-                        // ["Standing"],
-                        //     )
-                        //     .set_speed(1.0)
-                        //     .repeat();
+                        animation_transitions
+                            .play(
+                                &mut player,
+                                CustomerNpcAnimationNames::Idle.into(),
+                                Duration::ZERO
+                            )
+                            .set_speed(1.)
+                            .repeat();
                     }
                     AnimationState::Running(speed) => {
-                        weights.weights = [0., 0., 0., 1.];
-                        for (
-                            &animation_node_index,
-                            &animation_weight,
-                        ) in CLIP_NODE_INDICES
-                            .iter()
-                            .zip(weights.weights.iter())
-                        {
-                            player
-                                .play(
-                                    animation_node_index
-                                        .into(),
-                                )
-                                .set_speed(*speed as f32)
-                                .repeat();
-
-                            // Set the weight.
-                            if let Some(active_animation) =
-                                player.animation_mut(
-                                    animation_node_index
-                                        .into(),
-                                )
-                            {
-                                active_animation
-                                    .set_weight(
-                                        animation_weight,
-                                    );
-                            }
-                        }
-                        // player
-                        //     .start(
-                        //         handler.
-                        // animations
-                        //
-                        // ["Running"],
-                        //     )
-                        //     .set_speed(*speed
-                        // as f32)
-                        //     .repeat();
+                        animation_transitions
+                            .play(
+                                &mut player,
+                                CustomerNpcAnimationNames::Sprint.into(),
+                                Duration::ZERO
+                            )
+                            .set_speed(*speed)
+                            .repeat();
                     }
                     AnimationState::Jumping => {
-                        // player
-                        //     .start(
-                        //         handler.
-                        // animations
-                        //
-                        // ["Jumping"],
-                        //     )
-                        //     .set_speed(2.0);
+                        animation_transitions
+                        .play(
+                            &mut player,
+                            CustomerNpcAnimationNames::Jump.into(),
+                            Duration::ZERO
+                        )
+                        .set_speed(2.)
+                        .repeat();
                     }
                     AnimationState::Falling => {
-                        // player
-                        //     .start(
-                        //         handler.
-                        // animations
-                        //
-                        // ["Falling"],
-                        //     )
-                        //     .set_speed(1.0);
+                        animation_transitions
+                        .play(
+                            &mut player,
+                            CustomerNpcAnimationNames::Fall.into(),
+                            Duration::ZERO
+                        )
+                        .set_speed(1.)
+                        .repeat();
                     }
                     AnimationState::Crouching => {
-                        // player
-                        //     .start(
-                        //         handler.
-                        // animations
-                        //
-                        // ["Crouching"],
-                        //     )
-                        //     .set_speed(1.0)
-                        //     .repeat();
+                        animation_transitions
+                        .play(
+                            &mut player,
+                            CustomerNpcAnimationNames::Crouch.into(),
+                            Duration::ZERO
+                        )
+                        .set_speed(1.)
+                        .repeat();
                     }
                     AnimationState::Crawling(speed) => {
-                        // player
-                        //     .start(
-                        //         handler.
-                        // animations
-                        //
-                        // ["Crawling"],
-                        //     )
-                        //     .set_speed(*speed
-                        // as f32)
-                        //     .repeat();
+                        animation_transitions
+                        .play(
+                            &mut player,
+                            CustomerNpcAnimationNames::Crouch.into(),
+                            Duration::ZERO
+                        )
+                        .set_speed(1.)
+                        .repeat();
                     }
                     AnimationState::Dashing => {
-                        // player
-                        //     .start(
-                        //         handler.
-                        // animations
-                        //
-                        // ["Dashing"],
-                        //     )
-                        //     .set_speed(10.0);
+                        animation_transitions
+                        .play(
+                            &mut player,
+                            CustomerNpcAnimationNames::EmoteYes.into(),
+                            Duration::ZERO
+                        )
+                        .set_speed(10.)
+                        .repeat();
                     }
                 }
             }

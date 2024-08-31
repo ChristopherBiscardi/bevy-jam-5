@@ -193,7 +193,7 @@ fn apply_controls(
         // player holds the jump button. If the player
         // stops holding the jump button, simply stop
         // feeding the action.
-        if keyboard.pressed(KeyCode::Space) {
+        if action_state.pressed(&PlayerAction::Ability4) {
             controller.action(TnuaBuiltinJump {
                 // The height is the only mandatory field of
                 // the jump button.

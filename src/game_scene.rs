@@ -1,6 +1,6 @@
 use avian3d::prelude::*;
 use bevy::{
-    color::palettes::tailwind::*,
+    color::palettes::{css::ORANGE_RED, tailwind::*},
     core_pipeline::{
         bloom::BloomSettings,
         dof::{DepthOfFieldMode, DepthOfFieldSettings},
@@ -8,8 +8,8 @@ use bevy::{
     },
     math::vec3,
     pbr::{
-        NotShadowCaster, VolumetricFogSettings,
-        VolumetricLight,
+        CascadeShadowConfigBuilder, NotShadowCaster,
+        VolumetricFogSettings, VolumetricLight,
     },
     prelude::*,
     render::primitives::Aabb,
@@ -24,7 +24,10 @@ use blenvy::{
 };
 use leafwing_input_manager::InputManagerBundle;
 use rand::Rng;
-use std::{f32::consts::PI, time::Duration};
+use std::{
+    f32::consts::{FRAC_PI_2, FRAC_PI_8, PI},
+    time::Duration,
+};
 
 use game_menu::spawn_game_menu;
 use tnua_animation::{AnimationState, TnuaAnimationPlugin};
@@ -50,38 +53,42 @@ pub struct GameScenePlugin;
 
 impl Plugin for GameScenePlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<DropTimer>()
-            .register_type::<ExampleAnimationWeights>()
-            .register_type::<GameOverSensor>()
-            .register_type::<WashingMachine>()
-            .add_plugins((
-                PhysicsPlugins::default(),
-                // PhysicsDebugPlugin::default(),
-                TnuaControllerPlugin::default(),
-                TnuaAvian3dPlugin::default(),
-                TnuaAnimationPlugin,
-            ))
-            .add_systems(
-                OnEnter(AppState::InGame),
-                (
-                    spawn_player,
-                    setup_level,
-                    spawn_game_menu,
-                )
-                    .chain(),
+        app.insert_resource(AmbientLight {
+            color: ORANGE_RED.into(),
+            brightness: 420.0,
+        })
+        .init_resource::<DropTimer>()
+        .register_type::<ExampleAnimationWeights>()
+        .register_type::<GameOverSensor>()
+        .register_type::<WashingMachine>()
+        .add_plugins((
+            PhysicsPlugins::default(),
+            // PhysicsDebugPlugin::default(),
+            TnuaControllerPlugin::default(),
+            TnuaAvian3dPlugin::default(),
+            TnuaAnimationPlugin,
+        ))
+        .add_systems(
+            OnEnter(AppState::InGame),
+            (
+                spawn_player,
+                setup_level,
+                spawn_game_menu,
             )
-            .add_systems(
-                Update,
-                (
-                    // randomize_washers,
-                    game_over,
-                    saturate_standard_material_alphas,
-                    // spawners
-                )
-                    .run_if(in_state(IsPaused::Running)),
+                .chain(),
+        )
+        .add_systems(
+            Update,
+            (
+                // randomize_washers,
+                game_over,
+                saturate_standard_material_alphas,
+                // spawners
             )
-            .observe(init_animations)
-            .observe(init_animations_on_scene_instance);
+                .run_if(in_state(IsPaused::Running)),
+        )
+        .observe(init_animations)
+        .observe(init_animations_on_scene_instance);
     }
 }
 
@@ -323,8 +330,24 @@ fn spawn_player(
         DirectionalLightBundle {
             directional_light: DirectionalLight {
                 illuminance: 5_000.,
+                shadows_enabled: true,
                 ..default()
             },
+            transform: Transform {
+                translation: Vec3::new(0.0, 2.0, 0.0),
+                rotation: Quat::from_rotation_x(-1.7),
+                ..default()
+            },
+            // The default cascade config is designed to handle large scenes.
+            // As this example has a much smaller world, we can tighten the shadow
+            // bounds for better visual quality.
+            // cascade_shadow_config:
+            //     CascadeShadowConfigBuilder {
+            //         first_cascade_far_bound: 4.0,
+            //         maximum_distance: 10.0,
+            //         ..default()
+            //     }
+            //     .into(),
             ..default()
         },
         VolumetricLight,
