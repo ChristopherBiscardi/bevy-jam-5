@@ -129,13 +129,15 @@ pub fn spawn_game_menu(
                             ..default()
                         },
                     ))
-                    .with_child::<OptionsModal>(
-                        OptionsModalBundle {
+                    .with_child::<InventoryModal>(
+                        InventoryModalBundle {
                             styles: WoodpeckerStyle {
                                 width: Units::Percentage(100.0),
                                 justify_content: Some(
                                     WidgetAlignContent::Center,
                                 ),
+                                background_color: GREEN_400.into(),
+                                border_color: GREEN_400.into(),
                                 ..default()
                             },
                             ..default()

@@ -12,8 +12,10 @@ use bevy_tnua::{
 use leafwing_input_manager::prelude::*;
 
 use crate::{
-    camera::GameCamera, game_scene::Player,
+    camera::GameCamera,
+    game_scene::Player,
     states::IsPaused,
+    widgets::{InventoryModal, OptionsModal},
 };
 
 pub struct ControlsPlugin;
@@ -25,9 +27,13 @@ impl Plugin for ControlsPlugin {
         )
         .add_systems(
             Update,
-            (apply_controls
-                .in_set(TnuaUserControlsSystemSet)
-                .run_if(in_state(IsPaused::Running))),
+            (
+                handle_inventory
+                    .run_if(in_state(IsPaused::Running)),
+                apply_controls
+                    .in_set(TnuaUserControlsSystemSet)
+                    .run_if(in_state(IsPaused::Running)),
+            ),
         );
     }
 }
@@ -48,6 +54,9 @@ pub enum PlayerAction {
     Down,
     Left,
     Right,
+    //
+    Pause,
+    Inventory,
     // Abilities
     Ability1,
     Ability2,
@@ -87,6 +96,10 @@ impl PlayerAction {
         input_map
             .insert(Right, GamepadButtonType::DPadRight);
 
+        //
+
+        input_map.insert(Inventory, KeyCode::KeyI);
+
         // Abilities
         input_map.insert(Ability1, KeyCode::KeyQ);
         input_map.insert(Ability1, GamepadButtonType::West);
@@ -111,6 +124,27 @@ impl PlayerAction {
         );
 
         input_map
+    }
+}
+
+fn handle_inventory(
+    mut query: Query<
+        &ActionState<PlayerAction>,
+        With<Player>,
+    >,
+    mut modal: Query<&mut InventoryModal>,
+) {
+    for player_action in &query {
+        if player_action
+            .just_pressed(&PlayerAction::Inventory)
+        {
+            let Ok(mut modal) = modal.get_single_mut()
+            else {
+                warn!("Expected a single modal");
+                return;
+            };
+            modal.show_modal = !modal.show_modal;
+        }
     }
 }
 

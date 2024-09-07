@@ -20819,6 +20819,8 @@
         "Down",
         "Left",
         "Right",
+        "Pause",
+        "Inventory",
         "Ability1",
         "Ability2",
         "Ability3",
@@ -21043,6 +21045,80 @@
         "id"
       ],
       "short_name": "PersistentId",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::widgets::inventory_modal::InventoryModal": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "wash_cycle::widgets::inventory_modal::InventoryModal",
+      "properties": {
+        "show_modal": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        }
+      },
+      "required": [
+        "show_modal"
+      ],
+      "short_name": "InventoryModal",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::widgets::inventory_modal_base::InventoryBaseModal": {
+      "additionalProperties": false,
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "wash_cycle::widgets::inventory_modal_base::InventoryBaseModal",
+      "properties": {
+        "children_styles": {
+          "type": {
+            "$ref": "#/$defs/woodpecker_ui::styles::WoodpeckerStyle"
+          }
+        },
+        "min_size": {
+          "type": {
+            "$ref": "#/$defs/glam::Vec2"
+          }
+        },
+        "overlay_color": {
+          "type": {
+            "$ref": "#/$defs/bevy_color::color::Color"
+          }
+        },
+        "timeout": {
+          "type": {
+            "$ref": "#/$defs/f32"
+          }
+        },
+        "title": {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        },
+        "transition_play": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        },
+        "visible": {
+          "type": {
+            "$ref": "#/$defs/bool"
+          }
+        }
+      },
+      "required": [
+        "title",
+        "children_styles",
+        "visible",
+        "timeout",
+        "overlay_color",
+        "transition_play",
+        "min_size"
+      ],
+      "short_name": "InventoryBaseModal",
       "type": "object",
       "typeInfo": "Struct"
     },
