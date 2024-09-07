@@ -662,36 +662,6 @@ fn detect_player_return_to_customer_pickup(
             if pickup_colliding_entities
                 .contains(&player_entity)
             {
-                // move each item from player_inventory to
-                // customer_inventory
-                //
-                // another option is to use extract_if, but
-                // its nightly
-                //
-                // the index here needs to be accounted for
-                // separately because .remove() will change
-                // the indices and shift all future elements
-                // to the left
-                // let mut i = 0;
-                // while i < player_inventory.items.len() {
-                //     if customer_inventory
-                //         .has_available_space()
-                //         && player_inventory.items[i]
-                //             .owner
-                //             .as_ref()
-                //             == Some(customer_persistent_id)
-                //         && player_inventory.items[i].state
-                //             == ProcessedState::Processed
-                //     {
-                //         let val = player_inventory
-                //             .items
-                //             .remove(i);
-                //         customer_inventory.items.push(val);
-                //     } else {
-                //         i += 1;
-                //     }
-                // }
-
                 let available_space = customer_inventory
                     .max_item_count
                     - customer_inventory.items.len();
