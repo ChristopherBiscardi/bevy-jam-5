@@ -43,8 +43,9 @@ use crate::{
     collision_layers::{CollisionGrouping, GameLayer},
     controls::PlayerAction,
     customer_npc::{
-        CustomerNpc, CustomerNpcAnimationNames, Inventory,
+        CustomerNpc, CustomerNpcAnimationNames,
     },
+    inventory::Inventory,
     navmesh::{Obstacle, Spawner},
     states::{AppState, IsPaused},
 };

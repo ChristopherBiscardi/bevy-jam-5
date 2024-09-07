@@ -1,3 +1,4 @@
+#![feature(extract_if)]
 #![allow(warnings)]
 use animation_graph_processing::AnimationGraphProcessingPlugin;
 use avian3d::{
@@ -24,6 +25,8 @@ use bevy_picking_avian::AvianBackendSettings;
 use bevy_vello::render::VelloRenderSettings;
 use blenvy::BlenvyPlugin;
 use customer_npc::CustomerNpcPlugin;
+use inventory::InventoryPlugin;
+use persistent_id::PersistentIdPlugin;
 use woodpecker_ui::{RenderSettings, WoodpeckerUIPlugin};
 
 use crate::{
@@ -48,8 +51,10 @@ mod controls;
 mod customer_npc;
 mod game_scene;
 mod grid;
+mod inventory;
 mod main_menu;
 mod navmesh;
+mod persistent_id;
 mod states;
 mod widgets;
 
@@ -112,6 +117,8 @@ impl Plugin for AppPlugin {
                 WashCycleCameraPlugin,
                 widgets::WashCycleWidgetsPlugin,
                 AnimationGraphProcessingPlugin,
+                PersistentIdPlugin,
+                InventoryPlugin,
             ),
         ))
         // .insert_resource(DebugPickingMode::Normal)

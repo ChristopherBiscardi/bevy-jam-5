@@ -242,7 +242,6 @@ pub fn animate_platformer_character(
                 // the movement.
                 AnimationState::Running(speed)
                 | AnimationState::Crawling(speed) => {
-                    warn!("Must implement running/crawling speed");
                     for (_, active_animation) in
                         player.playing_animations_mut()
                     {
@@ -260,7 +259,6 @@ pub fn animate_platformer_character(
                         .just_starting()
                         .is_some()
                     {
-                        warn!("Must implement jumping/dashing seek");
                         player.seek_all_by(0.0);
                     }
                 }

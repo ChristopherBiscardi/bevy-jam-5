@@ -21,7 +21,7 @@ use bevy_mod_raycast::prelude::*;
 
 use crate::{
     camera::GameCamera,
-    customer_npc::{Inventory, ProcessedState},
+    inventory::{Inventory, ProcessedState},
     game_scene::{
         InvalidRangeToObject, Player,
         PlayerMachineRangeSensor, WashingMachine,
@@ -153,13 +153,9 @@ fn do_work(
                 .entity(entity)
                 .remove::<Working>()
                 .insert(Done);
-            inventory.items = inventory
-                .items
-                .iter()
-                .map(|(_state, item)| {
-                    (ProcessedState::Processed, item.clone())
-                })
-                .collect();
+            for mut item in inventory.items.iter_mut() {
+                item.process();
+            }
         }
     }
 }

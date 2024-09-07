@@ -73,27 +73,6 @@
       "type": "array",
       "typeInfo": "Tuple"
     },
-    "(wash_cycle::customer_npc::ProcessedState, alloc::string::String)": {
-      "isComponent": false,
-      "isResource": false,
-      "items": false,
-      "long_name": "(wash_cycle::customer_npc::ProcessedState, alloc::string::String)",
-      "prefixItems": [
-        {
-          "type": {
-            "$ref": "#/$defs/wash_cycle::customer_npc::ProcessedState"
-          }
-        },
-        {
-          "type": {
-            "$ref": "#/$defs/alloc::string::String"
-          }
-        }
-      ],
-      "short_name": "(ProcessedState, String)",
-      "type": "array",
-      "typeInfo": "Tuple"
-    },
     "(woodpecker_ui::styles::units::Units, woodpecker_ui::styles::units::Units)": {
       "isComponent": false,
       "isResource": false,
@@ -193,19 +172,6 @@
       },
       "long_name": "alloc::vec::Vec<(bevy_ecs::entity::Entity, bevy_picking_core::backend::HitData)>",
       "short_name": "Vec<(Entity, HitData)>",
-      "type": "array",
-      "typeInfo": "List"
-    },
-    "alloc::vec::Vec<(wash_cycle::customer_npc::ProcessedState, alloc::string::String)>": {
-      "isComponent": false,
-      "isResource": false,
-      "items": {
-        "type": {
-          "$ref": "#/$defs/(wash_cycle::customer_npc::ProcessedState, alloc::string::String)"
-        }
-      },
-      "long_name": "alloc::vec::Vec<(wash_cycle::customer_npc::ProcessedState, alloc::string::String)>",
-      "short_name": "Vec<(ProcessedState, String)>",
       "type": "array",
       "typeInfo": "List"
     },
@@ -544,6 +510,19 @@
       },
       "long_name": "alloc::vec::Vec<u32>",
       "short_name": "Vec<u32>",
+      "type": "array",
+      "typeInfo": "List"
+    },
+    "alloc::vec::Vec<wash_cycle::inventory::Item>": {
+      "isComponent": false,
+      "isResource": false,
+      "items": {
+        "type": {
+          "$ref": "#/$defs/wash_cycle::inventory::Item"
+        }
+      },
+      "long_name": "alloc::vec::Vec<wash_cycle::inventory::Item>",
+      "short_name": "Vec<Item>",
       "type": "array",
       "typeInfo": "List"
     },
@@ -18076,6 +18055,33 @@
       "type": "object",
       "typeInfo": "Enum"
     },
+    "core::option::Option<wash_cycle::persistent_id::PersistentId>": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "core::option::Option<wash_cycle::persistent_id::PersistentId>",
+      "oneOf": [
+        {
+          "long_name": "None"
+        },
+        {
+          "items": false,
+          "long_name": "Some",
+          "prefixItems": [
+            {
+              "type": {
+                "$ref": "#/$defs/wash_cycle::persistent_id::PersistentId"
+              }
+            }
+          ],
+          "short_name": "Some",
+          "type": "array",
+          "typeInfo": "Tuple"
+        }
+      ],
+      "short_name": "Option<PersistentId>",
+      "type": "object",
+      "typeInfo": "Enum"
+    },
     "core::option::Option<woodpecker_ui::font::TextAlign>": {
       "isComponent": false,
       "isResource": false,
@@ -20845,31 +20851,6 @@
       "type": "object",
       "typeInfo": "Struct"
     },
-    "wash_cycle::customer_npc::Inventory": {
-      "additionalProperties": false,
-      "isComponent": true,
-      "isResource": false,
-      "long_name": "wash_cycle::customer_npc::Inventory",
-      "properties": {
-        "items": {
-          "type": {
-            "$ref": "#/$defs/alloc::vec::Vec<(wash_cycle::customer_npc::ProcessedState, alloc::string::String)>"
-          }
-        },
-        "max_item_count": {
-          "type": {
-            "$ref": "#/$defs/usize"
-          }
-        }
-      },
-      "required": [
-        "max_item_count",
-        "items"
-      ],
-      "short_name": "Inventory",
-      "type": "object",
-      "typeInfo": "Struct"
-    },
     "wash_cycle::customer_npc::PlayerReceiveFromCustomerLocation": {
       "additionalProperties": false,
       "isComponent": true,
@@ -20880,18 +20861,6 @@
       "short_name": "PlayerReceiveFromCustomerLocation",
       "type": "object",
       "typeInfo": "Struct"
-    },
-    "wash_cycle::customer_npc::ProcessedState": {
-      "isComponent": false,
-      "isResource": false,
-      "long_name": "wash_cycle::customer_npc::ProcessedState",
-      "oneOf": [
-        "Unprocessed",
-        "Processed"
-      ],
-      "short_name": "ProcessedState",
-      "type": "string",
-      "typeInfo": "Enum"
     },
     "wash_cycle::customer_npc::TheLight": {
       "additionalProperties": false,
@@ -20964,6 +20933,73 @@
       "type": "object",
       "typeInfo": "Struct"
     },
+    "wash_cycle::inventory::Inventory": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::inventory::Inventory",
+      "properties": {
+        "items": {
+          "type": {
+            "$ref": "#/$defs/alloc::vec::Vec<wash_cycle::inventory::Item>"
+          }
+        },
+        "max_item_count": {
+          "type": {
+            "$ref": "#/$defs/usize"
+          }
+        }
+      },
+      "required": [
+        "max_item_count",
+        "items"
+      ],
+      "short_name": "Inventory",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::inventory::Item": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::inventory::Item",
+      "properties": {
+        "name": {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        },
+        "owner": {
+          "type": {
+            "$ref": "#/$defs/core::option::Option<wash_cycle::persistent_id::PersistentId>"
+          }
+        },
+        "state": {
+          "type": {
+            "$ref": "#/$defs/wash_cycle::inventory::ProcessedState"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "state"
+      ],
+      "short_name": "Item",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::inventory::ProcessedState": {
+      "isComponent": false,
+      "isResource": false,
+      "long_name": "wash_cycle::inventory::ProcessedState",
+      "oneOf": [
+        "Unprocessed",
+        "Processed"
+      ],
+      "short_name": "ProcessedState",
+      "type": "string",
+      "typeInfo": "Enum"
+    },
     "wash_cycle::navmesh::Obstacle": {
       "additionalProperties": false,
       "isComponent": true,
@@ -20972,6 +21008,41 @@
       "properties": {},
       "required": [],
       "short_name": "Obstacle",
+      "type": "object",
+      "typeInfo": "Struct"
+    },
+    "wash_cycle::persistent_id::Id": {
+      "isComponent": false,
+      "isResource": false,
+      "items": false,
+      "long_name": "wash_cycle::persistent_id::Id",
+      "prefixItems": [
+        {
+          "type": {
+            "$ref": "#/$defs/alloc::string::String"
+          }
+        }
+      ],
+      "short_name": "Id",
+      "type": "array",
+      "typeInfo": "TupleStruct"
+    },
+    "wash_cycle::persistent_id::PersistentId": {
+      "additionalProperties": false,
+      "isComponent": true,
+      "isResource": false,
+      "long_name": "wash_cycle::persistent_id::PersistentId",
+      "properties": {
+        "id": {
+          "type": {
+            "$ref": "#/$defs/wash_cycle::persistent_id::Id"
+          }
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "short_name": "PersistentId",
       "type": "object",
       "typeInfo": "Struct"
     },

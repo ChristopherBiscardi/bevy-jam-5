@@ -1,8 +1,3 @@
-use std::{
-    ops::Deref,
-    time::{Duration, Instant},
-};
-
 use avian3d::prelude::{
     Collider, CollidingEntities, CollisionStarted,
 };
@@ -19,6 +14,10 @@ use bevy::{
 };
 use bevy_mod_picking::prelude::*;
 use rand::{seq::IteratorRandom, Rng};
+use std::{
+    ops::Deref,
+    time::{Duration, Instant},
+};
 use vello::wgpu::{
     Extent3d, TextureDimension, TextureFormat,
 };
@@ -27,7 +26,9 @@ use woodpecker_ui::prelude::*;
 use crate::{
     assets::{FontAssets, FontVelloAssets, PlayerAssets},
     game_scene::Player,
+    inventory::{Inventory, Item, ProcessedState},
     navmesh::{Object, Path, SpawnObstacle},
+    persistent_id::PersistentId,
     states::{AppState, GameMode, IsPaused},
     widgets::{self, *},
 };
@@ -40,7 +41,6 @@ impl Plugin for CustomerNpcPlugin {
             .register_type::<CustomerDropoffLocation>()
             .register_type::<PlayerReceiveFromCustomerLocation>()
             .register_type::<TheLight>()
-            .register_type::<Inventory>()
             .add_systems(
                 Update,
                 (
@@ -139,23 +139,10 @@ impl From<CustomerNpcAnimationNames>
 }
 
 #[derive(Component)]
-pub struct CustomerNpc(pub Handle<Gltf>);
-
-#[derive(Debug, Reflect, PartialEq)]
-pub enum ProcessedState {
-    Unprocessed,
-    Processed,
-}
-
-// TODO: Inventory must be associated with
-// a customer. Otherwise multiple customers
-// is buggy because returning items goes to arbitrary
-// customer
-#[derive(Debug, Component, Reflect)]
-#[reflect(Component)]
-pub struct Inventory {
-    pub max_item_count: usize,
-    pub items: Vec<(ProcessedState, String)>,
+pub struct CustomerNpc {
+    pub gltf: Handle<Gltf>,
+    // TODO: when Items become Entitys, remove this field.
+    pub expected_number_items_to_leave: usize,
 }
 
 #[derive(Component, Reflect)]
@@ -292,8 +279,23 @@ fn spawn_customer_npc(
           .expect("expect random character selection to always succeed");
     let random_character_gltf =
         gltfs.get(random_character).unwrap();
+
+    let persistent_id = PersistentId::new();
+    let items = vec![
+        Item {
+            name: "suit".to_string(),
+            owner: Some(persistent_id.clone()),
+            state: ProcessedState::Unprocessed,
+        },
+        Item {
+            name: "pen".to_string(),
+            owner: Some(persistent_id.clone()),
+            state: ProcessedState::Unprocessed,
+        },
+    ];
     commands
         .spawn((
+            Name::new("CustomerNpc"),
             SpatialBundle {
                 transform: new_transform,
                 ..default()
@@ -305,7 +307,10 @@ fn spawn_customer_npc(
             //     transform: new_transform,
             //     ..default()
             // },
-            CustomerNpc(random_character.clone()),
+            CustomerNpc {
+                gltf: random_character.clone(),
+                expected_number_items_to_leave: items.len(),
+            },
             Object(Some(dropoff_entity)),
             Path {
                 current: dropoff_transform.translation,
@@ -314,17 +319,9 @@ fn spawn_customer_npc(
             Collider::capsule(0.5, 1.),
             Inventory {
                 max_item_count: 5,
-                items: vec![
-                    (
-                        ProcessedState::Unprocessed,
-                        "suit".to_string(),
-                    ),
-                    (
-                        ProcessedState::Unprocessed,
-                        "pen".to_string(),
-                    ),
-                ],
+                items,
             },
+            persistent_id,
         ))
         .with_children(|builder| {
             builder.spawn(SceneBundle {
@@ -336,7 +333,13 @@ fn spawn_customer_npc(
         });
 }
 
-fn customer_spawn_cycle(mut commands: Commands) {
+fn customer_spawn_cycle(
+    mut commands: Commands,
+    // customers: Query<&CustomerNpc>,
+) {
+    // if customers.iter().len() > 1 {
+    //     return;
+    // }
     // 1 customer per 60 * n seconds
     // because of FixedUpdate rate
     let spawn_rate = 1. / (60. * 10.);
@@ -497,6 +500,7 @@ fn detect_customer_dropoff(
             customers.iter().find(|(entity, inventory)| {
                 entities_on_sensor.contains(entity)
                     && inventory.items.len() > 0
+                    && inventory.items.iter().any(|item| item.state == ProcessedState::Unprocessed)
             });
 
         if customer.is_some() {
@@ -598,7 +602,7 @@ pub struct Leaving;
 
 // TODO: customer should expect all items
 fn detect_player_return_to_customer_pickup(
-    query: Query<
+    dropoff_locations: Query<
         &CollidingEntities,
         With<CustomerDropoffLocation>,
     >,
@@ -611,11 +615,13 @@ fn detect_player_return_to_customer_pickup(
         (With<Player>, Without<CustomerNpc>),
     >,
     mut customers: Query<
-        (Entity, &mut Inventory),
         (
-            With<CustomerNpc>,
-            With<WaitingForStuffBack>,
+            Entity,
+            &mut Inventory,
+            &PersistentId,
+            &CustomerNpc,
         ),
+        (With<WaitingForStuffBack>,),
     >,
     mut ready_lights: Query<
         &mut Visibility,
@@ -642,70 +648,106 @@ fn detect_player_return_to_customer_pickup(
         return;
     };
 
-    for sensor_colliding_entities in &query {
-        let Some((customer_entity, mut customer_inventory)) =
-            customers.iter_mut().find(|(entity, _)| {
+    for sensor_colliding_entities in &dropoff_locations {
+        for (
+            customer_entity,
+            mut customer_inventory,
+            customer_persistent_id,
+            customer_npc,
+        ) in customers.iter_mut().filter(
+            |(entity, _, _, _)| {
                 sensor_colliding_entities.contains(entity)
-            })
-        else {
-            continue;
-        };
+            },
+        ) {
+            if pickup_colliding_entities
+                .contains(&player_entity)
+            {
+                // move each item from player_inventory to
+                // customer_inventory
+                //
+                // another option is to use extract_if, but
+                // its nightly
+                //
+                // the index here needs to be accounted for
+                // separately because .remove() will change
+                // the indices and shift all future elements
+                // to the left
+                // let mut i = 0;
+                // while i < player_inventory.items.len() {
+                //     if customer_inventory
+                //         .has_available_space()
+                //         && player_inventory.items[i]
+                //             .owner
+                //             .as_ref()
+                //             == Some(customer_persistent_id)
+                //         && player_inventory.items[i].state
+                //             == ProcessedState::Processed
+                //     {
+                //         let val = player_inventory
+                //             .items
+                //             .remove(i);
+                //         customer_inventory.items.push(val);
+                //     } else {
+                //         i += 1;
+                //     }
+                // }
 
-        if pickup_colliding_entities
-            .contains(&player_entity)
-            && player_inventory.items.iter().all(
-                |(state, _)| {
-                    state == &ProcessedState::Processed
-                },
-            )
-        {
-            let available_space = customer_inventory
-                .max_item_count
-                - customer_inventory.items.len();
+                let available_space = customer_inventory
+                    .max_item_count
+                    - customer_inventory.items.len();
+                for item_to_move in player_inventory
+                    .items
+                    .extract_if(|item| {
+                        item.owner.as_ref()
+                            == Some(customer_persistent_id)
+                            && item.state
+                                == ProcessedState::Processed
+                    })
+                    .take(available_space)
+                {
+                    customer_inventory
+                        .items
+                        .push(item_to_move);
+                }
 
-            // take all items, or only the amount that would
-            // fit in the available space in the player's
-            // inventory, whichever is smaller.
-            //
-            // this can be an empty range, resulting in no
-            // items transferring
-            let item_range = 0..(player_inventory
-                .items
-                .len()
-                .min(available_space));
-
-            let transition_items =
-                player_inventory.items.drain(item_range);
-
-            customer_inventory
-                .items
-                .extend(transition_items);
-
-            let Some((exit_entity, exit_parent)) =
-                spawner_meshes.iter().next()
-            else {
-                warn!("no way to leave");
-                return;
-            };
-            let Ok(exit_transform) =
-                transforms.get(exit_parent.get())
-            else {
-                warn!("no exit for customer");
-                return;
-            };
-            info!(
-                ?exit_entity,
-                location = ?exit_transform.translation,
-                "trying to exit"
-            );
-            commands
-                .entity(customer_entity)
-                .insert(Object(Some(exit_entity)))
-                .insert(Path {
-                    current: exit_transform.translation,
-                    next: vec![],
-                })
-                .insert(Leaving);
+                if customer_inventory.items.len()
+                    == customer_npc
+                        .expected_number_items_to_leave
+                    && customer_inventory.items.iter().all(
+                        |item| {
+                            item.state
+                                == ProcessedState::Processed
+                        },
+                    )
+                {
+                    let Some((exit_entity, exit_parent)) =
+                        spawner_meshes.iter().next()
+                    else {
+                        warn!("no way to leave");
+                        return;
+                    };
+                    let Ok(exit_transform) =
+                        transforms.get(exit_parent.get())
+                    else {
+                        warn!("no exit for customer");
+                        return;
+                    };
+                    info!(
+                        ?exit_entity,
+                        location = ?exit_transform.translation,
+                        "trying to exit"
+                    );
+                    commands
+                        .entity(customer_entity)
+                        .insert(Object(Some(exit_entity)))
+                        .insert(Path {
+                            current: exit_transform
+                                .translation,
+                            next: vec![],
+                        })
+                        .insert(Leaving);
+                }
+            }
         }
     }
 }
