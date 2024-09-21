@@ -1,7 +1,5 @@
 (
   assets:
    [ 
-    ("ActivityLightBlueprint", File ( path: "blueprints/ActivityLightBlueprint.glb" )),
-    ("ActivityLightMaterial", File ( path: "materials/ActivityLightMaterial.glb" )),
    ]
 )

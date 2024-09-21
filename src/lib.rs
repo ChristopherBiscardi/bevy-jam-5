@@ -24,6 +24,7 @@ use bevy_mod_picking::{
 use bevy_picking_avian::AvianBackendSettings;
 use bevy_vello::render::VelloRenderSettings;
 use blenvy::BlenvyPlugin;
+use custom_materials::CustomMaterialsPlugin;
 use customer_npc::CustomerNpcPlugin;
 use inventory::InventoryPlugin;
 use persistent_id::PersistentIdPlugin;
@@ -48,6 +49,7 @@ mod blenvy_helpers;
 mod camera;
 pub mod collision_layers;
 mod controls;
+mod custom_materials;
 mod customer_npc;
 mod game_scene;
 mod grid;
@@ -119,6 +121,7 @@ impl Plugin for AppPlugin {
                 AnimationGraphProcessingPlugin,
                 PersistentIdPlugin,
                 InventoryPlugin,
+                CustomMaterialsPlugin,
             ),
         ))
         // .insert_resource(DebugPickingMode::Normal)

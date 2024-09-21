@@ -223,7 +223,6 @@ fn spawn_customer_npc(
         return;
     }
 
-    dbg!(positions);
     let Some(negative_corner) =
         positions.iter().find(|arr| {
             arr[0].is_sign_negative()

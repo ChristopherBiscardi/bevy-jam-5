@@ -23,7 +23,7 @@ impl Plugin for WashCycleCameraPlugin {
             .register_type::<GameCamera>()
             .insert_resource(Dof {
                 focal_distance: 157.5,
-                aperture_f_stops: 1.0 / 50.0,
+                aperture_f_stops: 1.0 / 10.0,
                 sensor_height: 0.01866,
                 max_circle_of_confusion_diameter: 64.0,
                 max_depth: f32::INFINITY,

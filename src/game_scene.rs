@@ -68,7 +68,7 @@ impl Plugin for GameScenePlugin {
         .register_type::<WashingMachine>()
         .add_plugins((
             PhysicsPlugins::default(),
-            PhysicsDebugPlugin::default(),
+            // PhysicsDebugPlugin::default(),
             TnuaControllerPlugin::default(),
             TnuaAvian3dPlugin::default(),
             TnuaAnimationPlugin,
