@@ -84,15 +84,19 @@ impl PlayerAction {
 
         // Movement
         input_map.insert(Up, KeyCode::ArrowUp);
+        input_map.insert(Up, KeyCode::KeyW);
         input_map.insert(Up, GamepadButtonType::DPadUp);
 
         input_map.insert(Down, KeyCode::ArrowDown);
+        input_map.insert(Down, KeyCode::KeyS);
         input_map.insert(Down, GamepadButtonType::DPadDown);
 
         input_map.insert(Left, KeyCode::ArrowLeft);
+        input_map.insert(Left, KeyCode::KeyA);
         input_map.insert(Left, GamepadButtonType::DPadLeft);
 
         input_map.insert(Right, KeyCode::ArrowRight);
+        input_map.insert(Right, KeyCode::KeyD);
         input_map
             .insert(Right, GamepadButtonType::DPadRight);
 
