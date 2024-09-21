@@ -140,7 +140,10 @@ fn handle_inventory(
         {
             let Ok(mut modal) = modal.get_single_mut()
             else {
-                warn!("Expected a single modal");
+                warn!(
+                    "Expected a single modal, got {}",
+                    modal.iter().len()
+                );
                 return;
             };
             modal.show_modal = !modal.show_modal;
