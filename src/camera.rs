@@ -129,7 +129,7 @@ fn spawn_3d_camera(mut commands: Commands, dof: Res<Dof>) {
             projection: Projection::Perspective(
                 PerspectiveProjection {
                     // fov: 0.2,
-                    fov: 0.12,
+                    fov: 0.10,
                     ..default()
                 },
             ),
