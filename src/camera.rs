@@ -119,7 +119,7 @@ fn spawn_3d_camera(mut commands: Commands, dof: Res<Dof>) {
         StateScoped(AppState::InGame),
         GameCamera,
         Camera3dBundle {
-            transform: Transform::from_xyz(83., 92., 100.0)
+            transform: Transform::from_xyz(97., 97., 100.0)
                 .with_rotation(Quat::from_euler(
                     EulerRot::XYZ,
                     -0.78,
@@ -128,7 +128,8 @@ fn spawn_3d_camera(mut commands: Commands, dof: Res<Dof>) {
                 )),
             projection: Projection::Perspective(
                 PerspectiveProjection {
-                    fov: 0.2,
+                    // fov: 0.2,
+                    fov: 0.12,
                     ..default()
                 },
             ),

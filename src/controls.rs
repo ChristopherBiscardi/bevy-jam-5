@@ -13,7 +13,7 @@ use leafwing_input_manager::prelude::*;
 
 use crate::{
     camera::GameCamera,
-    game_scene::Player,
+    game_scene::{Player, PLAYER_FLOATING_HEIGHT},
     states::IsPaused,
     widgets::{InventoryModal, OptionsModal},
 };
@@ -220,7 +220,7 @@ fn apply_controls(
             // between the character's center
             // and the lowest point of its
             // collider.
-            float_height: 1.5,
+            float_height: PLAYER_FLOATING_HEIGHT,
             // `TnuaBuiltinWalk` has many other fields for
             // customizing the movement - but they have
             // sensible defaults. Refer to the

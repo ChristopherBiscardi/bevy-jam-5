@@ -50,6 +50,10 @@ use crate::{
     states::{AppState, IsPaused},
 };
 
+pub const PLAYER_COLLIDER_HEIGHT: f32 = 0.4;
+pub const PLAYER_FLOATING_HEIGHT: f32 =
+    PLAYER_COLLIDER_HEIGHT + 0.05;
+
 pub struct GameScenePlugin;
 
 impl Plugin for GameScenePlugin {
@@ -64,7 +68,7 @@ impl Plugin for GameScenePlugin {
         .register_type::<WashingMachine>()
         .add_plugins((
             PhysicsPlugins::default(),
-            // PhysicsDebugPlugin::default(),
+            PhysicsDebugPlugin::default(),
             TnuaControllerPlugin::default(),
             TnuaAvian3dPlugin::default(),
             TnuaAnimationPlugin,
@@ -247,10 +251,18 @@ fn setup_level(
         HideUntilReady,
         GameWorldTag,
     ));
+    // #[cfg(not(feature = "spawn_sacrifice"))]
+    // commands.spawn((
+    //     StateScoped(AppState::InGame),
+    //     BlueprintInfo::from_path("levels/level-001.
+    // glb"),     SpawnBlueprint,
+    //     HideUntilReady,
+    //     GameWorldTag,
+    // ));
     #[cfg(not(feature = "spawn_sacrifice"))]
     commands.spawn((
         StateScoped(AppState::InGame),
-        BlueprintInfo::from_path("levels/level-001.glb"),
+        BlueprintInfo::from_path("levels/level-002.glb"),
         SpawnBlueprint,
         HideUntilReady,
         GameWorldTag,
@@ -339,9 +351,11 @@ fn spawn_player(
                 rotation: Quat::from_rotation_x(-1.7),
                 ..default()
             },
-            // The default cascade config is designed to handle large scenes.
-            // As this example has a much smaller world, we can tighten the shadow
-            // bounds for better visual quality.
+            // The default cascade config is designed to
+            // handle large scenes.
+            // As this example has a much smaller world, we
+            // can tighten the shadow bounds for
+            // better visual quality.
             // cascade_shadow_config:
             //     CascadeShadowConfigBuilder {
             //         first_cascade_far_bound: 4.0,
@@ -361,18 +375,18 @@ fn spawn_player(
             SceneBundle {
                 scene: player_assets.player.clone(),
                 transform: Transform::from_xyz(
-                    0., 100., 0.,
+                    0., 10., 0.,
                 ),
                 ..default()
             },
             RigidBody::Dynamic,
-            Collider::capsule(0.5, 1.),
+            Collider::capsule(0.12, PLAYER_COLLIDER_HEIGHT),
             // This bundle holds the main components.
             TnuaControllerBundle::default(),
             // A sensor shape is not strictly necessary, but
             // without it we'll get weird results.
             TnuaAvian3dSensorShape(Collider::cylinder(
-                0.49, 0.0,
+                0.11, 0.0,
             )),
             TnuaAnimatingState::<AnimationState>::default(),
             // Tnua can fix the rotation, but the character
@@ -393,22 +407,25 @@ fn spawn_player(
             },
         ))
         .with_children(|builder| {
+            let half_height = 0.05;
+            let radius = 1.5;
+            let player_half_height_guessed = 0.2;
             builder.spawn((
                 PbrBundle {
                     mesh: meshes.add(Cylinder{
-                        radius: 3.,
-                        half_height: 0.05,
+                        radius,
+                        half_height: half_height,
                     }),
                     material: materials.add(StandardMaterial{
                         base_color: RED_400.into(),
                         alpha_mode: AlphaMode::Multiply,
                         ..default()
                     }),
-                    transform: Transform::from_xyz(0., -1., 0.),
+                    transform: Transform::from_xyz(0., -player_half_height_guessed, 0.),
                     visibility: Visibility::Hidden,
                     ..default()
                 },
-                Collider::cylinder(3., 0.1),
+                Collider::cylinder(radius, half_height * 2.),
                 Sensor,
                 PlayerMachineRangeSensor,
                 NotShadowCaster,
@@ -465,8 +482,8 @@ fn init_animations(
             continue;
         };
 
-        transform.scale = Vec3::splat(2.);
-        transform.translation.y = -1.;
+        // transform.scale = Vec3::splat(2.);
+        transform.translation.y = -0.5;
 
         let mut trans = AnimationTransitions::new();
         trans

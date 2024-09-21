@@ -60,8 +60,8 @@ impl Plugin for CustomerNpcPlugin {
     }
 }
 
-// const CUSTOMER_NPC_ANIMATION_NAMES: [&str; 32] = [
-//     "static",
+// const CUSTOMER_NPC_ANIMATION_NAMES: [&str; 32]
+// = [     "static",
 //     "idle",
 //     "walk",
 //     "sprint",
@@ -303,9 +303,9 @@ fn spawn_customer_npc(
             // PbrBundle {
             //     mesh: meshes.add(Capsule3d::default()),
             //     material: debug_material,
-            //     // transform: Transform::from_xyz(5., 2., 10.),
-            //     transform: new_transform,
-            //     ..default()
+            //     // transform: Transform::from_xyz(5.,
+            // 2., 10.),     transform:
+            // new_transform,     ..default()
             // },
             CustomerNpc {
                 gltf: random_character.clone(),
@@ -344,7 +344,8 @@ fn customer_spawn_cycle(
     // because of FixedUpdate rate
     let spawn_rate = 1. / (60. * 10.);
     let mut rng = rand::thread_rng();
-    // TODO: when should this become rng.random (due to gen blocks)
+    // TODO: when should this become rng.random (due
+    // to gen blocks)
     if rng.r#gen::<f32>() < spawn_rate {
         commands.trigger(CustomerNpcSpawnEvent);
     }
@@ -415,8 +416,8 @@ fn move_customer(
             * time.delta_seconds()
             * 10.0;
 
-        // if we have a child that is an animated character
-        // face them in a direction
+        // if we have a child that is an animated
+        // character face them in a direction
         let Some(character_entity) = children
             .iter_descendants(entity)
             .find(|e| transforms.get(*e).is_ok())
@@ -544,7 +545,7 @@ fn detect_pickup(
     let Ok(pickup_colliding_entities) =
         pickup_locations.get_single()
     else {
-        warn!("expected exactly 1 pickup location");
+        warn_once!("expected exactly 1 pickup location");
         return;
     };
 
@@ -637,7 +638,7 @@ fn detect_player_return_to_customer_pickup(
     let Ok(pickup_colliding_entities) =
         pickup_locations.get_single()
     else {
-        warn!("expected exactly 1 pickup location");
+        warn_once!("expected exactly 1 pickup location");
         return;
     };
 

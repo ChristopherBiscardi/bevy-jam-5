@@ -104,19 +104,30 @@ pub struct PlayerAssets {
     // pub gltf: Handle<Gltf>,
     // #[asset(
     //     paths(
-    //         // "mini_characters_1/character-female-b.glb#Scene0",
-    //         // "mini_characters_1/character-male-b.glb#Scene0",
-    //         // "mini_characters_1/character-male-c.glb#Scene0",
-    //         // "mini_characters_1/character-female-c.glb#Scene0",
-    //         "mini_characters_1/character-female-a.glb#Scene0",
-    //         "mini_characters_1/character-male-a.glb#Scene0",
-    //         // "mini_characters_1/character-female-d.glb#Scene0",
-    //         // "mini_characters_1/character-male-d.glb#Scene0",
-    //         // "mini_characters_1/character-male-e.glb#Scene0",
-    //         // "mini_characters_1/character-female-e.glb#Scene0",
-    //         // "mini_characters_1/character-male-f.glb#Scene0",
-    //         // "mini_characters_1/character-female-f.glb#Scene0",
-    //         // "mini_characters_1/character-male-a.gltf#Scene0",
+    //         //
+    // "mini_characters_1/character-female-b.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-male-b.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-male-c.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-female-c.glb#Scene0",
+    //         "mini_characters_1/character-female-a.glb#
+    // Scene0",         "mini_characters_1/
+    // character-male-a.glb#Scene0",         //
+    // "mini_characters_1/character-female-d.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-male-d.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-male-e.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-female-e.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-male-f.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-female-f.glb#Scene0",
+    //         //
+    // "mini_characters_1/character-male-a.gltf#Scene0",
     //       ),
     //     collection(typed, mapped)
     // )]
@@ -156,6 +167,8 @@ pub struct NavMeshAssets {
     pub pink_fabric: Handle<Gltf>,
     #[asset(path = "materials/Neon Plexi Pink by LP.glb")]
     pub neon_plexi_pink_by_lp: Handle<Gltf>,
+    #[asset(path = "materials/colormap.002.glb")]
+    pub colormap_002: Handle<Gltf>,
 }
 
 #[derive(AssetCollection, Resource)]
