@@ -161,12 +161,6 @@ fn spawn_3d_camera(mut commands: Commands, dof: Res<Dof>) {
                 .max_circle_of_confusion_diameter,
             max_depth: dof.max_depth,
         },
-        VolumetricFogSettings {
-            // This value is explicitly set to 0 since we
-            // have no environment map light
-            ambient_intensity: 0.0,
-            ..default()
-        },
     ));
 
     // commands.spawn((Camera3dBundle {

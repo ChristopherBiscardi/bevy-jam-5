@@ -173,11 +173,18 @@ pub struct NavMeshAssets {
 
 #[derive(AssetCollection, Resource)]
 pub struct TextureAssets {
-    // #[asset(path = "images/player.png")]
-    // player: Handle<Image>,
+    #[asset(path = "tiles1/T_Tiles1_Color.png")]
+    pub t_tiles1_color: Handle<Image>,
+    #[asset(path = "tiles1/T_Tiles1_Height.png")]
+    pub t_tiles1_height: Handle<Image>,
+    #[asset(path = "tiles1/T_Tiles1_Normal.png")]
+    pub t_tiles1_normal: Handle<Image>,
+    #[asset(path = "tiles1/T_Tiles1_AO.png")]
+    pub t_tiles1_ao: Handle<Image>,
     // #[asset(path = "images/tree.png")]
     // tree: Handle<Image>,
-    // #[asset(path = "images/female_adventurer_sheet.png")]
+    // #[asset(path =
+    // "images/female_adventurer_sheet.png")]
     // female_adventurer: Handle<Image>,
     // #[asset(texture_atlas_layout(
     //     tile_size_x = 96,
@@ -185,7 +192,8 @@ pub struct TextureAssets {
     //     columns = 8,
     //     rows = 1
     // ))]
-    // female_adventurer_layout: Handle<TextureAtlasLayout>,
+    // female_adventurer_layout:
+    // Handle<TextureAtlasLayout>,
 }
 
 #[derive(AssetCollection, Resource)]

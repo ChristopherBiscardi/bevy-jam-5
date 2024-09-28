@@ -9,9 +9,9 @@
 fn fragment(
     mesh: VertexOutput,
 ) -> @location(0) vec4<f32> {
-    let y_alpha = pow(1. - mesh.world_position.y, 10.);
-    let noise = (simplex_noise_3d(mesh.world_position.xyz + vec3(1., globals.time /2., 1.)) + 1.) / 2.;
-    return vec4(material_color.xyz * 100., noise * y_alpha);
+    let y_alpha = pow(1. - mesh.uv.y, 10.);
+    let noise = (simplex_noise_3d(vec3(mesh.uv.xxx) + vec3(1., globals.time /2., 1.)) + 1.) / 2.;
+    return vec4(material_color.rgb * 100., noise * y_alpha);
 }
 
 
