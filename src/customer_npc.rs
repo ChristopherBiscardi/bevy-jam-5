@@ -422,7 +422,6 @@ fn move_customer(
             .iter_descendants(entity)
             .find(|e| transforms.get(*e).is_ok())
         else {
-            warn!("npc should always have a valid Transform, AnimationPlayer, and AnimationTransitions");
             continue;
         };
 

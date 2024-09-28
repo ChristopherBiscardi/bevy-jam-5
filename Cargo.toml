@@ -50,7 +50,11 @@ blenvy = { git = "https://github.com/kaosat-dev/Blenvy.git", branch = "blenvy" }
 bevy_vello = "0.5.1"
 interpolation = "0.2"
 # vleue_navigator = { version = "0.8.0", features = ["debug-with-gizmos"] }
-vleue_navigator = { path = "../../vleue/vleue_navigator", features = [
+# vleue_navigator = { path = "../../vleue/vleue_navigator", features = [
+#     "debug-with-gizmos",
+#     "avian3d",
+# ] }   
+vleue_navigator = { version = "0.10", features = [
     "debug-with-gizmos",
     "avian3d",
 ] }

@@ -171,12 +171,15 @@ fn setup_navmesh(
                         ),
                     ],
                 ),
+                // build_timeout: Some(1.0),
+                // simplify: 0.005,
+                // merge_steps: 0,
                 ..default()
             },
             update_mode: NavMeshUpdateMode::Direct,
             handle: navmesh_handle.clone(),
             transform: transform,
-            ..default()
+            ..NavMeshBundle::with_default_id()
         });
         commands.insert_resource(CurrentMesh(
             navmesh_handle.clone(),

@@ -66,6 +66,10 @@ impl Plugin for AppPlugin {
     fn build(&self, app: &mut App) {
         let app = app
             .insert_resource(ClearColor(SLATE_200.into()))
+            .insert_resource(AmbientLight {
+                color: Color::WHITE,
+                brightness: 600.,
+            })
             .add_plugins(
                 DefaultPlugins.set(WindowPlugin {
                     primary_window: Window {
